@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Ship : MonoBehaviour
@@ -27,10 +28,20 @@ public class Ship : MonoBehaviour
     private float _turnInput;
 
     private Dictionary<Vector3, Tile> _tileGrid;
+
+    private bool _hasCore;
+
+    //弹药量
+    private int _ammoCapacity;
+
+    private int _ammoAmount;
+
+    private float _ammoRestoreSpeed;
+
+    [SerializeField] private Tile _whiteTile;
     private void Awake()
     {
         _grid = GetComponentInChildren<Grid>();
-
         rb = GetComponent<Rigidbody2D>();
 
         // 初始化刚体参数，让它飞起来更像“飞船”而不是“砖头”
@@ -38,7 +49,11 @@ public class Ship : MonoBehaviour
         rb.drag = _linearDrag;          // 设置阻力
         rb.angularDrag = _angularDrag;  // 设置旋转阻力
 
+        //初始化字典
         _tileGrid = new Dictionary<Vector3, Tile>();
+
+        //设置核心初始为存在
+        _hasCore = true;
     }
 
     private void Start()
@@ -71,11 +86,20 @@ public class Ship : MonoBehaviour
                     Debug.Log(item.ToString());
                 }
             }
+        }
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            Attack();
+        }
 
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Attack();
-            }
+        if (!_hasCore)
+        {
+            Destroy(gameObject);
+        }
+
+        if (_ammoAmount != _ammoCapacity)
+        {
+            AmmoRestore();
         }
     }
 
@@ -87,7 +111,7 @@ public class Ship : MonoBehaviour
 
     private void InitShip()
     {
-        SetTile(Vector3Int.zero, _selectedTile);
+        SetTile(Vector3Int.zero, _whiteTile);
     }
 
     public void SetTile(Vector3Int cellPos, Tile tile)
@@ -96,13 +120,17 @@ public class Ship : MonoBehaviour
 
         localPos = localPos + new Vector3(1f, 1f, 0);
 
-        Tile newTile = Instantiate<Tile>(_selectedTile, transform.GetChild(0));
+        Tile newTile = Instantiate<Tile>(tile, transform.GetChild(0));
 
         newTile.transform.localPosition = localPos;
 
         _tileGrid[cellPos] = newTile;
 
-        Utils.CreateworldText(newTile.transform, cellPos.ToString(), Vector3.zero, 20, Color.black, TextAnchor.MiddleCenter, TextAlignment.Center, sortingOrder: 2);
+        Vector2Int v2pos = new Vector2Int(0, 0);
+
+        v2pos = (Vector2Int)cellPos;
+
+        Utils.CreateworldText(newTile.transform, v2pos.ToString(), Vector3.zero, 20, Color.black, TextAnchor.MiddleCenter, TextAlignment.Center, sortingOrder: 2);
     }
 
     private bool CanSetTile(Vector3Int cellPos)
@@ -134,7 +162,6 @@ public class Ship : MonoBehaviour
     }
 
 
-
     private void HandleMovement()
     {
         // 推进：使用 ForceMode2D.Force
@@ -153,6 +180,61 @@ public class Ship : MonoBehaviour
 
     private void Attack()
     {
-        Instantiate(_bullet, _firePoint.position, _firePoint.rotation);
+        if (_ammoAmount > 0)
+        {
+            Instantiate(_bullet, _firePoint.position, _firePoint.rotation);
+            ConsumeAmmo(1);
+        }
     }
+
+    public void CoreHasDestory()
+    {
+        _hasCore = false;
+    }
+
+    //子弹操作相关
+    #region 子弹操作
+    private void AddAmmo(int amount)
+    {
+        _ammoAmount += amount;
+        UpdateAmmoInfo();
+    }
+
+    private void ConsumeAmmo(int amount)
+    {
+        _ammoAmount -= amount;
+        UpdateAmmoInfo();
+    }
+
+    public void AddAmmoCapacity(int amount)
+    {
+        _ammoCapacity += amount;
+        UpdateAmmoInfo();
+    }
+
+    public void ConsumeAmmoCapacity(int amount)
+    {
+        _ammoCapacity -= amount;
+        UpdateAmmoInfo();
+    }
+
+    float timer = 0f;
+    private void AmmoRestore()
+    {
+        //一秒钟补充一发弹药
+        //只要弹药量不满时才会补充
+
+        timer += Time.deltaTime;
+        if (timer >= 0.5f && _ammoAmount != _ammoCapacity)
+        {
+            AddAmmo(1);
+            timer = 0f;
+        }
+    }
+    #endregion
+    private void UpdateAmmoInfo()
+    {
+        UIManager.Instance.UpdateAmmoText(_ammoAmount, _ammoCapacity);
+    }
+
 }

@@ -169,7 +169,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 024088ac50c51a34ca8652b47129319b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selectedTile: {fileID: 2450221377810267497, guid: bea78e260585585419a4a30aec659f61, type: 3}
+  _selectedTile: {fileID: 0}
   _bullet: {fileID: 6656070570829737214, guid: d2c2420374061e44b85e4f2138dcaaa6, type: 3}
   _firePoint: {fileID: 508841793}
   _thrustForce: 200
@@ -463,8 +463,8 @@ MonoBehaviour:
   m_DeadZoneHeight: 0
   m_DeadZoneDepth: 0
   m_UnlimitedSoftZone: 0
-  m_SoftZoneWidth: 0.8
-  m_SoftZoneHeight: 0.8
+  m_SoftZoneWidth: 0.6
+  m_SoftZoneHeight: 0.53
   m_BiasX: 0
   m_BiasY: 0
   m_CenterOnActivate: 1
@@ -530,7 +530,7 @@ MonoBehaviour:
   m_Follow: {fileID: 333055915}
   m_Lens:
     FieldOfView: 103
-    OrthographicSize: 10
+    OrthographicSize: 23.9776
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -650,7 +650,7 @@ Camera:
   far clip plane: 1000
   field of view: 103
   orthographic: 1
-  orthographic size: 10
+  orthographic size: 23.9776
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
