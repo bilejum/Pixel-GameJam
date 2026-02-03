@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class RedTile : Tile
 {
@@ -8,11 +9,11 @@ public class RedTile : Tile
         base.Init();
 
         //出生增加弹药容量
-        _ship.AddAmmoCapacity(1);
+        _ship._ammoCapacity += 1;
     }
 
     private void OnDestroy()
     {
-        if (_ship !=null) _ship.ConsumeAmmoCapacity(1);
+        if (_ship != null) _ship._ammoCapacity -= 1;
     }
 }

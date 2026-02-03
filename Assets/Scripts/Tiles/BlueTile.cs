@@ -15,7 +15,6 @@ public class BlueTile : Tile
 
     private void OnDestroy()
     {
-        Debug.Log("sub");
         _ship.ThrustForce /= 1.1f;
         _ship.TurnTorque /= 1.1f;
     }

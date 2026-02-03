@@ -1,30 +1,23 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public enum State { Move, Fight }
 
-public class BaseEnemy : MonoBehaviour
+public class BaseEnemy : Ship
 {
     private EnemyManager _enemyManager;
     private Ship _target;
-    private Rigidbody2D rb;
 
     [SerializeField] private State _currentState = State.Move;
-    [SerializeField] private Bullet _bullet;
-    [SerializeField] private Transform _firePoint;
 
-    [Header("动力设置")]
-    [SerializeField] private float _thrustForce = 150f;
-    [SerializeField] private float _turnTorque = 10f;
+    [Header("AI设置")]
     [SerializeField] private float _attackRange = 10f; // 进入此范围开始射击
     [SerializeField] private float _stopRange = 5f;   // 距离太近则停止推进
-
-    [Header("战斗参数")]
     [SerializeField] private float _fireRate = 1f;
     private float _fireTimer;
-
-    private void Awake()
+    protected override void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
+        base.Awake();
         rb.gravityScale = 0f;
         rb.drag = 1f;           // 线性阻力，防止无限滑行
         rb.angularDrag = 2f;    // 旋转阻力，防止疯狂自转
@@ -38,6 +31,8 @@ public class BaseEnemy : MonoBehaviour
             _enemyManager._enemiesList.Add(this);
             _target = _enemyManager.target;
         }
+
+        Debug.Log($"敌人最大弹药量{_ammoCapacity},当前弹药量{_ammoAmount}");
     }
 
     private void FixedUpdate()
@@ -56,10 +51,12 @@ public class BaseEnemy : MonoBehaviour
 
     private void Update()
     {
-        if (_currentState == State.Fight)
+        if (_currentState == State.Fight && _target !=null)
         {
             HandleAttack();
         }
+
+        CheckAmmoRestore();
     }
 
     // 处理转向：让敌人始终面朝玩家
@@ -76,6 +73,8 @@ public class BaseEnemy : MonoBehaviour
         rb.AddTorque(crossProduct * _turnTorque);
     }
 
+
+
     // 处理移动：像玩家一样推力加速
     private void HandleMovement(float distance)
     {
@@ -91,7 +90,7 @@ public class BaseEnemy : MonoBehaviour
     private void HandleAttack()
     {
         _fireTimer += Time.deltaTime;
-        if (_fireTimer >= _fireRate)
+        if (_fireTimer >= _fireRate && _ammoAmount >0)
         {
             // 简单判断下是否对准了玩家，没对准不瞎射
             float dotProduct = Vector2.Dot(transform.up, (_target.transform.position - transform.position).normalized);
@@ -99,7 +98,10 @@ public class BaseEnemy : MonoBehaviour
             {
                 Instantiate(_bullet, _firePoint.position, _firePoint.rotation);
                 _fireTimer = 0;
+                _ammoAmount -= 1;
+                Debug.Log($"敌人最大弹药量{_ammoCapacity},当前弹药量{_ammoAmount}");
             }
         }
     }
+
 }

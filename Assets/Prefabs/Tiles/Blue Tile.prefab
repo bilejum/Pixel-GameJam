@@ -74,6 +74,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ccf447e894f5c4e41afbe562a2f193a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 100
+  _health: 200
   _color: {r: 0.25471687, g: 0.9954561, b: 1, a: 1}
   _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
+  _coordinate: {x: 0, y: 0, z: 0}

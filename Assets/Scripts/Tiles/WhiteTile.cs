@@ -10,6 +10,6 @@ public class WhiteTile : Tile
 
     private void OnDestroy()
     {
-        _ship.CoreHasDestory();
+        _ship.CoreDestory();
     }
 }

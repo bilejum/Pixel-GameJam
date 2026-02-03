@@ -1,71 +1,37 @@
-﻿using System.Collections.Generic;
-using TMPro;
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
-public class Ship : MonoBehaviour
+public abstract class Ship : MonoBehaviour
 {
-    private Rigidbody2D rb;
+    protected Rigidbody2D rb;
 
-    private Grid _grid;
+    [SerializeField] protected Bullet _bullet;
 
-    private Vector3Int _cellPos;
+    [SerializeField] protected Transform _firePoint;
 
-    [SerializeField] private Tile _selectedTile;
+    protected Grid _grid;
 
-    [SerializeField] private Bullet _bullet;
-
-    [SerializeField] private Transform _firePoint;
+    protected Dictionary<Vector3Int, Tile> _tileGrid;
 
     [Header("动力设置")]
-    [SerializeField] private float _thrustForce = 500f; // 推进力
-    [SerializeField] private float _turnTorque = 15f;   // 转向力矩
-
-    [Header("手感优化")]
-    [SerializeField] private float _linearDrag = 1f;    // 线性阻力（空气阻力感）
-    [SerializeField] private float _angularDrag = 2f;   // 旋转阻力（防止无限自转）
-
-    private float _thrustInput;
-    private float _turnInput;
-
-    private Dictionary<Vector3Int, Tile> _tileGrid;
-
-    private bool _hasCore;
+    [SerializeField] protected float _thrustForce = 500f; // 推进力
+    [SerializeField] protected float _turnTorque = 15f;   // 转向力矩
 
     //弹药量
-    private int _ammoCapacity;
+    public int _ammoCapacity;
 
-    private int _ammoAmount;
+    public int _ammoAmount;
 
-    private float _ammoRestoreSpeed;
+    protected float _ammoRestoreSpeed;
 
-    [SerializeField] private Tile _whiteTile;
+    protected AudioSource _FireSound;
 
-    [SerializeField] private float _weaponShootCD = 0.2f;
+    protected float _weaponShootCDTimer;
+    [SerializeField] protected float _weaponShootCD = 0.2f;
+    protected float timer = 0f;
 
-    private float timer = 0f;
 
-    public bool deleteMode =false;
-
-    private float _weaponShootCDTimer;
-
-    //从这开始
-    private void Awake()
-    {
-        _grid = GetComponentInChildren<Grid>();
-        rb = GetComponent<Rigidbody2D>();
-
-        // 初始化刚体参数，让它飞起来更像“飞船”而不是“砖头”
-        rb.gravityScale = 0f;           // 太空通常没重力
-        rb.drag = _linearDrag;          // 设置阻力
-        rb.angularDrag = _angularDrag;  // 设置旋转阻力
-
-        //初始化字典
-        _tileGrid = new Dictionary<Vector3Int, Tile>();
-
-        //设置核心初始为存在
-        _hasCore = true;
-    }
-    
     //对外暴露的加速度和扭矩力变量
     public float ThrustForce
     {
@@ -101,107 +67,12 @@ public class Ship : MonoBehaviour
         }
     }
 
-    public void SelectedTile(Tile tile)
+    protected virtual void Awake()
     {
-        _selectedTile = tile;
-    }
-    private void Start()
-    {
-        InitShip();
-    }
-
-    private void Update()
-    {
-        _thrustInput = Input.GetAxis("Vertical");
-        _turnInput = Input.GetAxis("Horizontal");
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            _cellPos = _grid.WorldToCell(Utils.GetMouseWorldPos());
-            if (!deleteMode)
-            {
-                if (CanSetTile(_cellPos))
-                {
-                    {
-                        Debug.Log($"current select tile{_cellPos}");
-                        SetTile(_cellPos, _selectedTile);
-                    }
-                }
-                else
-                {
-                    foreach (var item in _tileGrid)
-                    {
-                        Debug.Log(item.ToString());
-                    }
-                }
-            }
-            else if (deleteMode)
-            {
-                DeleteTile(_cellPos);
-            }
-        }
-
-        //按下空格射击
-        if (Input.GetKey(KeyCode.Space))
-        {
-            
-            Attack();
-        }
-
-        //判断核心是否还存在
-        if (!_hasCore)
-        {
-            Destroy(gameObject);
-        }
-
-        //子弹恢复
-        if (_ammoAmount != _ammoCapacity)
-        {
-            _ammoAmount = Mathf.Clamp(_ammoAmount, 0, _ammoCapacity-1);
-            AmmoRestore();
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        // 2. 在 FixedUpdate 中应用物理力
-        HandleMovement();
-    }
-
-    private void InitShip()
-    {
-        SetTile(Vector3Int.zero, _whiteTile);
-    }
-
-    public void SetTile(Vector3Int cellPos, Tile tile)
-    {
-        Vector3 localPos = _grid.CellToLocal(cellPos);
-
-        localPos = localPos + new Vector3(1f, 1f, 0);
-
-        Tile newTile = Instantiate<Tile>(tile, transform.GetChild(0));
-
-        newTile._coordinate = cellPos;
-
-        newTile.transform.localPosition = localPos;
-
-        _tileGrid[cellPos] = newTile;
-
-        Vector2Int v2pos = new Vector2Int(0, 0);
-
-        v2pos = (Vector2Int)cellPos;
-
-        Utils.CreateworldText(newTile.transform, v2pos.ToString(), Vector3.zero, 20, Color.black, TextAnchor.MiddleCenter, TextAlignment.Center, sortingOrder: 2);
-    }
-
-    public void DeleteTile(Vector3Int cellPos)
-    {
-        if (_tileGrid.ContainsKey(cellPos))
-        {
-            Debug.Log("找到方块，执行摧毁");
-            Destroy(_tileGrid[cellPos].gameObject);
-            _tileGrid.Remove(cellPos);
-        }
+        _grid = GetComponentInChildren<Grid>();
+        rb = GetComponent<Rigidbody2D>();
+        _tileGrid = new Dictionary<Vector3Int, Tile>();
+        _FireSound = GetComponent<AudioSource>();
     }
 
     public void DeleteTileInGrid(Vector3Int cellPos)
@@ -209,107 +80,50 @@ public class Ship : MonoBehaviour
         _tileGrid.Remove(cellPos);
     }
 
-    private bool CanSetTile(Vector3Int cellPos)
+    public void CoreDestory()
     {
-        // 1. 定义四个方向的偏移量（根据你的网格坐标系调整，这里是顶视角3D/2D通用：前后左右）
-        // 如果是2D正交（上下左右），可改为 new Vector3Int(0, 1, 0)、(0, -1, 0)、(1, 0, 0)、(-1, 0, 0)
-        Vector3Int[] directions = new Vector3Int[]
-        {
-        Vector3Int.up,  // 前（y+1）
-        Vector3Int.down,     // 后（y-1）
-        Vector3Int.right,    // 右（x+1）
-        Vector3Int.left,      // 左（x-1）
-        };
-
-        // 2. 遍历所有方向，检查相邻单元格是否存在于网格中
-        foreach (var dir in directions)
-        {
-            Vector3Int neighborPos = cellPos + dir; // 计算相邻单元格位置
-            Debug.Log(neighborPos);
-            if (_tileGrid.ContainsKey(neighborPos) && !_tileGrid.ContainsKey(cellPos))
-            {
-                // 只要有一个方向存在方块，就返回true（四周有方块）
-                return true;
-            }
-        }
-        // 3. 所有方向都没有方块，返回false
-        return false;
+        Destroy(this.gameObject);
     }
 
-    private void HandleMovement()
-    {
-        // 推进：使用 ForceMode2D.Force
-        // 注意：物理方法内部会自动处理时间步长，不需要手动乘 Time.deltaTime
-        if (Mathf.Abs(_thrustInput) > 0.01f)
-        {
-            rb.AddRelativeForce(Vector2.up * _thrustInput * _thrustForce);
-        }
+    [Header("战斗反馈")]
+    [SerializeField] private float _recoilForce = 100f; // 基础后坐力
 
-        // 转向：负号是因为通常 A/左 为正方向，但 Unity 顺时针旋转需要负力矩
-        if (Mathf.Abs(_turnInput) > 0.01f)
-        {
-            rb.AddTorque(_turnInput * -_turnTorque);
-        }
+    // 在执行射击的逻辑中调用
+    protected void ApplyRecoil(Vector2 direction, float multiplier)
+    {
+        // 后坐力的方向与子弹发射方向完全相反
+        Vector2 recoilDir = -direction;
+
+        // 计算总冲量：基础后坐力 * 炮管强化倍率
+        float totalForce = _recoilForce * multiplier;
+
+        // 使用 ForceMode2D.Impulse (瞬间冲击力)
+        // 这样不需要持续施加力，更符合爆炸发射的感觉
+        rb.AddForce(recoilDir * totalForce, ForceMode2D.Impulse);
     }
 
-    private void Attack()
-    {
-        _weaponShootCDTimer += Time.deltaTime;
-        if (_ammoAmount > 0 && _weaponShootCDTimer !>= _weaponShootCD)
-        {
-            Instantiate(_bullet, _firePoint.position, _firePoint.rotation);
-            ConsumeAmmo(1);
-            _weaponShootCDTimer = 0;
-        }
-    }
-
-    public void CoreHasDestory()
-    {
-        _hasCore = false;
-    }
-
-    //子弹操作相关
-    #region 子弹操作
-    private void AddAmmo(int amount)
-    {
-        _ammoAmount += amount;
-        UpdateAmmoInfo();
-    }
-
-    private void ConsumeAmmo(int amount)
-    {
-        _ammoAmount -= amount;
-        UpdateAmmoInfo();
-    }
-
-    public void AddAmmoCapacity(int amount)
-    {
-        _ammoCapacity += amount;
-        UpdateAmmoInfo();
-    }
-
-    public void ConsumeAmmoCapacity(int amount)
-    {
-        _ammoCapacity -= amount;
-        UpdateAmmoInfo();
-    }
-
-
-    private void AmmoRestore()
+    protected void AmmoRestore()
     {
         //0.5s补充一发弹药
         //只要弹药量不满时才会补充
         timer += Time.deltaTime;
         if (timer >= 0.5f && _ammoAmount <= _ammoCapacity)
         {
-            AddAmmo(1);
+            _ammoAmount += 1;
             timer = 0f;
         }
     }
-    #endregion
-    private void UpdateAmmoInfo()
+
+    protected void CheckAmmoRestore()
     {
-        UIManager.Instance.UpdateAmmoText(_ammoAmount, _ammoCapacity);
+        //子弹恢复
+        if (_ammoAmount != _ammoCapacity)
+        {
+            _ammoAmount = Mathf.Clamp(_ammoAmount, 0, _ammoCapacity - 1);
+            AmmoRestore();
+        }
     }
 
+
 }
+

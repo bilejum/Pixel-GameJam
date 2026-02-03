@@ -6,6 +6,7 @@ using UnityEngine;
 
 public class CameraHandler : MonoBehaviour
 {
+    public static CameraHandler Instance {  get; private set; }
 
     [SerializeField]
 
@@ -23,6 +24,11 @@ public class CameraHandler : MonoBehaviour
 
     private float targetOrthographicSize;
 
+
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         orthographicSize = cinemachineVirtualCamera.m_Lens.OrthographicSize;
@@ -53,7 +59,6 @@ public class CameraHandler : MonoBehaviour
         transform.position += (Vector3)moveDir * (moveSpeed * Time.deltaTime);
     }
     private void HandleZoom()
-
     {
 
         targetOrthographicSize += -Input.mouseScrollDelta.y * zoomAmount;
@@ -64,6 +69,16 @@ public class CameraHandler : MonoBehaviour
 
         cinemachineVirtualCamera.m_Lens.OrthographicSize = orthographicSize;
 
+    }
+
+    public void ZoomInToShip(int amount)
+    {
+        targetOrthographicSize = amount;
+    }
+
+    public float GetOrthographicSize()
+    {
+        return orthographicSize;
     }
 
 }

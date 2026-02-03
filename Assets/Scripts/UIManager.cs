@@ -9,11 +9,13 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance { get; private set; }
 
-    [SerializeField] private Ship _ship;
+    [SerializeField] private PlayerShip _ship;
 
     [SerializeField] private TextMeshProUGUI _ammoText;
 
     [SerializeField] private List<Tile> tilesDic;
+
+    public RectTransform _buildingUI;
 
     private void Awake()
     {

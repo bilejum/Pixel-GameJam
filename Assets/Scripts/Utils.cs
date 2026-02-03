@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -32,4 +32,5 @@ public static class Utils
         textMesh.transform.localScale = new Vector3(0.1f, 0.1f, 0);
         return textMesh;
     }
+
 }
