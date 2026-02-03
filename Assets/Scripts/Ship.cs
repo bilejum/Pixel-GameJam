@@ -27,7 +27,7 @@ public class Ship : MonoBehaviour
     private float _thrustInput;
     private float _turnInput;
 
-    private Dictionary<Vector3, Tile> _tileGrid;
+    private Dictionary<Vector3Int, Tile> _tileGrid;
 
     private bool _hasCore;
 
@@ -40,7 +40,15 @@ public class Ship : MonoBehaviour
 
     [SerializeField] private Tile _whiteTile;
 
-    [SerializeField] private float _weaponShootCD = 0.5f;
+    [SerializeField] private float _weaponShootCD = 0.2f;
+
+    private float timer = 0f;
+
+    public bool deleteMode =false;
+
+    private float _weaponShootCDTimer;
+
+    //从这开始
     private void Awake()
     {
         _grid = GetComponentInChildren<Grid>();
@@ -52,7 +60,7 @@ public class Ship : MonoBehaviour
         rb.angularDrag = _angularDrag;  // 设置旋转阻力
 
         //初始化字典
-        _tileGrid = new Dictionary<Vector3, Tile>();
+        _tileGrid = new Dictionary<Vector3Int, Tile>();
 
         //设置核心初始为存在
         _hasCore = true;
@@ -104,43 +112,52 @@ public class Ship : MonoBehaviour
 
     private void Update()
     {
-        // 1. 在 Update 中获取玩家输入（响应更及时）
         _thrustInput = Input.GetAxis("Vertical");
         _turnInput = Input.GetAxis("Horizontal");
 
-        // 这里保留你原来的 Tile 点击逻辑...
         if (Input.GetMouseButtonDown(0))
         {
             _cellPos = _grid.WorldToCell(Utils.GetMouseWorldPos());
-            Debug.Log($"current select tile{_cellPos}");
-            if (CanSetTile(_cellPos))
+            if (!deleteMode)
             {
+                if (CanSetTile(_cellPos))
                 {
-                    Debug.Log($"current select tile{_cellPos}");
-                    SetTile(_cellPos, _selectedTile);
+                    {
+                        Debug.Log($"current select tile{_cellPos}");
+                        SetTile(_cellPos, _selectedTile);
+                    }
+                }
+                else
+                {
+                    foreach (var item in _tileGrid)
+                    {
+                        Debug.Log(item.ToString());
+                    }
                 }
             }
-            else
+            else if (deleteMode)
             {
-                foreach (var item in _tileGrid)
-                {
-                    Debug.Log(item.ToString());
-                }
+                DeleteTile(_cellPos);
             }
         }
+
+        //按下空格射击
         if (Input.GetKey(KeyCode.Space))
         {
             
             Attack();
         }
 
+        //判断核心是否还存在
         if (!_hasCore)
         {
             Destroy(gameObject);
         }
 
+        //子弹恢复
         if (_ammoAmount != _ammoCapacity)
         {
+            _ammoAmount = Mathf.Clamp(_ammoAmount, 0, _ammoCapacity-1);
             AmmoRestore();
         }
     }
@@ -164,6 +181,8 @@ public class Ship : MonoBehaviour
 
         Tile newTile = Instantiate<Tile>(tile, transform.GetChild(0));
 
+        newTile._coordinate = cellPos;
+
         newTile.transform.localPosition = localPos;
 
         _tileGrid[cellPos] = newTile;
@@ -175,6 +194,21 @@ public class Ship : MonoBehaviour
         Utils.CreateworldText(newTile.transform, v2pos.ToString(), Vector3.zero, 20, Color.black, TextAnchor.MiddleCenter, TextAlignment.Center, sortingOrder: 2);
     }
 
+    public void DeleteTile(Vector3Int cellPos)
+    {
+        if (_tileGrid.ContainsKey(cellPos))
+        {
+            Debug.Log("找到方块，执行摧毁");
+            Destroy(_tileGrid[cellPos].gameObject);
+            _tileGrid.Remove(cellPos);
+        }
+    }
+
+    public void DeleteTileInGrid(Vector3Int cellPos)
+    {
+        _tileGrid.Remove(cellPos);
+    }
+
     private bool CanSetTile(Vector3Int cellPos)
     {
         // 1. 定义四个方向的偏移量（根据你的网格坐标系调整，这里是顶视角3D/2D通用：前后左右）
@@ -184,7 +218,7 @@ public class Ship : MonoBehaviour
         Vector3Int.up,  // 前（y+1）
         Vector3Int.down,     // 后（y-1）
         Vector3Int.right,    // 右（x+1）
-        Vector3Int.left      // 左（x-1）
+        Vector3Int.left,      // 左（x-1）
         };
 
         // 2. 遍历所有方向，检查相邻单元格是否存在于网格中
@@ -192,17 +226,15 @@ public class Ship : MonoBehaviour
         {
             Vector3Int neighborPos = cellPos + dir; // 计算相邻单元格位置
             Debug.Log(neighborPos);
-            if (_tileGrid.ContainsKey(neighborPos))
+            if (_tileGrid.ContainsKey(neighborPos) && !_tileGrid.ContainsKey(cellPos))
             {
                 // 只要有一个方向存在方块，就返回true（四周有方块）
                 return true;
             }
         }
-
         // 3. 所有方向都没有方块，返回false
         return false;
     }
-
 
     private void HandleMovement()
     {
@@ -220,11 +252,10 @@ public class Ship : MonoBehaviour
         }
     }
 
-    private float _weaponShootCDTimer;
     private void Attack()
     {
         _weaponShootCDTimer += Time.deltaTime;
-        if (_ammoAmount > 0 && _weaponShootCDTimer >= _weaponShootCD)
+        if (_ammoAmount > 0 && _weaponShootCDTimer !>= _weaponShootCD)
         {
             Instantiate(_bullet, _firePoint.position, _firePoint.rotation);
             ConsumeAmmo(1);
@@ -263,14 +294,13 @@ public class Ship : MonoBehaviour
         UpdateAmmoInfo();
     }
 
-    float timer = 0f;
+
     private void AmmoRestore()
     {
-        //一秒钟补充一发弹药
+        //0.5s补充一发弹药
         //只要弹药量不满时才会补充
-
         timer += Time.deltaTime;
-        if (timer >= 0.5f && _ammoAmount != _ammoCapacity)
+        if (timer >= 0.5f && _ammoAmount <= _ammoCapacity)
         {
             AddAmmo(1);
             timer = 0f;

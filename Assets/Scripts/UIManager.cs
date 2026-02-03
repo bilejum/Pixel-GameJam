@@ -44,9 +44,19 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void ButtonClick()
+    public void DeleteMode()
     {
-
+        if (!_ship.deleteMode)
+        {
+            Debug.Log("enter delete");
+            _ship.deleteMode = true;
+            _ship.SelectedTile(null);
+        }
+        else
+        {
+            _ship.deleteMode = false;
+        }
+        
     }
 
 }

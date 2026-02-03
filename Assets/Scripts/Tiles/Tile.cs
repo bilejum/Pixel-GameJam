@@ -4,7 +4,9 @@ using UnityEngine;
 public abstract class Tile : MonoBehaviour
 {
     [SerializeField] protected float _health = 100f;
-    [SerializeField]protected Color _color;
+    [SerializeField] protected Color _color;
+    [SerializeField] protected GameObject _destroyEffectPrefab;
+    public Vector3Int _coordinate;
 
     protected Ship _ship;
 
@@ -13,15 +15,26 @@ public abstract class Tile : MonoBehaviour
     {
         get
         {
-            return _health; 
+            return _health;
         }
         set
         {
-            _health = value; 
+            _health = value;
 
             // 逻辑处理：血量归零销毁物体
             if (_health <= 0)
             {
+                //把自己从坐标里删了
+                _ship.DeleteTileInGrid(_coordinate);
+
+                if (_destroyEffectPrefab != null)
+                {
+                    // 在子弹当前的位置，以默认旋转角度生成特效
+                    var newDestroyEffect = Instantiate(_destroyEffectPrefab, transform.position, Quaternion.identity);
+                    var main = newDestroyEffect.GetComponent<ParticleSystem>().main;
+                    var colorOvertime = newDestroyEffect.GetComponent<ParticleSystem>().colorOverLifetime;
+                    colorOvertime.color = _color;
+                }
                 Destroy(gameObject);
             }
 

@@ -11,6 +11,12 @@ public class BlueTile : Tile
         _ship.ThrustForce *= 1.1f;
         _ship.TurnTorque *= 1.1f;
 
-        //_color = Color.blue;
+    }
+
+    private void OnDestroy()
+    {
+        Debug.Log("sub");
+        _ship.ThrustForce /= 1.1f;
+        _ship.TurnTorque /= 1.1f;
     }
 }

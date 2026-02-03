@@ -13,6 +13,6 @@ public class RedTile : Tile
 
     private void OnDestroy()
     {
-        _ship.ConsumeAmmoCapacity(1);
+        if (_ship !=null) _ship.ConsumeAmmoCapacity(1);
     }
 }

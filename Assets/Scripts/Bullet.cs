@@ -31,7 +31,6 @@ public class Bullet : MonoBehaviour
             // 在子弹当前的位置，以默认旋转角度生成特效
             Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
         }
-
         Destroy(gameObject);
     }
 }
