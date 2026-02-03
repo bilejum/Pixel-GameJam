@@ -39,6 +39,8 @@ public class Ship : MonoBehaviour
     private float _ammoRestoreSpeed;
 
     [SerializeField] private Tile _whiteTile;
+
+    [SerializeField] private float _weaponShootCD = 0.5f;
     private void Awake()
     {
         _grid = GetComponentInChildren<Grid>();
@@ -55,7 +57,46 @@ public class Ship : MonoBehaviour
         //设置核心初始为存在
         _hasCore = true;
     }
+    
+    //对外暴露的加速度和扭矩力变量
+    public float ThrustForce
+    {
+        get
+        {
+            return _thrustForce;
+        }
+        set
+        {
+            _thrustForce = value;
+            if (_thrustForce <= 0)
+            {
+                _thrustForce = 0f;
+            }
 
+        }
+    }
+
+    public float TurnTorque
+    {
+        get
+        {
+            return _turnTorque;
+        }
+        set
+        {
+            _turnTorque = value;
+            if (_turnTorque <= 0)
+            {
+                _turnTorque = 0f;
+            }
+
+        }
+    }
+
+    public void SelectedTile(Tile tile)
+    {
+        _selectedTile = tile;
+    }
     private void Start()
     {
         InitShip();
@@ -87,8 +128,9 @@ public class Ship : MonoBehaviour
                 }
             }
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
+            
             Attack();
         }
 
@@ -178,12 +220,15 @@ public class Ship : MonoBehaviour
         }
     }
 
+    private float _weaponShootCDTimer;
     private void Attack()
     {
-        if (_ammoAmount > 0)
+        _weaponShootCDTimer += Time.deltaTime;
+        if (_ammoAmount > 0 && _weaponShootCDTimer >= _weaponShootCD)
         {
             Instantiate(_bullet, _firePoint.position, _firePoint.rotation);
             ConsumeAmmo(1);
+            _weaponShootCDTimer = 0;
         }
     }
 

@@ -4,7 +4,7 @@ using UnityEngine;
 public abstract class Tile : MonoBehaviour
 {
     [SerializeField] protected float _health = 100f;
-    protected Color _color;
+    [SerializeField]protected Color _color;
 
     protected Ship _ship;
 
