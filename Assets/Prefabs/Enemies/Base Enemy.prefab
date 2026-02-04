@@ -833,7 +833,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8375479706344985782}
   - component: {fileID: 8375479706344985776}
-  - component: {fileID: 7253422821656297048}
+  - component: {fileID: -6546163030618778620}
   - component: {fileID: 1362884078318366333}
   m_Layer: 0
   m_Name: Base Enemy
@@ -880,7 +880,7 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &7253422821656297048
+--- !u!114 &-6546163030618778620
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -889,7 +889,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8375479706344985783}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e8b18cddd235f2e42b60aff5c34976b2, type: 3}
+  m_Script: {fileID: 11500000, guid: bb75b16685b070d43a0c7e590b6ab0a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _bullet: {fileID: 6656070570829737214, guid: d2c2420374061e44b85e4f2138dcaaa6, type: 3}
@@ -898,10 +898,10 @@ MonoBehaviour:
   _turnTorque: 10
   _ammoCapacity: 0
   _ammoAmount: 0
-  _weaponShootCD: 0.2
-  _recoilForce: 5
+  _weaponShootCD: 0.5
+  _recoilForce: 100
   _currentState: 0
-  _attackRange: 50
+  _attackRange: 70
   _stopRange: 10
   _fireRate: 0.5
 --- !u!82 &1362884078318366333

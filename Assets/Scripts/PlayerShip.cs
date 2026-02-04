@@ -171,6 +171,10 @@ public class PlayerShip : Ship
         {
             rb.AddRelativeForce(Vector2.up * _thrustInput * _thrustForce);
         }
+        //if (Mathf.Abs(_turnInput) > 0.01f)
+        //{
+        //    rb.AddForce(Vector2.right * _turnInput * _thrustForce);
+        //}
 
         // 转向：负号是因为通常 A/左 为正方向，但 Unity 顺时针旋转需要负力矩
         //if (Mathf.Abs(_turnInput) > 0.01f)
