@@ -2,8 +2,6 @@
 using UnityEngine;
 
 
-
-
 public class CameraHandler : MonoBehaviour
 {
     public static CameraHandler Instance {  get; private set; }

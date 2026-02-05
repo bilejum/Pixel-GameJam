@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get; private set; }
     public GameState State;
 
-    [SerializeField] private PlayerShip _playerShip;
+    public PlayerShip _playerShip;
 
     private void Awake()
     {

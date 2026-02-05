@@ -75,6 +75,7 @@ public class PlayerShip : Ship
             {
                 DeleteTile(_cellPos);
             }
+
         }
 
         //按下空格射击
@@ -85,6 +86,7 @@ public class PlayerShip : Ship
         }
 
         CheckAmmoRestore();
+        UIManager.Instance.AdjustGaugePointer(_thrustForce * _thrustInput);
     }
 
 
