@@ -24,6 +24,7 @@ public class BaseAIShip : Ship
     [SerializeField] protected float _attackRange = 10f; // 进入此范围开始射击
     [SerializeField] protected float _stopRange = 5f;   // 距离太近则停止推进
     [SerializeField] protected float _fireRate = 1f;
+    [SerializeField] protected float _spreadAngle = 1f;
 
     protected Vector2 directionToTarget;
 
@@ -34,6 +35,8 @@ public class BaseAIShip : Ship
     [SerializeField] protected float _targetUpdateTimer;
 
     protected Collider2D[] detectedShip = new Collider2D[10]; // 检测到的敌人（数组比List更高效）
+
+
 
 
     protected override void Awake()
@@ -61,7 +64,7 @@ public class BaseAIShip : Ship
 
         if (_target == null) return;
 
-        float distance = Vector2.Distance(transform.position, _target.transform.position);
+        float distance = Vector2.Distance(_target.transform.position, this.transform.position);
 
         // 状态切换逻辑
         if (distance < _attackRange) _currentState = State.Fight;
@@ -77,13 +80,20 @@ public class BaseAIShip : Ship
     {
         if (_currentState == State.Fight && _target != null)
         {
-            directionToTarget = (transform.position - _target.transform.position).normalized;
+            Vector2 toTarget = _target.transform.position - transform.position;
+            float distance = toTarget.magnitude;
+            directionToTarget = toTarget.normalized;
 
-            // 简单判断下是否对准了玩家，没对准不瞎射
-            float dotProduct = Vector2.Dot(transform.up, (_target.transform.position - transform.position).normalized);
+            float dotProduct = Vector2.Dot(transform.up, directionToTarget);
             if (dotProduct > 0.95f)
             {
-                HandleAttack(directionToTarget);
+                // 距离越远，散布越大（可选）
+                float currentSpread = _spreadAngle * (1 + (distance * 0.05f));
+
+                float randomOffset = UnityEngine.Random.Range(-currentSpread * 0.5f, currentSpread * 0.5f);
+                Vector2 impreciseDir = Quaternion.Euler(0, 0, randomOffset) * directionToTarget;
+
+                HandleAttack(impreciseDir);
             }
         }
     }

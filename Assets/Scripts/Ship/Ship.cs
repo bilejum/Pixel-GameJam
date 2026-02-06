@@ -59,6 +59,19 @@ public abstract class Ship : MonoBehaviour
         _grid = GetComponentInChildren<Grid>();
         rb = GetComponent<Rigidbody2D>();
         _tileGrid = new Dictionary<Vector3Int, Tile>();
+
+        // 修复：如果该 Ship 的 prefab 已经包含若干 Tile（作为子对象），
+        // 需要在 Awake 时把这些 Tile 注册到 _tileGrid，这样敌机 prefab 上的枪塔才能被调度到 HandleAttack。
+        var existingTiles = GetComponentsInChildren<Tile>(includeInactive: true);
+        foreach (var t in existingTiles)
+        {
+            // 如果 Tile 已有坐标且未被注册，则加入字典；
+            // 若坐标未设置（默认 Vector3Int.zero），仍尝试注册，后续逻辑可以根据需要调整坐标管理策略。
+            if (!_tileGrid.ContainsKey(t._coordinate))
+            {
+                _tileGrid[t._coordinate] = t;
+            }
+        }
     }
 
     //轮询调度所有可以攻击的Tile
