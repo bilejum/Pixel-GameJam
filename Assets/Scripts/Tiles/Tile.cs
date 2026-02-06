@@ -67,6 +67,6 @@ public abstract class Tile : MonoBehaviour
 
     public virtual void Init()
     {
-        //Debug.Log($"{_color.ToString()},已安装!");
+        Debug.Log($"{this.ToString()},已安装!");
     }
 }

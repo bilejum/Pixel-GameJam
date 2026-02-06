@@ -12,8 +12,6 @@ public class UIManager : MonoBehaviour
 
     private PlayerShip _playerShip;
 
-    [SerializeField] private TextMeshProUGUI _ammoText;
-
     public RectTransform _buildingUI;
 
     //建造菜单缩进大小
@@ -37,12 +35,6 @@ public class UIManager : MonoBehaviour
             _playerShip = GameManager.Instance._playerShip;
         }
     }
-    public void UpdateAmmoText(int ammoAmount, int AmmoCapacity)
-    {
-        if (_ammoText == null) return;
-        _ammoText.text = $"Ammo: {ammoAmount}/{AmmoCapacity}";
-    }
-
     public void DeleteMode()
     {
         if (!_playerShip.deleteMode)

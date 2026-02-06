@@ -15,6 +15,12 @@ public class RedTile : Tile
     [SerializeField] protected float _weaponShootCD = 0.5f;
     [SerializeField] private float _recoilForce = 5f; // 基础后坐力
 
+
+    private void Awake()
+    {
+        _FireSound = GetComponent<AudioSource>();
+    }
+
     public override void Init()
     {
         _color = Color.red;
@@ -35,6 +41,7 @@ public class RedTile : Tile
             newBullet._shooter = _ship;
             _weaponShootCDTimer = 0;
             _ship.ApplyRecoil(direction,1f,_recoilForce);
+            _FireSound.Play();
         }
     }
 }

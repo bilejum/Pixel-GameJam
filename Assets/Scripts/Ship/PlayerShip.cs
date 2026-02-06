@@ -23,6 +23,8 @@ public class PlayerShip : Ship
 
     private Vector2 directionToMouse;
 
+
+
     //从这开始
     protected override void Awake()
     {
@@ -46,37 +48,25 @@ public class PlayerShip : Ship
         _thrustInput = Input.GetAxis("Vertical");
         _turnInput = Input.GetAxis("Horizontal");
 
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && GameManager.Instance.State is GameState.Build)
         {
             _cellPos = _grid.WorldToCell(Utils.GetMouseWorldPos());
             if (!deleteMode)
             {
                 if (CanSetTile(_cellPos))
                 {
-                    {
-                        Debug.Log($"current select tile{_cellPos}");
-                        SetTile(_cellPos, _selectedTile);
-                    }
-                }
-                else
-                {
-                    foreach (var item in _tileGrid)
-                    {
-                        Debug.Log(item.ToString());
-                    }
+                    Debug.Log($"current select tile{_cellPos}");
+                    SetTile(_cellPos, _selectedTile);
                 }
             }
             else if (deleteMode)
             {
                 DeleteTile(_cellPos);
             }
-
         }
 
-        //按下空格射击
-        if (Input.GetKey(KeyCode.Space))
+        if(Input.GetMouseButton(0) && GameManager.Instance.State is GameState.Game)
         {
-
             HandleAttack();
         }
 
@@ -149,7 +139,7 @@ public class PlayerShip : Ship
         foreach (var dir in directions)
         {
             Vector3Int neighborPos = cellPos + dir; // 计算相邻单元格位置
-            Debug.Log(neighborPos);
+            //Debug.Log(neighborPos);
             if (_tileGrid.ContainsKey(neighborPos) && !_tileGrid.ContainsKey(cellPos))
             {
                 // 只要有一个方向存在方块，就返回true（四周有方块）
@@ -205,7 +195,7 @@ public class PlayerShip : Ship
     {
         foreach (var tile in _tileGrid.Values)
         {
-            if(tile._tileType is TileType.Attack)
+            if (tile._tileType is TileType.Attack)
             {
                 var attackTile = tile as RedTile;
                 attackTile.Shoot(directionToMouse);
