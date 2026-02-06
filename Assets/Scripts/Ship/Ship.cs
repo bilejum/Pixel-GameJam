@@ -16,6 +16,9 @@ public abstract class Ship : MonoBehaviour
     [SerializeField] protected float _thrustForce = 100f; // 推进力
     [SerializeField] protected float _turnTorque = 15f;   // 转向力矩
 
+    public float _energy =0f;
+    public float _maxEnergy =0f;
+
     //对外暴露的加速度和扭矩力变量
     public float ThrustForce
     {
@@ -52,9 +55,23 @@ public abstract class Ship : MonoBehaviour
 
     protected virtual void Awake()
     {
+
         _grid = GetComponentInChildren<Grid>();
         rb = GetComponent<Rigidbody2D>();
         _tileGrid = new Dictionary<Vector3Int, Tile>();
+    }
+
+    //轮询调度所有可以攻击的Tile
+    protected virtual void HandleAttack(Vector2 direction)
+    {
+        foreach (var tile in _tileGrid.Values)
+        {
+            if (tile._tileType is TileType.Attack)
+            {
+                var attackTile = tile as RedTile;
+                attackTile.Shoot(direction);
+            }
+        }
     }
 
     public void DeleteTileInGrid(Vector3Int cellPos)
@@ -79,6 +96,11 @@ public abstract class Ship : MonoBehaviour
         // 使用 ForceMode2D.Impulse (瞬间冲击力)
         // 这样不需要持续施加力，更符合爆炸发射的感觉
         rb.AddForce(recoilDir * totalForce, ForceMode2D.Impulse);
+    }
+
+    public void ConsumeEnergy(float amount)
+    {
+        _energy -= amount;
     }
 
 }

@@ -23,6 +23,9 @@ public class UIManager : MonoBehaviour
     [SerializeField] private RectTransform _GaugePointer;
     [SerializeField] private float _smoothSpeed = 5f;      // 平滑速度
 
+    //能量条
+    [SerializeField] private TextMeshProUGUI _energyText;
+
     private void Awake()
     {
         Instance = this;
@@ -64,6 +67,11 @@ public class UIManager : MonoBehaviour
         // 4. 应用平滑过度动画
         // 注意：如果这个方法是在 Update 里调用的，Lerp 会非常平滑
         _GaugePointer.rotation = Quaternion.Lerp(_GaugePointer.rotation, targetRotation, Time.deltaTime * _smoothSpeed);
+    }
+
+    public void AdjustEnergy(float energy,float maxEnergy)
+    {
+        _energyText.text = $"{energy}/{maxEnergy}";
     }
 
     public void SwitchColor(string tileColor)

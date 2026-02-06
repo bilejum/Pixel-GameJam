@@ -17,6 +17,8 @@ public class EnemyManager : MonoBehaviour
     {
         Instance = this;
         _enemiesList = new List<BaseEnemy>();
+
+        target = GameManager.Instance._playerShip;
     }
 
 

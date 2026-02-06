@@ -29,7 +29,6 @@ public class PlayerShip : Ship
     protected override void Awake()
     {
         base.Awake();
-        rb.gravityScale = 0f;           // 太空通常没重力
         rb.drag = _linearDrag;          // 设置阻力
         rb.angularDrag = _angularDrag;  // 设置旋转阻力
     }
@@ -66,11 +65,14 @@ public class PlayerShip : Ship
 
         if(Input.GetMouseButton(0) && GameManager.Instance.State is GameState.Game)
         {
-            HandleAttack();
+            HandleAttack(directionToMouse);
         }
 
         //修改速度表
         UIManager.Instance.AdjustGaugePointer(_thrustForce * _thrustInput);
+
+        //修改能量条
+        UIManager.Instance.AdjustEnergy(_energy,_maxEnergy);
 
         directionToMouse = Utils.GetDirectionToMouse(transform);
     }
@@ -189,16 +191,5 @@ public class PlayerShip : Ship
         }
     }
 
-    //轮询调度所有可以攻击的Tile
-    private void HandleAttack()
-    {
-        foreach (var tile in _tileGrid.Values)
-        {
-            if (tile._tileType is TileType.Attack)
-            {
-                var attackTile = tile as RedTile;
-                attackTile.Shoot(directionToMouse);
-            }
-        }
-    }
+
 }

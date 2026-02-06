@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public enum State { Move, Fight }
+public enum State
+{
+    Move,
+    Fight
+}
 
 public enum Fraction
 {
@@ -20,8 +24,8 @@ public class BaseAIShip : Ship
     [SerializeField] protected float _attackRange = 10f; // 进入此范围开始射击
     [SerializeField] protected float _stopRange = 5f;   // 距离太近则停止推进
     [SerializeField] protected float _fireRate = 1f;
-    private float _fireTimer;
 
+    protected Vector2 directionToTarget;
 
     [Header("索敌设置")]
     public float _searchRadius = 10f; // 索敌半径（队友能感知的最大范围）
@@ -42,18 +46,17 @@ public class BaseAIShip : Ship
 
     protected virtual void Start()
     {
-
     }
 
     private void FixedUpdate()
     {
-        _targetUpdateTimer += Time.deltaTime;
-        if (_targetUpdateTimer >= _targetUpdateInterval)
-        {
-            //Debug.Log($"已检测，敌人为 {_target}");
-            UpdateTargetEnemy();
-            _targetUpdateTimer = 0f;
-        }
+        //_targetUpdateTimer += Time.deltaTime;
+        //if (_targetUpdateTimer >= _targetUpdateInterval)
+        //{
+        //    UpdateTargetEnemy();
+        //    Debug.Log($"已检测，敌人为 {_target}");
+        //    _targetUpdateTimer = 0f;
+        //}
 
 
         if (_target == null) return;
@@ -72,9 +75,11 @@ public class BaseAIShip : Ship
 
     private void Update()
     {
+        Debug.Log(_target);
         if (_currentState == State.Fight && _target != null)
         {
-            HandleAttack();
+            directionToTarget = (transform.position - _target.transform.position).normalized;
+            HandleAttack(directionToTarget);
         }
     }
 
@@ -104,22 +109,6 @@ public class BaseAIShip : Ship
         }
     }
 
-    private void HandleAttack()
-    {
-        //_fireTimer += Time.deltaTime;
-        //if (_fireTimer >= _fireRate && _ammoAmount > 0)
-        //{
-        //    // 简单判断下是否对准了玩家，没对准不瞎射
-        //    float dotProduct = Vector2.Dot(transform.up, (_target.transform.position - transform.position).normalized);
-        //    if (dotProduct > 0.95f)
-        //    {
-        //        Instantiate(_bullet, _firePoint.position, _firePoint.rotation);
-        //        _fireTimer = 0;
-        //        _ammoAmount -= 1;
-        //        Debug.Log($"敌人最大弹药量{_ammoCapacity},当前弹药量{_ammoAmount}");
-        //}
-        //}
-    }
 
     private void UpdateTargetEnemy()
     {
@@ -146,6 +135,5 @@ public class BaseAIShip : Ship
                 return;
             }
         }
-
     }
 }

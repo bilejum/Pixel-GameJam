@@ -24,6 +24,8 @@ public abstract class Tile : MonoBehaviour
     protected SpriteRenderer _spriteRenderer;
 
     [SerializeField] public TileType _tileType;
+
+    [SerializeField] protected float _energyConsume;
     public float Health
     {
         get

@@ -31,7 +31,7 @@ public class RedTile : Tile
 
     public void Shoot(Vector2 direction)
     {
-        if (_weaponShootCDTimer >= _weaponShootCD)
+        if (_weaponShootCDTimer >= _weaponShootCD && _ship._energy >= _energyConsume)
         {
             var newBullet = Instantiate<Bullet>(bullet, transform.position, Quaternion.identity);
             newBullet._direction = direction;
@@ -39,6 +39,8 @@ public class RedTile : Tile
             _weaponShootCDTimer = 0;
             _ship.ApplyRecoil(direction,1f,_recoilForce);
             _FireSound.Play();
+
+            _ship.ConsumeEnergy(_energyConsume);
         }
     }
 }
