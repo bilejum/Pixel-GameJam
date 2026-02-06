@@ -7,18 +7,22 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
+    //设置UIManager单例
     public static UIManager Instance { get; private set; }
 
-    [SerializeField] private PlayerShip _playerShip;
+    private PlayerShip _playerShip;
 
     [SerializeField] private TextMeshProUGUI _ammoText;
 
-    [SerializeField] private List<Tile> tilesDic;
-
     public RectTransform _buildingUI;
 
-    [SerializeField] private RectTransform _GaugePointer;
+    //建造菜单缩进大小
+    [SerializeField] private float _buildingUIZoomInAmont = 6;
+    [SerializeField] private float _buildingUIZoomOutAmont = 40;
+    private float _lastZoomAmount;
 
+    //速度表
+    [SerializeField] private RectTransform _GaugePointer;
     [SerializeField] private float _smoothSpeed = 5f;      // 平滑速度
 
     private void Awake()
@@ -37,24 +41,6 @@ public class UIManager : MonoBehaviour
     {
         if (_ammoText == null) return;
         _ammoText.text = $"Ammo: {ammoAmount}/{AmmoCapacity}";
-    }
-
-    public void SwitchColor(string tileColor)
-    {
-        switch (tileColor)
-        {
-            case "White":
-                _playerShip.SelectedTile(tilesDic[0]);
-                break;
-            case "Red":
-                _playerShip.SelectedTile(tilesDic[1]);
-                break;
-            case "Blue":
-                _playerShip.SelectedTile(tilesDic[2]);
-                break;
-            default:
-                break;
-        }
     }
 
     public void DeleteMode()
@@ -88,5 +74,34 @@ public class UIManager : MonoBehaviour
         _GaugePointer.rotation = Quaternion.Lerp(_GaugePointer.rotation, targetRotation, Time.deltaTime * _smoothSpeed);
     }
 
+    public void SwitchColor(string tileColor)
+    {
+        if (tileColor == null) return;
+        if (_playerShip == null) return;
 
+        string LoadPath = $"Prefabs/Tiles/{tileColor} Tile";
+
+        Tile tilePrefab = Resources.Load<Tile>(LoadPath);
+
+        Debug.Log(tilePrefab);
+        //将获取的TilePrefab传给playerShip
+        _playerShip.SelectedTile(tilePrefab);
+        Debug.Log($"成功加载并选择{tileColor}Tile！");
+    }
+
+    public void SwitchBuildingUI(bool buildingUIFlag)
+    {
+        if (buildingUIFlag)
+        {
+            _lastZoomAmount = CameraHandler.Instance.GetOrthographicSize();
+            _buildingUI.gameObject.SetActive(buildingUIFlag);
+            CameraHandler.Instance.ZoomInToShip(_buildingUIZoomInAmont);
+        }
+        else
+        {
+            _buildingUI.gameObject.SetActive(buildingUIFlag);
+            _buildingUIZoomOutAmont = _lastZoomAmount;
+            CameraHandler.Instance.ZoomInToShip(_buildingUIZoomOutAmont);
+        }
+    }
 }

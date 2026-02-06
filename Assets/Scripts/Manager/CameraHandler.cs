@@ -69,7 +69,7 @@ public class CameraHandler : MonoBehaviour
 
     }
 
-    public void ZoomInToShip(int amount)
+    public void ZoomInToShip(float amount)
     {
         targetOrthographicSize = amount;
     }
