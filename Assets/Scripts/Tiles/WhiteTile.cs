@@ -2,12 +2,11 @@
 
 public class WhiteTile : Tile
 {
-    public override void Init()
+    protected override void Awake()
     {
         _color = Color.white;
         _tileType = TileType.Core;
-        base.Init();
-
+        base.Awake();
     }
 
     private void OnDestroy()

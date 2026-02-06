@@ -7,15 +7,15 @@ public class BlueTile : Tile
 
     [SerializeField] private float _addThrustForceAmount;
     [SerializeField] private float _addTurnTorqueAmount;
-    public override void Init()
+
+    protected override void Awake()
     {
-        base.Init();
         //增加扭矩力和速度
+        _tileType = TileType.Other;
+        base.Awake();
+
         _ship.ThrustForce += _addThrustForceAmount;
         _ship.TurnTorque += _addTurnTorqueAmount;
-
-        _tileType = TileType.Other;
-
     }
 
     private void OnDestroy()

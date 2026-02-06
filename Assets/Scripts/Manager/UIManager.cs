@@ -75,10 +75,8 @@ public class UIManager : MonoBehaviour
 
         Tile tilePrefab = Resources.Load<Tile>(LoadPath);
 
-        Debug.Log(tilePrefab);
         //将获取的TilePrefab传给playerShip
         _playerShip.SelectedTile(tilePrefab);
-        Debug.Log($"成功加载并选择{tileColor}Tile！");
     }
 
     public void SwitchBuildingUI(bool buildingUIFlag)

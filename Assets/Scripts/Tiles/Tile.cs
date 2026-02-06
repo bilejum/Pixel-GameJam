@@ -53,20 +53,12 @@ public abstract class Tile : MonoBehaviour
 
         }
     }
-    private void Awake()
+    protected virtual void Awake()
     {
         _ship = transform.parent.parent.GetComponent<Ship>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
-    }
 
-    private void Start()
-    {
-        Init();
         _spriteRenderer.color = _color;
     }
 
-    public virtual void Init()
-    {
-        Debug.Log($"{this.ToString()},已安装!");
-    }
 }

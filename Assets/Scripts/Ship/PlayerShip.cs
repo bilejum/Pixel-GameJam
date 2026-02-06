@@ -55,7 +55,6 @@ public class PlayerShip : Ship
             {
                 if (CanSetTile(_cellPos))
                 {
-                    Debug.Log($"current select tile{_cellPos}");
                     SetTile(_cellPos, _selectedTile);
                 }
             }

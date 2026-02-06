@@ -16,17 +16,14 @@ public class RedTile : Tile
     [SerializeField] private float _recoilForce = 5f; // 基础后坐力
 
 
-    private void Awake()
-    {
-        _FireSound = GetComponent<AudioSource>();
-    }
-
-    public override void Init()
+    protected override void Awake()
     {
         _color = Color.red;
         _tileType = TileType.Attack;
-        base.Init();
+        _FireSound = GetComponent<AudioSource>();
+        base.Awake();
     }
+
     private void Update()
     {
         _weaponShootCDTimer += Time.deltaTime;
