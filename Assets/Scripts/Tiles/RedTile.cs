@@ -1,19 +1,40 @@
 ﻿using System;
 using UnityEngine;
 
+/// <summary>
+/// 红色方块，本身作为最基础炮台使用，从方块内部发射
+/// </summary>
+
 public class RedTile : Tile
 {
+    [SerializeField] private Bullet bullet;
+
+    [Header("开火设置")]
+    [SerializeField] protected AudioSource _FireSound;
+    protected float _weaponShootCDTimer;
+    [SerializeField] protected float _weaponShootCD = 0.5f;
+    [SerializeField] private float _recoilForce = 5f; // 基础后坐力
+
     public override void Init()
     {
         _color = Color.red;
+        _tileType = TileType.Attack;
         base.Init();
-
-        //出生增加弹药容量
-        _ship._ammoCapacity += 1;
+    }
+    private void Update()
+    {
+        _weaponShootCDTimer += Time.deltaTime;
     }
 
-    private void OnDestroy()
+    public void Shoot(Vector2 direction)
     {
-        if (_ship != null) _ship._ammoCapacity -= 1;
+        if (_weaponShootCDTimer >= _weaponShootCD)
+        {
+            var newBullet = Instantiate<Bullet>(bullet, transform.position, Quaternion.identity);
+            newBullet._direction = direction;
+            newBullet._shooter = _ship;
+            _weaponShootCDTimer = 0;
+            _ship.ApplyRecoil(direction,1f,_recoilForce);
+        }
     }
 }

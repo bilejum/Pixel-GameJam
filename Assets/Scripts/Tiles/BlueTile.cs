@@ -8,14 +8,16 @@ public class BlueTile : Tile
     {
         base.Init();
         //增加扭矩力和速度
-        _ship.ThrustForce *= 1.1f;
-        _ship.TurnTorque *= 1.1f;
+        _ship.ThrustForce += 50;
+        _ship.TurnTorque += 20;
+
+        _tileType = TileType.Other;
 
     }
 
     private void OnDestroy()
     {
-        _ship.ThrustForce /= 1.1f;
-        _ship.TurnTorque /= 1.1f;
+        _ship.ThrustForce -= 50;
+        _ship.TurnTorque -= 20;
     }
 }

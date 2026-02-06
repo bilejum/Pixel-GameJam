@@ -697,6 +697,14 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 8676449952109239357, guid: 2099a5948c927de4ba1aca481ff724b5, type: 3}
+      propertyPath: _turnTorque
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8676449952109239357, guid: 2099a5948c927de4ba1aca481ff724b5, type: 3}
+      propertyPath: _thrustForce
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2099a5948c927de4ba1aca481ff724b5, type: 3}
 --- !u!1 &619394800
@@ -1337,13 +1345,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: add5d96a04e7f6a43a7b28c0b964996e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerShip: {fileID: 0}
   _ammoText: {fileID: 893300645}
-  tilesDic:
-  - {fileID: -3458611733534522787, guid: 20ccd7516545ac241bd17de83b8dd4df, type: 3}
-  - {fileID: 5939482147851961875, guid: df230e8e9a57d2f4fb694496825076ce, type: 3}
-  - {fileID: -2784357674937424464, guid: 437a1c47aa83e274d826e3e9ac5f4511, type: 3}
   _buildingUI: {fileID: 645124139}
+  _buildingUIZoomInAmont: 6
+  _buildingUIZoomOutAmont: 40
   _GaugePointer: {fileID: 1222681372}
   _smoothSpeed: 5
 --- !u!1 &1020564319
@@ -1953,7 +1958,7 @@ MonoBehaviour:
   m_Follow: {fileID: 1179424569}
   m_Lens:
     FieldOfView: 103
-    OrthographicSize: 54
+    OrthographicSize: 36.20621
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -2200,8 +2205,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10905, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 2023e943dd6f1bc43b99fdb3d43ba5ff, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2353,7 +2358,7 @@ Camera:
   far clip plane: 1000
   field of view: 103
   orthographic: 1
-  orthographic size: 54
+  orthographic size: 36.20621
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2

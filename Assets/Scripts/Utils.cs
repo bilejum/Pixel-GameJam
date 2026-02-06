@@ -33,4 +33,16 @@ public static class Utils
         return textMesh;
     }
 
+
+    public static Vector2 GetDirectionToMouse(UnityEngine.Transform transform)
+    {
+        // 获取鼠标世界坐标
+        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        mouseWorldPos.z = 0;
+
+        // 计算方向：从飞船位置指向鼠标位置
+        Vector2 directionToMouse = ((Vector2)mouseWorldPos - (Vector2)transform.position).normalized;
+
+        return directionToMouse;
+    }
 }

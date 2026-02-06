@@ -76,8 +76,6 @@ public class BaseAIShip : Ship
         {
             HandleAttack();
         }
-
-        CheckAmmoRestore();
     }
 
     // 处理转向：让敌人始终面朝玩家
@@ -108,19 +106,19 @@ public class BaseAIShip : Ship
 
     private void HandleAttack()
     {
-        _fireTimer += Time.deltaTime;
-        if (_fireTimer >= _fireRate && _ammoAmount > 0)
-        {
-            // 简单判断下是否对准了玩家，没对准不瞎射
-            float dotProduct = Vector2.Dot(transform.up, (_target.transform.position - transform.position).normalized);
-            if (dotProduct > 0.95f)
-            {
-                Instantiate(_bullet, _firePoint.position, _firePoint.rotation);
-                _fireTimer = 0;
-                _ammoAmount -= 1;
-                Debug.Log($"敌人最大弹药量{_ammoCapacity},当前弹药量{_ammoAmount}");
-            }
-        }
+        //_fireTimer += Time.deltaTime;
+        //if (_fireTimer >= _fireRate && _ammoAmount > 0)
+        //{
+        //    // 简单判断下是否对准了玩家，没对准不瞎射
+        //    float dotProduct = Vector2.Dot(transform.up, (_target.transform.position - transform.position).normalized);
+        //    if (dotProduct > 0.95f)
+        //    {
+        //        Instantiate(_bullet, _firePoint.position, _firePoint.rotation);
+        //        _fireTimer = 0;
+        //        _ammoAmount -= 1;
+        //        Debug.Log($"敌人最大弹药量{_ammoCapacity},当前弹药量{_ammoAmount}");
+        //}
+        //}
     }
 
     private void UpdateTargetEnemy()

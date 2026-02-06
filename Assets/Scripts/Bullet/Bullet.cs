@@ -2,28 +2,31 @@
 
 public class Bullet : MonoBehaviour
 {
-    public float speed = 20f;
-    public float lifeTime = 3f; // 3秒后自动销毁，防止内存爆掉
+    [SerializeField] public float speed = 20f;
 
-    public float damage = 20f;
+    //自动销毁，防止内存爆掉
+    [SerializeField] public float lifeTime = 3f;
 
+    [SerializeField] public float damage = 20f;
 
     [Header("特效设置")]
-    // 这里拖入你刚才做好的 ExplosionVFX 预制体
     [SerializeField] private GameObject hitEffectPrefab;
+
+    public Vector2 _direction;
+
+    public Ship _shooter;
 
     void Start()
     {
         // 子弹生成时，直接给它一个向前的速度
-        GetComponent<Rigidbody2D>().velocity = transform.up * speed;
+        GetComponent<Rigidbody2D>().velocity = _direction * speed;
         Destroy(gameObject, lifeTime);
-
     }
 
     // 碰撞检测逻辑可以在这里扩展
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision != null)
+        if (collision != null && collision.transform.parent.parent != _shooter.transform)
         {
             var hitTile = collision.GetComponent<Tile>();
             hitTile.Health -= damage;

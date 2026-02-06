@@ -8,35 +8,30 @@ public class PlayerShip : Ship
 
     [SerializeField] private Tile _selectedTile;
 
-
     [Header("手感优化")]
     [SerializeField] private float _linearDrag = 1f;    // 线性阻力（空气阻力感）
     [SerializeField] private float _angularDrag = 2f;   // 旋转阻力（防止无限自转）
 
+    //控制输入值(0,1)
     private float _thrustInput;
     private float _turnInput;
 
-    [SerializeField] private Tile _whiteTile;
-
-
-    public bool deleteMode =false;
-
+    public bool deleteMode = false;
 
     //是否可以移动，主要用于UI切换
     public bool canMove = true;
 
-
+    private Vector2 directionToMouse;
 
     //从这开始
     protected override void Awake()
     {
         base.Awake();
-        // 初始化刚体参数，让它飞起来更像“飞船”而不是“砖头”
         rb.gravityScale = 0f;           // 太空通常没重力
         rb.drag = _linearDrag;          // 设置阻力
         rb.angularDrag = _angularDrag;  // 设置旋转阻力
-   }
-    
+    }
+
     public void SelectedTile(Tile tile)
     {
         _selectedTile = tile;
@@ -82,14 +77,14 @@ public class PlayerShip : Ship
         if (Input.GetKey(KeyCode.Space))
         {
 
-            Attack();
+            HandleAttack();
         }
 
-        CheckAmmoRestore();
+        //修改速度表
         UIManager.Instance.AdjustGaugePointer(_thrustForce * _thrustInput);
+
+        directionToMouse = Utils.GetDirectionToMouse(transform);
     }
-
-
 
     private void FixedUpdate()
     {
@@ -98,13 +93,13 @@ public class PlayerShip : Ship
         {
             HandleMovement();
         }
-        
-
     }
 
+    //初始化飞船，目前仅有放置核心方块（白色方块）功能
     private void InitShip()
     {
-        SetTile(Vector3Int.zero, _whiteTile);
+        Tile whiteTile = Resources.Load<Tile>("Prefabs/Tiles/White Tile");
+        SetTile(Vector3Int.zero, whiteTile);
     }
 
     public void SetTile(Vector3Int cellPos, Tile tile)
@@ -188,13 +183,6 @@ public class PlayerShip : Ship
 
     private void RotateTowardsMouse()
     {
-        // 获取鼠标世界坐标
-        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        mouseWorldPos.z = 0;
-
-        // 计算方向：从飞船位置指向鼠标位置
-        Vector2 directionToMouse = ((Vector2)mouseWorldPos - rb.position).normalized;
-
         // 计算叉积：判断鼠标在飞船“机头”的哪一边
         // transform.up 是飞船当前的正前方
         float angleDiff = Vector3.Cross(transform.up, directionToMouse).z;
@@ -212,58 +200,16 @@ public class PlayerShip : Ship
         }
     }
 
-    private void Attack()
+    //轮询调度所有可以攻击的Tile
+    private void HandleAttack()
     {
-        Vector2 bulletDir = _firePoint.up;
-
-        _weaponShootCDTimer += Time.deltaTime;
-        if (_ammoAmount > 0 && _weaponShootCDTimer !>= _weaponShootCD)
+        foreach (var tile in _tileGrid.Values)
         {
-            Instantiate(_bullet, _firePoint.position, _firePoint.rotation);
-            //ConsumeAmmo(1);
-            _ammoAmount -= 1;
-            _weaponShootCDTimer = 0;
-            UpdateAmmoInfo();
-
-            _FireSound.Play();
-
-            ApplyRecoil(bulletDir, 10);
+            if(tile._tileType is TileType.Attack)
+            {
+                var attackTile = tile as RedTile;
+                attackTile.Shoot(directionToMouse);
+            }
         }
     }
-
-    //子弹操作相关
-    //#region 子弹操作
-    //private void AddAmmo(int amount)
-    //{
-    //    _ammoAmount += amount;
-    //    UpdateAmmoInfo();
-    //}
-
-    //private void ConsumeAmmo(int amount)
-    //{
-    //    _ammoAmount -= amount;
-    //    UpdateAmmoInfo();
-    //}
-
-    //public void AddAmmoCapacity(int amount)
-    //{
-    //    _ammoCapacity += amount;
-    //    UpdateAmmoInfo();
-    //}
-
-    //public void ConsumeAmmoCapacity(int amount)
-    //{
-    //    _ammoCapacity -= amount;
-    //    UpdateAmmoInfo();
-    //}
-
-
-
-    //#endregion
-
-    private void UpdateAmmoInfo()
-    {
-        UIManager.Instance.UpdateAmmoText(_ammoAmount, _ammoCapacity);
-    }
-
 }

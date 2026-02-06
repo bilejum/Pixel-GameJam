@@ -1,16 +1,29 @@
 ﻿using System;
 using UnityEngine;
 
+//这个Type指的是方块的功能类别，譬如能否攻击
+public enum TileType
+{
+    Attack,
+    Core,
+    Other
+}
+
 public abstract class Tile : MonoBehaviour
 {
     [SerializeField] protected float _health = 100f;
+
     [SerializeField] protected Color _color;
+
     [SerializeField] protected GameObject _destroyEffectPrefab;
+
     public Vector3Int _coordinate;
 
     protected Ship _ship;
 
     protected SpriteRenderer _spriteRenderer;
+
+    [SerializeField] public TileType _tileType;
     public float Health
     {
         get
