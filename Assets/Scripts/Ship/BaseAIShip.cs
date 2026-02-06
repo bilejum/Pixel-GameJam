@@ -75,11 +75,16 @@ public class BaseAIShip : Ship
 
     private void Update()
     {
-        Debug.Log(_target);
         if (_currentState == State.Fight && _target != null)
         {
             directionToTarget = (transform.position - _target.transform.position).normalized;
-            HandleAttack(directionToTarget);
+
+            // 简单判断下是否对准了玩家，没对准不瞎射
+            float dotProduct = Vector2.Dot(transform.up, (_target.transform.position - transform.position).normalized);
+            if (dotProduct > 0.95f)
+            {
+                HandleAttack(directionToTarget);
+            }
         }
     }
 
@@ -108,8 +113,6 @@ public class BaseAIShip : Ship
             rb.AddRelativeForce(Vector2.up * _thrustForce);
         }
     }
-
-
     private void UpdateTargetEnemy()
     {
         // 清空当前目标（先重置）

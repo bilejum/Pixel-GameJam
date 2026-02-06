@@ -566,8 +566,8 @@ MonoBehaviour:
   _maxEnergy: 0
   _currentState: 0
   _fraction: 1
-  _attackRange: 10
-  _stopRange: 5
+  _attackRange: 70
+  _stopRange: 20
   _fireRate: 1
   _searchRadius: 10
   _targetUpdateInterval: 0.5
