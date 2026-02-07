@@ -184,10 +184,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _health: 100
   _maxHealth: 100
-  _color: {r: 0.25471687, g: 0.9954561, b: 1, a: 1}
+  _healthRecoveyRate: 10
+  _color: {r: 0.07191872, g: 0.8617275, b: 0.97735846, a: 1}
   _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
   _coordinate: {x: 0, y: 0, z: 0}
   _tileType: 0
   _energyConsume: 0
+  _material: {fileID: 0}
   _addThrustForceAmount: 20
   _addTurnTorqueAmount: 10

@@ -23,20 +23,20 @@ public class EnemyManager : MonoBehaviour
 
 
     private float timer;
-    //private void Update()
-    //{
-    //    timer += Time.deltaTime;
-    //    if (timer > 1f)
-    //    {
-    //        SpawnEnemies();
-    //        timer = 0f;
-    //    }
+    private void Update()
+    {
+        timer += Time.deltaTime;
+        if (timer > 1f)
+        {
+            //SpawnEnemies();
+            timer = 0f;
+        }
 
-    //    if (Input.GetKeyDown(KeyCode.C))
-    //    {
-    //        ClearEnemies();
-    //    }
-    //}
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            ClearEnemies();
+        }
+    }
 
     private void SpawnEnemies()
     {
@@ -57,5 +57,10 @@ public class EnemyManager : MonoBehaviour
                 enemyShip.GetChild(i).GetComponent<Tile>().Health = 0;
             }
         }
+    }
+
+    public void StopAllEnemies()
+    {
+
     }
 }

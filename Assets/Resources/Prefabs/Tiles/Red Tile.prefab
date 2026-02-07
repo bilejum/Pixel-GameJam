@@ -170,13 +170,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b4045f689d0e3314da1e076c92ee3264, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 50
-  _maxHealth: 50
-  _color: {r: 0, g: 0, b: 0, a: 0}
+  _health: 100
+  _maxHealth: 100
+  _healthRecoveyRate: 10
+  _color: {r: 0.882353, g: 0.1254902, b: 0.1254902, a: 0}
   _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
   _coordinate: {x: 0, y: 0, z: 0}
   _tileType: 0
   _energyConsume: 5
+  _material: {fileID: 0}
   bullet: {fileID: 6656070570829737214, guid: d2c2420374061e44b85e4f2138dcaaa6, type: 3}
   _FireSound: {fileID: 0}
   _weaponShootCD: 0.5

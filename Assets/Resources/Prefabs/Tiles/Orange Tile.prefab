@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &324085935017602898
+--- !u!1001 &3668122089439338259
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -53,36 +53,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4173422818425878524, guid: bea78e260585585419a4a30aec659f61, type: 3}
       propertyPath: m_Name
-      value: Yellow Tile
+      value: Base Tile
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bea78e260585585419a4a30aec659f61, type: 3}
---- !u!1 &4437623989764102318 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4173422818425878524, guid: bea78e260585585419a4a30aec659f61, type: 3}
-  m_PrefabInstance: {fileID: 324085935017602898}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3330162047188022247
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4437623989764102318}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8813a193d37fb71428b16ee9a1ca34d8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _health: 100
-  _maxHealth: 100
-  _healthRecoveyRate: 10
-  _color: {r: 0.96470594, g: 0.7686275, b: 0.050980397, a: 0}
-  _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
-  _coordinate: {x: 0, y: 0, z: 0}
-  _tileType: 2
-  _energyConsume: 0
-  _material: {fileID: 0}
-  _chargeCD: 0.1
-  _chargeAmount: 1
-  _maxCharge: 10

@@ -26,18 +26,21 @@ public class Bullet : MonoBehaviour
     // 碰撞检测逻辑可以在这里扩展
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision != null && collision.transform.parent.parent != _shooter.transform)
+        if (collision != null)
         {
-            var hitTile = collision.GetComponent<Tile>();
-            hitTile.Health -= damage;
-            //Debug.Log($"damage :{hitTile.Health}");
-
-            if (hitEffectPrefab != null)
+            if (collision.transform.parent.parent != _shooter.transform)
             {
-                // 在子弹当前的位置，以默认旋转角度生成特效
-                Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
+                var hitTile = collision.GetComponent<Tile>();
+                hitTile.Health -= damage;
+                //Debug.Log($"damage :{hitTile.Health}");
+
+                if (hitEffectPrefab != null)
+                {
+                    // 在子弹当前的位置，以默认旋转角度生成特效
+                    Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
+                }
+                Destroy(gameObject);
             }
-            Destroy(gameObject);
         }
     }
 }

@@ -44,7 +44,6 @@ public abstract class Tile : MonoBehaviour
         {
             if (value < _health)
             {
-                Debug.Log("血量减少");
                 _ship.SetShipState = ShipState.Fight;
             }
 

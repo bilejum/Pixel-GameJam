@@ -30,6 +30,7 @@ public class CameraHandler : MonoBehaviour
     private void Start()
     {
         orthographicSize = cinemachineVirtualCamera.m_Lens.OrthographicSize;
+        cinemachineVirtualCamera.Follow = GameManager.Instance._playerShip.transform;
     }
 
 
@@ -63,7 +64,7 @@ public class CameraHandler : MonoBehaviour
 
         targetOrthographicSize = Mathf.Clamp(targetOrthographicSize, minOrthograhicSize, maxOrthographicSize);
 
-        orthographicSize = Mathf.Lerp(orthographicSize, targetOrthographicSize, Time.deltaTime * 5f);
+        orthographicSize = Mathf.Lerp(orthographicSize, targetOrthographicSize, Time.deltaTime* 5f);
 
         cinemachineVirtualCamera.m_Lens.OrthographicSize = orthographicSize;
 
