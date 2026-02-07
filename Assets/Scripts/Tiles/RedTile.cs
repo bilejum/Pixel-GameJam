@@ -24,8 +24,9 @@ public class RedTile : Tile
         base.Awake();
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
         _weaponShootCDTimer += Time.deltaTime;
     }
 

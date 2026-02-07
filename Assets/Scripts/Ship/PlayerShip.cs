@@ -42,8 +42,10 @@ public class PlayerShip : Ship
         InitShip();
     }
 
-    private void Update()
+    protected override void Update()
     {
+        base.Update();
+
         _thrustInput = Input.GetAxis("Vertical");
         _turnInput = Input.GetAxis("Horizontal");
 

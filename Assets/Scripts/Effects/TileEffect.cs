@@ -12,6 +12,7 @@ public class TileEffect : MonoBehaviour
         // 获取当前物体 SpriteRenderer 组件里的材质
         // 使用 .material 会自动创建该材质的副本，这样改动就不会影响到其他方块
         _instancedMaterial = GetComponent<SpriteRenderer>().material;
+        Debug.Log(_instancedMaterial);
     }
 
     // 当方块被打中或者死亡时调用这个方法
@@ -24,7 +25,8 @@ public class TileEffect : MonoBehaviour
 
     IEnumerator DissolveRoutine(float currentDissolve)
     {
-        _currentDissolve = currentDissolve;
+        currentDissolve /= 2;
+        _currentDissolve = Mathf.Clamp(currentDissolve,0f,0.4f);
 
         _instancedMaterial.SetFloat("_DissolveAmount", _currentDissolve);
 

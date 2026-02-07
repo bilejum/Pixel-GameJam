@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 
-public enum State
+public enum AIState
 {
     Move,
     Fight
@@ -16,15 +16,15 @@ public class BaseAIShip : Ship
 {
     protected Ship _target;
 
-    [SerializeField] protected State _currentState = State.Move;
+    [SerializeField] protected AIState _currentState = AIState.Move;
 
     [SerializeField] private Fraction _fraction;
 
     [Header("AI设置")]
-    [SerializeField] protected float _attackRange = 10f; // 进入此范围开始射击
-    [SerializeField] protected float _stopRange = 5f;   // 距离太近则停止推进
+    [SerializeField] protected float _attackRange = 70f; // 进入此范围开始射击
+    [SerializeField] protected float _stopRange = 30f;   // 距离太近则停止推进
     [SerializeField] protected float _fireRate = 1f;
-    [SerializeField] protected float _spreadAngle = 1f;
+    [SerializeField] protected float _spreadAngle = 2f;
 
     protected Vector2 directionToTarget;
 
@@ -67,18 +67,19 @@ public class BaseAIShip : Ship
         float distance = Vector2.Distance(_target.transform.position, this.transform.position);
 
         // 状态切换逻辑
-        if (distance < _attackRange) _currentState = State.Fight;
-        else _currentState = State.Move;
+        if (distance < _attackRange) _currentState = AIState.Fight;
+        else _currentState = AIState.Move;
 
         HandleRotation();
         HandleMovement(distance);
 
 
     }
-
-    private void Update()
+    protected override void Update()
     {
-        if (_currentState == State.Fight && _target != null)
+        base.Update();
+
+        if (_currentState == AIState.Fight && _target != null)
         {
             Vector2 toTarget = _target.transform.position - transform.position;
             float distance = toTarget.magnitude;

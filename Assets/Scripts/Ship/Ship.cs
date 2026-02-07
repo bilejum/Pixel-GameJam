@@ -2,6 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
+/// <summary>
+/// 主要用于判断是否脱战
+/// </summary>
+public enum ShipState
+{
+    Fight,
+    Noncombat
+}
 public abstract class Ship : MonoBehaviour
 {
     protected Rigidbody2D rb;
@@ -13,11 +23,11 @@ public abstract class Ship : MonoBehaviour
     protected Dictionary<Vector3Int, Tile> _tileGrid;
 
     [Header("动力设置")]
-    [SerializeField] protected float _thrustForce = 100f; // 推进力
-    [SerializeField] protected float _turnTorque = 15f;   // 转向力矩
+    [SerializeField] protected float _thrustForce = 0f; // 推进力
+    [SerializeField] protected float _turnTorque = 0f;   // 转向力矩
 
-    public float _energy =0f;
-    public float _maxEnergy =0f;
+    public float _energy = 0f;
+    public float _maxEnergy = 0f;
 
     //对外暴露的加速度和扭矩力变量
     public float ThrustForce
@@ -53,6 +63,32 @@ public abstract class Ship : MonoBehaviour
         }
     }
 
+    [Header("脱战设置")]
+    private ShipState _shipState = ShipState.Noncombat;
+    public float _noncombatCD = 10f;
+    private float _nocombatTimer;
+
+    public ShipState SetShipState
+    {
+        set
+        {
+            if(value is ShipState.Fight)
+            {
+                _shipState = ShipState.Fight;
+                _nocombatTimer = 0;
+            }
+        }
+    }
+
+    public ShipState GetShipState
+    {
+        get
+        {
+            return _shipState;
+        }
+        
+    }
+
     protected virtual void Awake()
     {
 
@@ -70,6 +106,21 @@ public abstract class Ship : MonoBehaviour
             if (!_tileGrid.ContainsKey(t._coordinate))
             {
                 _tileGrid[t._coordinate] = t;
+            }
+        }
+    }
+
+    protected virtual void Update()
+    {
+        //进入脱战判断，被打的时候会重置脱战计时
+        if (_shipState is ShipState.Fight)
+        {
+            _nocombatTimer += Time.deltaTime;
+            //脱战CD
+            if (_nocombatTimer >= _noncombatCD)
+            {
+                _shipState = ShipState.Noncombat;
+                _nocombatTimer = 0f;
             }
         }
     }

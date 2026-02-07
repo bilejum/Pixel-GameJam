@@ -11,10 +11,12 @@ public enum TileType
 
 public abstract class Tile : MonoBehaviour
 {
+    [Header("血量相关")]
     [SerializeField] protected float _health = 100f;
-
     [SerializeField] protected float _maxHealth = 100f;
+    [SerializeField] protected float _healthRecoveyRate =0.1f; //这是百分比
 
+    [Header("杂项")]
     [SerializeField] protected Color _color;
 
     [SerializeField] protected GameObject _destroyEffectPrefab;
@@ -28,6 +30,10 @@ public abstract class Tile : MonoBehaviour
     [SerializeField] public TileType _tileType;
 
     [SerializeField] protected float _energyConsume;
+
+    [SerializeField] protected Material _material;
+
+    protected TileEffect _tileEffect;
     public float Health
     {
         get
@@ -36,10 +42,17 @@ public abstract class Tile : MonoBehaviour
         }
         set
         {
+            if (value < _health)
+            {
+                Debug.Log("血量减少");
+                _ship.SetShipState = ShipState.Fight;
+            }
+
             _health = value;
 
+
             var healthPercent = _health / _maxHealth;
-            _tileEffect.PlayDissolve(1f- healthPercent);
+            _tileEffect.PlayDissolve(1- healthPercent);
 
             // 逻辑处理：血量归零销毁物体
             if (_health <= 0)
@@ -61,16 +74,24 @@ public abstract class Tile : MonoBehaviour
             }
         }
     }
-    protected TileEffect _tileEffect;
+
     protected virtual void Awake()
     {
         _ship = transform.parent.parent.GetComponent<Ship>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _tileEffect = GetComponent<TileEffect>();
 
+        //_material = Resources.Load<Material>("Shaders/M_Glow_Addctive");
+        //_spriteRenderer.material = _material;
 
         _spriteRenderer.color = _color;
     }
 
-
+    protected virtual void Update()
+    {
+        if(_ship.GetShipState is ShipState.Noncombat && _health < _maxHealth)
+        {
+            Health += _maxHealth * _healthRecoveyRate * Time.deltaTime;
+        }
+    }
 }

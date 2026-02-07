@@ -24,7 +24,7 @@ public class YellowTile : Tile
         _ship._maxEnergy += _maxCharge;
     }
 
-    private void Update()
+    protected override void Update()
     {
         _chargeTimer += Time.deltaTime;
         if (_chargeTimer >= _chargeCD && _ship._energy <_ship._maxEnergy)
