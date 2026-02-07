@@ -173,7 +173,7 @@ MonoBehaviour:
   _health: 100
   _maxHealth: 100
   _healthRecoveyRate: 10
-  _color: {r: 0.882353, g: 0.1254902, b: 0.1254902, a: 0}
+  _color: {r: 0.882353, g: 0.1254902, b: 0.1254902, a: 1}
   _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
   _coordinate: {x: 0, y: 0, z: 0}
   _tileType: 0
