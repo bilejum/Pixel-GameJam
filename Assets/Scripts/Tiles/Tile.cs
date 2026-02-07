@@ -13,6 +13,8 @@ public abstract class Tile : MonoBehaviour
 {
     [SerializeField] protected float _health = 100f;
 
+    [SerializeField] protected float _maxHealth = 100f;
+
     [SerializeField] protected Color _color;
 
     [SerializeField] protected GameObject _destroyEffectPrefab;
@@ -36,6 +38,9 @@ public abstract class Tile : MonoBehaviour
         {
             _health = value;
 
+            var healthPercent = _health / _maxHealth;
+            _tileEffect.PlayDissolve(1f- healthPercent);
+
             // 逻辑处理：血量归零销毁物体
             if (_health <= 0)
             {
@@ -49,18 +54,23 @@ public abstract class Tile : MonoBehaviour
                     var main = newDestroyEffect.GetComponent<ParticleSystem>().main;
                     var colorOvertime = newDestroyEffect.GetComponent<ParticleSystem>().colorOverLifetime;
                     colorOvertime.color = _color;
-                }
-                Destroy(gameObject);
-            }
 
+                    Destroy(gameObject);
+                }
+
+            }
         }
     }
+    protected TileEffect _tileEffect;
     protected virtual void Awake()
     {
         _ship = transform.parent.parent.GetComponent<Ship>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _tileEffect = GetComponent<TileEffect>();
+
 
         _spriteRenderer.color = _color;
     }
+
 
 }

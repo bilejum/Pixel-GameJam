@@ -62,25 +62,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 4173422818425878524, guid: bea78e260585585419a4a30aec659f61, type: 3}
   m_PrefabInstance: {fileID: 9045944727597722727}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &-2784357674937424464
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4927887130447780763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccf447e894f5c4e41afbe562a2f193a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _health: 200
-  _color: {r: 0.25471687, g: 0.9954561, b: 1, a: 1}
-  _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
-  _coordinate: {x: 0, y: 0, z: 0}
-  _tileType: 0
-  _addThrustForceAmount: 20
-  _addTurnTorqueAmount: 10
 --- !u!96 &446284257994435033
 TrailRenderer:
   serializedVersion: 2
@@ -189,3 +170,24 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &-2784357674937424464
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4927887130447780763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ccf447e894f5c4e41afbe562a2f193a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _health: 100
+  _maxHealth: 100
+  _color: {r: 0.25471687, g: 0.9954561, b: 1, a: 1}
+  _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
+  _coordinate: {x: 0, y: 0, z: 0}
+  _tileType: 0
+  _energyConsume: 0
+  _addThrustForceAmount: 20
+  _addTurnTorqueAmount: 10

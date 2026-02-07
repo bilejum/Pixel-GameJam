@@ -9,10 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3464308017724833628}
+  - component: {fileID: 3464308017724833627}
   - component: {fileID: 3464308017724833626}
   - component: {fileID: 3464308017724833625}
   m_Layer: 0
-  m_Name: Base Enemy
+  m_Name: PlayerShip
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,6 +36,28 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3464308017724833627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3464308017724833629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 024088ac50c51a34ca8652b47129319b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _bullet: {fileID: 6656070570829737214, guid: d2c2420374061e44b85e4f2138dcaaa6, type: 3}
+  _thrustForce: 0
+  _turnTorque: 0
+  _energy: 0
+  _maxEnergy: 0
+  _selectedTile: {fileID: -2784357674937424464, guid: 437a1c47aa83e274d826e3e9ac5f4511, type: 3}
+  _linearDrag: 1
+  _angularDrag: 2
+  deleteMode: 0
+  canMove: 1
 --- !u!50 &3464308017724833626
 Rigidbody2D:
   serializedVersion: 4

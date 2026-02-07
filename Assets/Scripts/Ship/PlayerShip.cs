@@ -111,7 +111,7 @@ public class PlayerShip : Ship
 
         v2pos = (Vector2Int)cellPos;
 
-        Utils.CreateworldText(newTile.transform, v2pos.ToString(), Vector3.zero, 20, Color.black, TextAnchor.MiddleCenter, TextAlignment.Center, sortingOrder: 2);
+        //Utils.CreateworldText(newTile.transform, v2pos.ToString(), Vector3.zero, 20, Color.black, TextAnchor.MiddleCenter, TextAlignment.Center, sortingOrder: 2);
     }
 
     public void DeleteTile(Vector3Int cellPos)
