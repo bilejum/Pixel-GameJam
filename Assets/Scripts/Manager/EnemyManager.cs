@@ -13,6 +13,8 @@ public class EnemyManager : MonoBehaviour
 
     [SerializeField] private BaseEnemy enemyPrefab;
 
+    [SerializeField] private bool _spawnEnemyFlag = false;
+
     private void Awake()
     {
         Instance = this;
@@ -25,11 +27,14 @@ public class EnemyManager : MonoBehaviour
     private float timer;
     private void Update()
     {
-        timer += Time.deltaTime;
-        if (timer > 1f)
+        if (_spawnEnemyFlag)
         {
-            //SpawnEnemies();
-            timer = 0f;
+            timer += Time.deltaTime;
+            if (timer > 1f)
+            {
+                SpawnEnemies();
+                timer = 0f;
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.C))
