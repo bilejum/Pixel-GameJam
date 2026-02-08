@@ -26,6 +26,7 @@ public class YellowTile : Tile
 
     protected override void Update()
     {
+        base.Update();
         _chargeTimer += Time.deltaTime;
         if (_chargeTimer >= _chargeCD && _ship._energy <_ship._maxEnergy)
         {

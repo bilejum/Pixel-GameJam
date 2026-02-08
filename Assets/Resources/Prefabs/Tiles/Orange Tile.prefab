@@ -78,12 +78,12 @@ MonoBehaviour:
   _maxHealth: 100
   _healthRecoveyRate: 0.1
   _color: {r: 0.92549026, g: 0.44705886, b: 0.09019608, a: 1}
-  _destroyEffectPrefab: {fileID: 0}
+  _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
   _coordinate: {x: 0, y: 0, z: 0}
   _tileType: 0
-  _energyConsume: 0
-  _material: {fileID: 0}
-  bullet: {fileID: 0}
+  _material: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  _energyConsume: 10
+  _bullet: {fileID: 8440934337991791292, guid: a59b5b33b448adb45873c44d15b63185, type: 3}
   _FireSound: {fileID: 0}
-  _weaponShootCD: 0.5
-  _recoilForce: 5
+  _weaponShootCD: 2
+  _recoilForce: 20

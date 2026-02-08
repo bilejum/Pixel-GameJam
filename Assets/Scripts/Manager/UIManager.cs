@@ -26,6 +26,10 @@ public class UIManager : MonoBehaviour
     //能量条
     [SerializeField] private TextMeshProUGUI _energyText;
 
+    //波次
+    [SerializeField] private TextMeshProUGUI _waveTimeText;
+    [SerializeField] private TextMeshProUGUI _waveIndexText;
+
     private void Awake()
     {
         Instance = this;
@@ -101,5 +105,13 @@ public class UIManager : MonoBehaviour
             _buildingUIZoomOutAmont = _lastZoomAmount;
             CameraHandler.Instance.ZoomInToShip(_buildingUIZoomOutAmont);
         }
+    }
+
+    public void UpdateWaveText(float time,int currentWave)
+    {
+        _waveTimeText.text = time.ToString("F0");
+
+        _waveIndexText.text = "Wave" + currentWave.ToString();
+
     }
 }

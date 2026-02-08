@@ -25,7 +25,7 @@ public class TileEffect : MonoBehaviour
     IEnumerator DissolveRoutine(float currentDissolve)
     {
         currentDissolve /= 2;
-        _currentDissolve = Mathf.Clamp(currentDissolve,0f,0.4f);
+        _currentDissolve = Mathf.Clamp(currentDissolve, 0f, 0.4f);
 
         _instancedMaterial.SetFloat("_DissolveAmount", _currentDissolve);
 

@@ -179,7 +179,7 @@ MonoBehaviour:
   _tileType: 0
   _energyConsume: 5
   _material: {fileID: 0}
-  bullet: {fileID: 6656070570829737214, guid: d2c2420374061e44b85e4f2138dcaaa6, type: 3}
+  _bullet: {fileID: 8700920392053616244, guid: 21e63eae24e72394482228b691bb55f8, type: 3}
   _FireSound: {fileID: 0}
   _weaponShootCD: 0.5
   _recoilForce: 5

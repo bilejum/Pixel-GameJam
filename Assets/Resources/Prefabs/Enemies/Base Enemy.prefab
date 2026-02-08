@@ -254,8 +254,8 @@ MonoBehaviour:
   _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
   _coordinate: {x: 1, y: 0, z: 0}
   _tileType: 2
-  _energyConsume: 0
   _material: {fileID: 2100000, guid: ca70cad3b24681348a2471776182787e, type: 2}
+  _energyConsume: 0
   _addThrustForceAmount: 20
   _addTurnTorqueAmount: 10
 --- !u!1 &4915325947061337981
@@ -319,7 +319,8 @@ GameObject:
   - component: {fileID: 4915325947813476783}
   - component: {fileID: 4915325947813476780}
   - component: {fileID: 5522469249313511846}
-  m_Layer: 0
+  - component: {fileID: 8077910171980075566}
+  m_Layer: 6
   m_Name: Base Enemy
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -471,7 +472,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb75b16685b070d43a0c7e590b6ab0a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bullet: {fileID: 6656070570829737214, guid: d2c2420374061e44b85e4f2138dcaaa6, type: 3}
   _thrustForce: 0
   _turnTorque: 0
   _energy: 0
@@ -483,9 +483,35 @@ MonoBehaviour:
   _stopRange: 30
   _fireRate: 1
   _spreadAngle: 10
-  _searchRadius: 10
-  _targetUpdateInterval: 0.5
-  _targetUpdateTimer: 0
+  _canAction: 1
+  _avoidanceRadius: 15
+  _avoidanceForce: 100
+--- !u!61 &8077910171980075566
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4915325947813476776}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &5476738323875305796
 GameObject:
   m_ObjectHideFlags: 0
@@ -631,8 +657,8 @@ MonoBehaviour:
   _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
   _coordinate: {x: 0, y: -1, z: 0}
   _tileType: 2
-  _energyConsume: 0
   _material: {fileID: 2100000, guid: ca70cad3b24681348a2471776182787e, type: 2}
+  _energyConsume: 0
   _chargeCD: 0.1
   _chargeAmount: 1
   _maxCharge: 10
@@ -878,10 +904,9 @@ MonoBehaviour:
   _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
   _coordinate: {x: 0, y: 1, z: 0}
   _tileType: 0
-  _energyConsume: 5
   _material: {fileID: 2100000, guid: ca70cad3b24681348a2471776182787e, type: 2}
-  bullet: {fileID: 6656070570829737214, guid: d2c2420374061e44b85e4f2138dcaaa6, type: 3}
-  _FireSound: {fileID: 6732425889791046885}
+  _energyConsume: 5
+  _bullet: {fileID: 8700920392053616244, guid: 21e63eae24e72394482228b691bb55f8, type: 3}
   _weaponShootCD: 0.5
   _recoilForce: 5
 --- !u!1 &7631341284737082349
@@ -1029,8 +1054,8 @@ MonoBehaviour:
   _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
   _coordinate: {x: 0, y: 0, z: 0}
   _tileType: 1
-  _energyConsume: 0
   _material: {fileID: 2100000, guid: ca70cad3b24681348a2471776182787e, type: 2}
+  _energyConsume: 0
 --- !u!1 &8595116456206020828
 GameObject:
   m_ObjectHideFlags: 0
@@ -1285,7 +1310,7 @@ MonoBehaviour:
   _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
   _coordinate: {x: -1, y: 0, z: 0}
   _tileType: 2
-  _energyConsume: 0
   _material: {fileID: 2100000, guid: ca70cad3b24681348a2471776182787e, type: 2}
+  _energyConsume: 0
   _addThrustForceAmount: 20
   _addTurnTorqueAmount: 10

@@ -16,8 +16,6 @@ public abstract class Ship : MonoBehaviour
 {
     protected Rigidbody2D rb;
 
-    [SerializeField] protected Bullet _bullet;
-
     protected Grid _grid;
 
     protected Dictionary<Vector3Int, Tile> _tileGrid;
@@ -132,7 +130,7 @@ public abstract class Ship : MonoBehaviour
         {
             if (tile._tileType is TileType.Attack)
             {
-                var attackTile = tile as RedTile;
+                var attackTile = tile as BaseAttackTile;
                 attackTile.Shoot(direction);
             }
         }

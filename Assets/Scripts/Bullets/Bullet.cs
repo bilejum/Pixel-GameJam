@@ -10,11 +10,17 @@ public class Bullet : MonoBehaviour
     [SerializeField] public float damage = 20f;
 
     [Header("特效设置")]
-    [SerializeField] private GameObject hitEffectPrefab;
+    [SerializeField] protected GameObject hitEffectPrefab;
 
     public Vector2 _direction;
 
     public Ship _shooter;
+
+    [SerializeField] private string bulletSound;
+    private void Awake()
+    {
+        AudioManager.Instance.PlaySFX(bulletSound);
+    }
 
     void Start()
     {
@@ -24,15 +30,17 @@ public class Bullet : MonoBehaviour
     }
 
     // 碰撞检测逻辑可以在这里扩展
-    private void OnTriggerEnter2D(Collider2D collision)
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision != null)
+        if (collision == null || _shooter == null) return;
         {
-            if (collision.transform.parent.parent != _shooter.transform)
+
+            Transform shooterRoot = _shooter.transform;
+            Transform targetRoot = collision.transform.root; // 直接找最上级父物体，更安全
+            if (targetRoot != shooterRoot)
             {
                 var hitTile = collision.GetComponent<Tile>();
-                hitTile.Health -= damage;
-                //Debug.Log($"damage :{hitTile.Health}");
+                if (hitTile != null) hitTile.Health -= damage;
 
                 if (hitEffectPrefab != null)
                 {

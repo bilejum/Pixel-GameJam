@@ -37,12 +37,19 @@ public class GameManager : MonoBehaviour
                 UIManager.Instance.SwitchBuildingUI(true);
                 _playerShip.canMove = false;
                 State = GameState.Build;
+                //EnemyManager.Instance.DisAbleEnemies();
+                Time.timeScale = 0f;
+                CameraHandler.Instance.SwitchCinemachineUpdateMode(true);
             }
             else if (State == GameState.Build)
             {
                 UIManager.Instance.SwitchBuildingUI(false);
                 _playerShip.canMove = true;
                 State = GameState.Game;
+                //EnemyManager.Instance.EnableEnemies();
+                Time.timeScale = 1f;
+                CameraHandler.Instance.SwitchCinemachineUpdateMode(false);
+
             }
         }
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CameraHandler : MonoBehaviour
 {
-    public static CameraHandler Instance {  get; private set; }
+    public static CameraHandler Instance { get; private set; }
 
     [SerializeField]
 
@@ -22,10 +22,14 @@ public class CameraHandler : MonoBehaviour
 
     private float targetOrthographicSize;
 
+    private Camera _camera;
 
     private void Awake()
     {
         Instance = this;
+
+        _camera = Camera.main;
+
     }
     private void Start()
     {
@@ -37,9 +41,11 @@ public class CameraHandler : MonoBehaviour
 
     private void Update()
     {
+
         //HandleMove();
         HandleZoom();
     }
+
 
     private void HandleMove()
 
@@ -64,7 +70,7 @@ public class CameraHandler : MonoBehaviour
 
         targetOrthographicSize = Mathf.Clamp(targetOrthographicSize, minOrthograhicSize, maxOrthographicSize);
 
-        orthographicSize = Mathf.Lerp(orthographicSize, targetOrthographicSize, Time.deltaTime* 5f);
+        orthographicSize = Mathf.Lerp(orthographicSize, targetOrthographicSize, Time.unscaledDeltaTime * 5f);
 
         cinemachineVirtualCamera.m_Lens.OrthographicSize = orthographicSize;
 
@@ -78,6 +84,18 @@ public class CameraHandler : MonoBehaviour
     public float GetOrthographicSize()
     {
         return orthographicSize;
+    }
+
+    public void SwitchCinemachineUpdateMode(bool flag)
+    {
+        if (flag)
+        {
+            _camera.GetComponent<CinemachineBrain>().m_UpdateMethod = CinemachineBrain.UpdateMethod.LateUpdate;
+        }
+        else
+        {
+            _camera.GetComponent<CinemachineBrain>().m_UpdateMethod = CinemachineBrain.UpdateMethod.SmartUpdate;
+        }
     }
 
 }

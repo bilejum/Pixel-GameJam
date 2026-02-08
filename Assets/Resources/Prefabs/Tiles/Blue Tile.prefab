@@ -189,7 +189,7 @@ MonoBehaviour:
   _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
   _coordinate: {x: 0, y: 0, z: 0}
   _tileType: 0
-  _energyConsume: 0
   _material: {fileID: 0}
-  _addThrustForceAmount: 20
-  _addTurnTorqueAmount: 10
+  _energyConsume: 0
+  _addThrustForceAmount: 15
+  _addTurnTorqueAmount: 15

@@ -28,16 +28,15 @@ public class BaseAIShip : Ship
 
     protected Vector2 directionToTarget;
 
-    [Header("索敌设置")]
-    public float _searchRadius = 10f; // 索敌半径（队友能感知的最大范围）
+    public bool _canAction = true;
 
-    public float _targetUpdateInterval = 0.5f; // 目标更新间隔（秒），避免每帧检测耗性能
-    [SerializeField] protected float _targetUpdateTimer;
-
-    protected Collider2D[] detectedShip = new Collider2D[10]; // 检测到的敌人（数组比List更高效）
-
+    [Header("避让设置")]
+    [SerializeField] protected float _avoidanceRadius = 15f; // 检测队友的范围
+    [SerializeField] protected float _avoidanceForce = 10f;  // 避让推力的强度
+    private Collider2D[] _neighborResults = new Collider2D[5]; // 缓存数组，减少GC
 
 
+    private Vector2 avoidance;
 
     protected override void Awake()
     {
@@ -53,15 +52,6 @@ public class BaseAIShip : Ship
 
     private void FixedUpdate()
     {
-        //_targetUpdateTimer += Time.deltaTime;
-        //if (_targetUpdateTimer >= _targetUpdateInterval)
-        //{
-        //    UpdateTargetEnemy();
-        //    Debug.Log($"已检测，敌人为 {_target}");
-        //    _targetUpdateTimer = 0f;
-        //}
-
-
         if (_target == null) return;
 
         float distance = Vector2.Distance(_target.transform.position, this.transform.position);
@@ -72,30 +62,15 @@ public class BaseAIShip : Ship
 
         HandleRotation();
         HandleMovement(distance);
-
-
     }
+
     protected override void Update()
     {
-        base.Update();
-
-        if (_currentState == AIState.Fight && _target != null)
+        if (_canAction)
         {
-            Vector2 toTarget = _target.transform.position - transform.position;
-            float distance = toTarget.magnitude;
-            directionToTarget = toTarget.normalized;
+            base.Update();
 
-            float dotProduct = Vector2.Dot(transform.up, directionToTarget);
-            if (dotProduct > 0.95f)
-            {
-                // 距离越远，散布越大（可选）
-                float currentSpread = _spreadAngle * (1 + (distance * 0.05f));
-
-                float randomOffset = UnityEngine.Random.Range(-currentSpread * 0.5f, currentSpread * 0.5f);
-                Vector2 impreciseDir = Quaternion.Euler(0, 0, randomOffset) * directionToTarget;
-
-                HandleAttack(impreciseDir);
-            }
+            HandleAIAttack();
         }
     }
 
@@ -116,6 +91,10 @@ public class BaseAIShip : Ship
     // 处理移动：像玩家一样推力加速
     private void HandleMovement(float distance)
     {
+        if (Time.frameCount % 30 == 0)
+        {
+            avoidance = GetAvoidanceSteering();
+        }
         // 只有当敌人基本对准了玩家，且距离不够近时，才开启推进器
         float dotProduct = Vector2.Dot(transform.up, (_target.transform.position - transform.position).normalized);
 
@@ -123,31 +102,61 @@ public class BaseAIShip : Ship
         {
             rb.AddRelativeForce(Vector2.up * _thrustForce);
         }
-    }
-    private void UpdateTargetEnemy()
-    {
-        // 清空当前目标（先重置）
-        _target = null;
 
-
-        // 1. 球形检测：在索敌范围内找怪物（高效的物理检测）
-        var detectedEnemyCount = Physics2D.OverlapCircleNonAlloc(
-            transform.position,
-            _searchRadius,
-            detectedShip,
-            LayerMask.GetMask("AIDetection")
-        );
-
-        Debug.Log(detectedShip.ToString());
-
-        if (detectedEnemyCount == 0) return;
-        foreach (var enemy in detectedShip)
+        // 持续应用避让力（不受朝向限制，这样侧滑也能避开队友）
+        if (avoidance != Vector2.zero)
         {
-            if (enemy.GetComponent<BaseAIShip>()._fraction != _fraction)
+            // 使用 AddForce 让避让更平滑
+            rb.AddForce(avoidance * _avoidanceForce, ForceMode2D.Force);
+        }
+    }
+
+    private void HandleAIAttack()
+    {
+        if (_currentState == AIState.Fight && _target != null)
+        {
+            Vector2 toTarget = _target.transform.position - transform.position;
+            float distance = toTarget.magnitude;
+            directionToTarget = toTarget.normalized;
+
+            float dotProduct = Vector2.Dot(transform.up, directionToTarget);
+            if (dotProduct > 0.95f)
             {
-                _target = enemy.GetComponent<Ship>();
-                return;
+                // 距离越远，散布越大（可选）
+                float currentSpread = _spreadAngle * (1 + (distance * 0.05f));
+
+                float randomOffset = UnityEngine.Random.Range(-currentSpread * 0.5f, currentSpread * 0.5f);
+                Vector2 impreciseDir = Quaternion.Euler(0, 0, randomOffset) * directionToTarget;
+
+                HandleAttack(impreciseDir);
             }
         }
     }
+
+    protected Vector2 GetAvoidanceSteering()
+    {
+        Vector2 avoidanceVector = Vector2.zero;
+
+        // 1. 只检测特定层级（建议给AI船只设置专门的Layer，比如 "Ship"）
+        int count = Physics2D.OverlapCircleNonAlloc(transform.position, _avoidanceRadius, _neighborResults, LayerMask.GetMask("AIDetection"));
+
+        for (int i = 0; i < count; i++)
+        {
+            Collider2D other = _neighborResults[i];
+            if (other.gameObject == this.gameObject) continue; // 排除自己
+
+            // 2. 计算避让力：距离越近，推力越大
+            Vector2 diff = (Vector2)transform.position - (Vector2)other.transform.position;
+            float distance = diff.magnitude;
+
+            if (distance < _avoidanceRadius && distance > 0)
+            {
+                // 使用反平方律或线性衰减：1/d 让距离极近时产生极大推力
+                avoidanceVector += diff.normalized / distance;
+            }
+        }
+
+        return avoidanceVector;
+    }
+
 }

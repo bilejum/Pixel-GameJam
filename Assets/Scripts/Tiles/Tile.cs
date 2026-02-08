@@ -29,11 +29,13 @@ public abstract class Tile : MonoBehaviour
 
     [SerializeField] public TileType _tileType;
 
-    [SerializeField] protected float _energyConsume;
 
     [SerializeField] protected Material _material;
 
     protected TileEffect _tileEffect;
+
+    [Header("开火设置")]
+    [SerializeField] protected float _energyConsume;
     public float Health
     {
         get
@@ -48,7 +50,6 @@ public abstract class Tile : MonoBehaviour
             }
 
             _health = value;
-
 
             var healthPercent = _health / _maxHealth;
             _tileEffect.PlayDissolve(1- healthPercent);
@@ -80,7 +81,7 @@ public abstract class Tile : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _tileEffect = GetComponent<TileEffect>();
 
-        //_material = Resources.Load<Material>("Shaders/M_Glow_Addctive");
+        //_material = Resources.Load<Material>("Shaders/Shader Graphs_DissolveShader");
         //_spriteRenderer.material = _material;
 
         _spriteRenderer.color = _color;
@@ -88,6 +89,7 @@ public abstract class Tile : MonoBehaviour
 
     protected virtual void Update()
     {
+        //脱战自动回血
         if(_ship.GetShipState is ShipState.Noncombat && _health < _maxHealth)
         {
             Health += _maxHealth * _healthRecoveyRate * Time.deltaTime;

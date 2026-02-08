@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
+
 public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager Instance { get; private set; }
@@ -13,7 +14,17 @@ public class EnemyManager : MonoBehaviour
 
     [SerializeField] private BaseEnemy enemyPrefab;
 
+
+
+    //波次相关
     [SerializeField] private bool _spawnEnemyFlag = false;
+    public List<WaveDataSO> _waveDataSOList;
+    [SerializeField] private string _waveDataSOPath = "ScriptableObjects";
+    [SerializeField] private WaveDataSO _currentWave;
+    [SerializeField] private int _currentWaveIndex = 0;
+    public float _spawnInterval = 0.5f; // 每个敌人生成的间隔
+
+    private float _timer;
 
     private void Awake()
     {
@@ -21,34 +32,79 @@ public class EnemyManager : MonoBehaviour
         _enemiesList = new List<BaseEnemy>();
 
         target = GameManager.Instance._playerShip;
+
+        var waveDatas = Resources.LoadAll(_waveDataSOPath);
+
+        foreach (WaveDataSO waveData in waveDatas)
+        {
+            _waveDataSOList.Add(waveData);
+        }
+
+        _currentWave = _waveDataSOList[_currentWaveIndex];
+
+        StartWave();
     }
 
 
-    private float timer;
     private void Update()
     {
-        if (_spawnEnemyFlag)
+        _timer += Time.deltaTime;
+        if(_timer >= _currentWave.time)
         {
-            timer += Time.deltaTime;
-            if (timer > 1f)
-            {
-                SpawnEnemies();
-                timer = 0f;
-            }
+            ClearEnemies();
+            _currentWaveIndex += 1;
+            _currentWaveIndex = _currentWaveIndex % _waveDataSOList.Count;
+            StartWave();
+            _timer = 0;
         }
 
         if (Input.GetKeyDown(KeyCode.C))
         {
             ClearEnemies();
         }
+
+        UIManager.Instance.UpdateWaveText(_currentWave.time - _timer,_currentWave.waveIndex);
     }
 
-    private void SpawnEnemies()
+    [ContextMenu("开始生成当前波次")] // 让你可以在 Inspector 里右键点击脚本手动测试
+    public void StartWave()
     {
-        var x = Random.Range(-100, 100);
-        var y = Random.Range(-100, 100);
+        if (_currentWave != null)
+        {
+            StartCoroutine(SpawnWaveRoutine());
+        }
+    }
 
-        Instantiate(enemyPrefab, new Vector3(x, y, 0), Quaternion.identity);
+
+    private IEnumerator SpawnWaveRoutine()
+    {
+        Debug.Log($"开始波次: {_currentWave.waveIndex}");
+
+        foreach (var group in _currentWave.enemyGroups)
+        {
+            // 按照每个 Group 定义的数量生成敌人
+            for (int i = 0; i < group.count; i++)
+            {
+                SpawnEnemy(group.enemyPrefab, group.spawnPosition);
+
+                // 等待一小会儿再生成下一个，防止重叠
+                yield return new WaitForSeconds(_spawnInterval);
+            }
+        }
+
+        Debug.Log("该波次所有敌人已生成完毕");
+    }
+
+    private void SpawnEnemy(Ship prefab, Vector2 position)
+    {
+        if (prefab == null) return;
+
+        float x = position.x + Random.Range(10, 20);
+        float y = position.y + Random.Range(10, 20);
+       
+        // 实例化敌人
+        Ship newEnemy = Instantiate(prefab, new Vector2(x,y), Quaternion.identity);
+        _enemiesList.Add((BaseEnemy)newEnemy);
     }
 
     public void ClearEnemies()
@@ -64,8 +120,23 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public void StopAllEnemies()
+    public void DisAbleEnemies()
     {
-
+        foreach (var enemy in _enemiesList)
+        {
+            BaseAIShip enemyShip = enemy.GetComponent<BaseAIShip>();
+            enemyShip._canAction = false;
+        }
     }
+
+    public void EnableEnemies()
+    {
+        foreach (var enemy in _enemiesList)
+        {
+            BaseAIShip enemyShip = enemy.GetComponent<BaseAIShip>();
+            enemyShip._canAction = true;
+        }
+    }
+
+
 }
