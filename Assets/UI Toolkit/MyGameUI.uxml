@@ -1,0 +1,34 @@
+﻿<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI%20Toolkit/new%20uss.uss?fileID=7433441132597879392&amp;guid=62933b5ce108e2844997e83db61d2764&amp;type=3#new uss" />
+    <!-- 根容器：收窄左右面板，中间留更多空间 -->
+    <ui:VisualElement name="root-container" style="flex-grow: 1; flex-direction: row; justify-content: space-between; padding: 20px; gap: 40px; picking-mode: ignore;">
+        <!-- 左侧面板：全合成表 + 滚动 + 隐藏按钮 -->
+        <ui:VisualElement name="left-panel-container" class="side-panel-base panel-hidden-left" style="width: 280px;">
+            <!-- 左侧隐藏按钮：悬浮在面板右上角 -->
+            <ui:Button name="toggle-left-btn" class="panel-toggle-btn" text="←" />
+            <ui:VisualElement class="glass-panel" style="width: 100%; height: 80%;">
+                <ui:Label text="SYNTHESIS RECIPES" class="header-text" />
+                <!-- 合成表滚动区：自定义滚动条 -->
+                <ui:ScrollView name="synthesis-scroll" class="custom-scroll-view" style="flex-grow: 1; margin-top: 10px;">
+                    <ui:VisualElement name="synthesis-list" style="flex-direction: column; gap: 15px;" />
+                </ui:ScrollView>
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <!-- 右侧面板：背包 + 底部功能按钮 -->
+        <ui:VisualElement name="right-panel-container" class="side-panel-base panel-hidden-right" style="width: 300px;">
+            <ui:VisualElement class="glass-panel" style="width: 100%; height: 80%; display: flex; flex-direction: column;">
+                <ui:Label text="INVENTORY" class="header-text" />
+                <!-- 背包网格：无滚动 -->
+                <ui:VisualElement name="inventory-grid" style="flex-direction: row; flex-wrap: wrap; justify-content: flex-start; margin-top: 10px; max-height: 450px; overflow: hidden; gap: 4px;" />
+                
+                <!-- 底部功能按钮行 -->
+                <ui:VisualElement name="action-buttons" style="flex-direction: row; justify-content: space-around; align-items: center; margin-top: auto; padding-top: 15px; border-top-width: 1px; border-top-color: rgba(255,255,255,0.2);">
+                    <ui:Button name="btn-delete-block" class="action-btn" text="删除" />
+                    <ui:Button name="btn-clear-slot" class="action-btn" text="清空" />
+                    <ui:Button name="btn-exit-game" class="action-btn" text="退出" />
+                </ui:VisualElement>
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

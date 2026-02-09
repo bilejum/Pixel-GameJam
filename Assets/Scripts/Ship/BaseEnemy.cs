@@ -11,7 +11,7 @@ public class BaseEnemy : BaseAIShip
         if (_enemyManager != null)
         {
             _enemyManager._enemiesList.Add(this);
-            _target = _enemyManager.target;
+            _target = _enemyManager._target;
         }
     }
 

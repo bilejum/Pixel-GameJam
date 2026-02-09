@@ -191,5 +191,5 @@ MonoBehaviour:
   _tileType: 0
   _material: {fileID: 0}
   _energyConsume: 0
-  _addThrustForceAmount: 15
+  _addThrustForceAmount: 20
   _addTurnTorqueAmount: 15

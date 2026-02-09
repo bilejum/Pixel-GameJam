@@ -8,11 +8,11 @@ public class EnemyManager : MonoBehaviour
 {
     public static EnemyManager Instance { get; private set; }
 
-    public Ship target;
+    public Ship _target;
 
     public List<BaseEnemy> _enemiesList;
 
-    [SerializeField] private BaseEnemy enemyPrefab;
+    [SerializeField] private BaseEnemy _enemyPrefab;
 
 
 
@@ -31,7 +31,7 @@ public class EnemyManager : MonoBehaviour
         Instance = this;
         _enemiesList = new List<BaseEnemy>();
 
-        target = GameManager.Instance._playerShip;
+        _target = GameManager.Instance._playerShip;
 
         var waveDatas = Resources.LoadAll(_waveDataSOPath);
 
@@ -51,9 +51,11 @@ public class EnemyManager : MonoBehaviour
         _timer += Time.deltaTime;
         if(_timer >= _currentWave.time)
         {
-            ClearEnemies();
+            //ClearEnemies();
             _currentWaveIndex += 1;
-            _currentWaveIndex = _currentWaveIndex % _waveDataSOList.Count;
+            _currentWaveIndex = _currentWaveIndex % _waveDataSOList.Count +1;
+
+            _currentWave = _waveDataSOList[_currentWaveIndex];
             StartWave();
             _timer = 0;
         }

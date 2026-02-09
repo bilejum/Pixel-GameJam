@@ -12,6 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc7d9973325060e42836d4e913af39e9, type: 3}
   m_Name: Wave3SO
   m_EditorClassIdentifier: 
-  waveIndex: 0
-  enemyGroups: []
+  waveIndex: 3
+  enemyGroups:
+  - enemyPrefab: {fileID: 5522469249313511846, guid: 8dac67f600057054bb2bfd8c0f7bf4c2, type: 3}
+    count: 4
+    spawnPosition: {x: 100, y: -100}
+  - enemyPrefab: {fileID: 5522469249313511846, guid: 8dac67f600057054bb2bfd8c0f7bf4c2, type: 3}
+    count: 4
+    spawnPosition: {x: -100, y: 100}
+  - enemyPrefab: {fileID: 5522469249313511846, guid: 8dac67f600057054bb2bfd8c0f7bf4c2, type: 3}
+    count: 4
+    spawnPosition: {x: -100, y: -100}
+  - enemyPrefab: {fileID: 5522469249313511846, guid: 8dac67f600057054bb2bfd8c0f7bf4c2, type: 3}
+    count: 4
+    spawnPosition: {x: 100, y: 100}
   time: 0

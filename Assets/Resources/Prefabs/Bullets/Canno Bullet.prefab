@@ -94,9 +94,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67e9ed23e663cd54e8e3807a948ffaf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 30
-  lifeTime: 3
-  damage: 75
+  speed: 40
+  lifeTime: 2
+  damage: 100
   hitEffectPrefab: {fileID: 7726117135938462674, guid: b2c7594fe6c92d9489e9b57df617bda5, type: 3}
   _direction: {x: 0, y: 0}
   _shooter: {fileID: 0}
