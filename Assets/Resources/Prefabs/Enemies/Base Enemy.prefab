@@ -258,6 +258,8 @@ MonoBehaviour:
   _energyConsume: 0
   _addThrustForceAmount: 20
   _addTurnTorqueAmount: 10
+  _addStrafeForceAmount: 0
+  _adddashForceAmount: 0
 --- !u!1 &4915325947061337981
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,6 +379,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _thrustForce: 0
   _turnTorque: 0
+  _strafeForce: 40
+  _dashForce: 50
   _energy: 0
   _maxEnergy: 0
   _noncombatCD: 10
@@ -388,7 +392,7 @@ MonoBehaviour:
   _spreadAngle: 10
   _canAction: 1
   _avoidanceRadius: 15
-  _avoidanceForce: 100
+  _avoidanceForce: 200
   _lootTile: {fileID: 4934797671668513787, guid: 201b42f1f3ba5aa45952e350b6570fca, type: 3}
   lootTable: {fileID: 11400000, guid: 93cccb4ad77b7584eb0a91a887533eff, type: 2}
 --- !u!61 &8077910171980075566
@@ -1219,3 +1223,5 @@ MonoBehaviour:
   _energyConsume: 0
   _addThrustForceAmount: 20
   _addTurnTorqueAmount: 10
+  _addStrafeForceAmount: 0
+  _adddashForceAmount: 0

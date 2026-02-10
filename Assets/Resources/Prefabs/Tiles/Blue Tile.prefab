@@ -205,4 +205,5 @@ MonoBehaviour:
   _energyConsume: 0
   _addThrustForceAmount: 25
   _addTurnTorqueAmount: 20
-  _addStrafeForceAmount: 5
+  _addStrafeForceAmount: 20
+  _adddashForceAmount: 20

@@ -24,6 +24,8 @@ public abstract class Ship : MonoBehaviour
     [SerializeField] protected float _thrustForce = 0f; // 推进力
     [SerializeField] protected float _turnTorque = 0f;   // 转向力矩
     [SerializeField] protected float _strafeForce = 40f; // 横向移动力度
+    [SerializeField]
+    public float _dashForce = 50f; // 冲刺力度
 
     public float _energy = 0f;
     public float _maxEnergy = 0f;

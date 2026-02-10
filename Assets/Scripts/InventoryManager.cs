@@ -30,10 +30,15 @@ public class InventoryManager : MonoBehaviour
 
     void Awake()
     {
-        Instance = this;
-        if (Instance != null) { Destroy(gameObject); }
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else if (Instance != this)
+        {
+            Destroy(gameObject); // 如果已经存在一个实例了，才销毁自己
+        }
     }
-
 
     public void AddItem(Tile tile, int count)
     {

@@ -29,6 +29,15 @@ public class GameManager : MonoBehaviour
 
         State = GameState.Game;
 
+       if(State is GameState.Game) { 
+        //鼠标锁定在游戏窗口
+        Cursor.lockState = CursorLockMode.Confined;
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+
     }
     private void Update()
     {
@@ -57,7 +66,8 @@ public class GameManager : MonoBehaviour
                 //EnemyManager.Instance.EnableEnemies();
                 Time.timeScale = 1f;
                 CameraHandler.Instance.SwitchCinemachineUpdateMode(false);
-
+                _playerShip._ghostTile.SetActive(false);
+                _playerShip._selectedTile = null;
             }
         }
     }

@@ -8,6 +8,7 @@ public class BlueTile : Tile
     [SerializeField] private float _addThrustForceAmount;
     [SerializeField] private float _addTurnTorqueAmount;
     [SerializeField] private float _addStrafeForceAmount;
+    [SerializeField] private float _adddashForceAmount;
 
     protected override void Awake()
     {
@@ -18,6 +19,7 @@ public class BlueTile : Tile
         _ship.ThrustForce += _addThrustForceAmount;
         _ship.TurnTorque += _addTurnTorqueAmount;
         _ship.StrafeForce += _addStrafeForceAmount;
+        _ship._dashForce += _adddashForceAmount;
     }
 
     private void OnDestroy()
@@ -25,5 +27,6 @@ public class BlueTile : Tile
         _ship.ThrustForce -= _addThrustForceAmount;
         _ship.TurnTorque -= _addTurnTorqueAmount;
         _ship.StrafeForce -= _addStrafeForceAmount;
+        _ship._dashForce -= _adddashForceAmount;
     }
 }

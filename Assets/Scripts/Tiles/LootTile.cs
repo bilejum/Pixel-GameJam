@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class LootTile : MonoBehaviour
 {
@@ -43,5 +44,11 @@ public class LootTile : MonoBehaviour
         // 真正到达位置后，加入背包并销毁自己
         InventoryManager.Instance.AddItem(tilePrefab, 1);
         Destroy(gameObject);
+    }
+
+
+    private void OnDestroy()
+    {
+        StopAllCoroutines();
     }
 }

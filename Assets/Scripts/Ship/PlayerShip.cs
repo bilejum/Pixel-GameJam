@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerShip : Ship
@@ -17,15 +18,12 @@ public class PlayerShip : Ship
     [SerializeField]
     private float _angularDrag = 5f; // 旋转阻力（防止无限自转）
 
-
-    [SerializeField]
-    private float _dashForce = 50f; // 冲刺力度
-
     [SerializeField]
     private float _dashCooldown = 1f; // 冲刺冷却时间
 
     [Range(0, 1)]
-    [SerializeField] private float _brakingStrength = 0.95f; // 不按键时的减速力度
+    [SerializeField]
+    private float _brakingStrength = 0.95f; // 不按键时的减速力度
 
     private float _dashTimer;
 
@@ -39,6 +37,8 @@ public class PlayerShip : Ship
     public bool canMove = true;
 
     private Vector2 directionToMouse;
+
+    public GameObject _ghostTile;
 
     //从这开始
     protected override void Awake()
@@ -60,9 +60,9 @@ public class PlayerShip : Ship
         _thrustInput = Input.GetAxisRaw("Vertical");
         _turnInput = Input.GetAxisRaw("Horizontal");
 
-
         // 冲刺冷却计时
-        if (_dashTimer > 0) _dashTimer -= Time.deltaTime;
+        if (_dashTimer > 0)
+            _dashTimer -= Time.deltaTime;
 
         // 检测冲刺输入 (空格键)
         if (Input.GetKeyDown(KeyCode.Space) && _dashTimer <= 0 && canMove)
@@ -70,16 +70,29 @@ public class PlayerShip : Ship
             PerformDash();
         }
 
+        if (GameManager.Instance.State is GameState.Build)
+        {
+            MoveGhostTile();
+        }
+
+        //这一行必须有
+        _cellPos = _grid.WorldToCell(Utils.GetMouseWorldPos());
         if (Input.GetMouseButtonDown(0) && GameManager.Instance.State is GameState.Build)
         {
             if (Utils.IsPointerOverUI())
                 return;
-            _cellPos = _grid.WorldToCell(Utils.GetMouseWorldPos());
             if (!deleteMode)
             {
+                //如果可以放置，则播放正确音效
                 if (CanSetTile(_cellPos))
                 {
                     SetTile(_cellPos, _selectedTile);
+                    AudioManager.Instance.PlaySFX("Correct");
+                }
+                //反之播放错误音效
+                else
+                {
+                    AudioManager.Instance.PlaySFX("Error");
                 }
             }
             else if (deleteMode)
@@ -123,6 +136,28 @@ public class PlayerShip : Ship
     {
         _selectedTile = itemData.tilePrefab;
         _selectedItemData = itemData;
+        _ghostTile.SetActive(true);
+        _ghostTile.GetComponent<SpriteRenderer>().color = _selectedTile._color;
+    }
+
+    private void MoveGhostTile()
+    {
+        if (_ghostTile == null) return;
+        var spriteRender = _ghostTile.GetComponent<SpriteRenderer>();
+
+        var lerp = Vector3.Lerp(
+            _ghostTile.transform.localPosition,
+            _grid.CellToLocal(_cellPos),
+            Time.unscaledDeltaTime * 20
+        );
+        _ghostTile.transform.localPosition = lerp;
+
+        if (_selectedItemData == null) return;
+        if(_selectedItemData.count <= 0)
+        {
+            _ghostTile.SetActive(false);
+        }
+
     }
 
     public void SetTile(Vector3Int cellPos, Tile tile)
@@ -211,7 +246,6 @@ public class PlayerShip : Ship
     //        rb.AddRelativeForce(Vector2.right * _turnInput * _strafeForce);
     //    }
 
-
     //    RotateTowardsMouse();
     //}
 
@@ -247,7 +281,8 @@ public class PlayerShip : Ship
     private void RotateTowardsMouseEnhanced()
     {
         // 计算当前朝向与目标朝向的角度差
-        float targetAngle = Mathf.Atan2(directionToMouse.y, directionToMouse.x) * Mathf.Rad2Deg - 90f;
+        float targetAngle =
+            Mathf.Atan2(directionToMouse.y, directionToMouse.x) * Mathf.Rad2Deg - 90f;
         float currentAngle = rb.rotation;
         float angleDiff = Mathf.DeltaAngle(currentAngle, targetAngle);
 

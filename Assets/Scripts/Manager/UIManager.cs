@@ -47,6 +47,8 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject _backPackUI;
 
+    [SerializeField] private GameObject _crosshair;
+
     private void Awake()
     {
 
