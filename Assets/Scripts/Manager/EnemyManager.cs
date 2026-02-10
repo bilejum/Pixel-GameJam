@@ -33,7 +33,15 @@ public class EnemyManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+
         _enemiesList = new List<BaseEnemy>();
 
         _target = GameManager.Instance._playerShip;
@@ -121,12 +129,30 @@ public class EnemyManager : MonoBehaviour
             BaseEnemy enemy = _enemiesList[i];
             if (enemy != null)
             {
-                
+                var enemyShip = enemy.transform.GetChild(0);
+                var enemyShipIndex = enemy.transform.childCount;
+                for (int j = 0; j < enemyShipIndex; j++)
+                {
+                    enemyShip.GetChild(j).GetComponent<Tile>().Health = 0;
+                }
             }
         }
         // 循环结束后清空列表
         _enemiesList.Clear();
     }
+
+    //public void ClearEnemies()
+    //{
+    //    foreach (var enemy in _enemiesList)
+    //    {
+    //        var enemyShip = enemy.transform.GetChild(0);
+    //        var enemyShipIndex = enemy.transform.childCount;
+    //        for (int i = 0; i < enemyShipIndex; i++)
+    //        {
+    //            enemyShip.GetChild(i).GetComponent<Tile>().Health = 0;
+    //        }
+    //    }
+    //}
 
     public void DisAbleEnemies()
     {

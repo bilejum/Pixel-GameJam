@@ -200,9 +200,9 @@ MonoBehaviour:
   _color: {r: 0.07191872, g: 0.8617275, b: 0.97735846, a: 1}
   _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
   _coordinate: {x: 0, y: 0, z: 0}
-  _spriteRenderer: {fileID: 0}
   _tileType: 0
   _material: {fileID: 0}
   _energyConsume: 0
-  _addThrustForceAmount: 20
-  _addTurnTorqueAmount: 15
+  _addThrustForceAmount: 25
+  _addTurnTorqueAmount: 20
+  _addStrafeForceAmount: 5

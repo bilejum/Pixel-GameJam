@@ -23,6 +23,7 @@ public abstract class Ship : MonoBehaviour
     [Header("动力设置")]
     [SerializeField] protected float _thrustForce = 0f; // 推进力
     [SerializeField] protected float _turnTorque = 0f;   // 转向力矩
+    [SerializeField] protected float _strafeForce = 40f; // 横向移动力度
 
     public float _energy = 0f;
     public float _maxEnergy = 0f;
@@ -60,6 +61,7 @@ public abstract class Ship : MonoBehaviour
 
         }
     }
+    public float StrafeForce { get => _strafeForce; set => _strafeForce = value; }
 
     [Header("脱战设置")]
     private ShipState _shipState = ShipState.Noncombat;
@@ -70,7 +72,7 @@ public abstract class Ship : MonoBehaviour
     {
         set
         {
-            if(value is ShipState.Fight)
+            if (value is ShipState.Fight)
             {
                 _shipState = ShipState.Fight;
                 _nocombatTimer = 0;
@@ -84,8 +86,10 @@ public abstract class Ship : MonoBehaviour
         {
             return _shipState;
         }
-        
+
     }
+
+
 
     protected virtual void Awake()
     {
@@ -143,6 +147,7 @@ public abstract class Ship : MonoBehaviour
 
     public void CoreDestory()
     {
+        AudioManager.Instance.PlaySFX("Kill");
         Destroy(this.gameObject);
     }
 

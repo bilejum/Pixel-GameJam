@@ -15,7 +15,19 @@ public class PlayerShip : Ship
     private float _linearDrag = 1f; // 线性阻力（空气阻力感）
 
     [SerializeField]
-    private float _angularDrag = 2f; // 旋转阻力（防止无限自转）
+    private float _angularDrag = 5f; // 旋转阻力（防止无限自转）
+
+
+    [SerializeField]
+    private float _dashForce = 50f; // 冲刺力度
+
+    [SerializeField]
+    private float _dashCooldown = 1f; // 冲刺冷却时间
+
+    [Range(0, 1)]
+    [SerializeField] private float _brakingStrength = 0.95f; // 不按键时的减速力度
+
+    private float _dashTimer;
 
     //控制输入值(0,1)
     private float _thrustInput;
@@ -45,8 +57,18 @@ public class PlayerShip : Ship
     {
         base.Update();
 
-        _thrustInput = Input.GetAxis("Vertical");
-        _turnInput = Input.GetAxis("Horizontal");
+        _thrustInput = Input.GetAxisRaw("Vertical");
+        _turnInput = Input.GetAxisRaw("Horizontal");
+
+
+        // 冲刺冷却计时
+        if (_dashTimer > 0) _dashTimer -= Time.deltaTime;
+
+        // 检测冲刺输入 (空格键)
+        if (Input.GetKeyDown(KeyCode.Space) && _dashTimer <= 0 && canMove)
+        {
+            PerformDash();
+        }
 
         if (Input.GetMouseButtonDown(0) && GameManager.Instance.State is GameState.Build)
         {
@@ -86,6 +108,7 @@ public class PlayerShip : Ship
         if (canMove)
         {
             HandleMovement();
+            ApplyBraking(); // 模拟 Reassembly 的自动制动
         }
     }
 
@@ -173,43 +196,88 @@ public class PlayerShip : Ship
         return false;
     }
 
+    //private void HandleMovement()
+    //{
+    //    // 推进：使用 ForceMode2D.Force
+    //    // 注意：物理方法内部会自动处理时间步长，不需要手动乘 Time.deltaTime
+    //    if (Mathf.Abs(_thrustInput) > 0.01f)
+    //    {
+    //        rb.AddRelativeForce(Vector2.up * _thrustInput * _thrustForce);
+    //    }
+
+    //    // 2. 横向移动 (A/D) - 使用 AddRelativeForce 确保是相对于飞船自身的左右
+    //    if (Mathf.Abs(_turnInput) > 0.01f)
+    //    {
+    //        rb.AddRelativeForce(Vector2.right * _turnInput * _strafeForce);
+    //    }
+
+
+    //    RotateTowardsMouse();
+    //}
+
     private void HandleMovement()
     {
-        // 推进：使用 ForceMode2D.Force
-        // 注意：物理方法内部会自动处理时间步长，不需要手动乘 Time.deltaTime
-        if (Mathf.Abs(_thrustInput) > 0.01f)
-        {
-            rb.AddRelativeForce(Vector2.up * _thrustInput * _thrustForce);
-        }
-        //if (Mathf.Abs(_turnInput) > 0.01f)
-        //{
-        //    rb.AddForce(Vector2.right * _turnInput * _thrustForce);
-        //}
+        // 1. 纵向与横向移动
+        Vector2 moveVector = new Vector2(_turnInput * _strafeForce, _thrustInput * _thrustForce);
+        rb.AddRelativeForce(moveVector);
 
-        // 转向：负号是因为通常 A/左 为正方向，但 Unity 顺时针旋转需要负力矩
-        //if (Mathf.Abs(_turnInput) > 0.01f)
-        //{
-        //    rb.AddTorque(_turnInput * -_turnTorque);
-        //}
-        RotateTowardsMouse();
+        // 2. 核心：Reassembly 式转向
+        RotateTowardsMouseEnhanced();
     }
 
-    private void RotateTowardsMouse()
+    //private void RotateTowardsMouse()
+    //{
+    //    // 计算叉积：判断鼠标在飞船“机头”的哪一边
+    //    // transform.up 是飞船当前的正前方
+    //    float angleDiff = Vector3.Cross(transform.up, directionToMouse).z;
+
+    //    // 应用扭矩：根据角度差施加旋转力
+    //    rb.AddTorque(angleDiff * _turnTorque);
+
+    //    // --- 优化：角速度补偿 (防止晃动) ---
+    //    // 如果你觉得飞船转过头了停不下来，可以加这一段：
+    //    // 当飞船接近目标方向时，自动衰减角速度，减少摆动
+    //    float dot = Vector2.Dot(transform.up, directionToMouse);
+    //    if (dot > 0.98f)
+    //    {
+    //        rb.angularVelocity *= 0.8f;
+    //    }
+    //}
+
+    private void RotateTowardsMouseEnhanced()
     {
-        // 计算叉积：判断鼠标在飞船“机头”的哪一边
-        // transform.up 是飞船当前的正前方
-        float angleDiff = Vector3.Cross(transform.up, directionToMouse).z;
+        // 计算当前朝向与目标朝向的角度差
+        float targetAngle = Mathf.Atan2(directionToMouse.y, directionToMouse.x) * Mathf.Rad2Deg - 90f;
+        float currentAngle = rb.rotation;
+        float angleDiff = Mathf.DeltaAngle(currentAngle, targetAngle);
 
-        // 应用扭矩：根据角度差施加旋转力
-        rb.AddTorque(angleDiff * _turnTorque);
+        // PID 简版：扭矩 = 角度差 * 强度 - 当前角速度 * 阻尼
+        // 这会让飞船在快要对准鼠标时自动反向用力，瞬间锁死方向
+        float torque = angleDiff * _turnTorque * 0.1f;
 
-        // --- 优化：角速度补偿 (防止晃动) ---
-        // 如果你觉得飞船转过头了停不下来，可以加这一段：
-        // 当飞船接近目标方向时，自动衰减角速度，减少摆动
-        float dot = Vector2.Dot(transform.up, directionToMouse);
-        if (dot > 0.98f)
+        // 这里的 0.1f 是为了平衡，如果转得太慢就调大，如果乱抖就调小
+        rb.AddTorque(torque - rb.angularVelocity * 0.5f, ForceMode2D.Force);
+    }
+
+    private void ApplyBraking()
+    {
+        // 如果没有输入，模拟推进器反向喷射来减速
+        if (Mathf.Abs(_thrustInput) < 0.01f && Mathf.Abs(_turnInput) < 0.01f)
         {
-            rb.angularVelocity *= 0.8f;
+            // 快速将速度降低到接近0，产生“控制感”
+            rb.velocity *= _brakingStrength;
         }
+    }
+
+    private void PerformDash()
+    {
+        Vector2 inputDir = new Vector2(_turnInput, _thrustInput).normalized;
+        Vector2 dashDir = inputDir.sqrMagnitude < 0.01f ? Vector2.up : inputDir;
+
+        // 清除当前速度的一分部，让冲刺更有爆发感
+        rb.velocity *= 0.5f;
+        rb.AddRelativeForce(dashDir * _dashForce, ForceMode2D.Impulse);
+
+        _dashTimer = _dashCooldown;
     }
 }
