@@ -5,7 +5,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-
 [Serializable]
 public class ItemData
 {
@@ -28,20 +27,12 @@ public class InventoryManager : MonoBehaviour
     public int space = 12; // 背包格子上限
 
     private Color32 slotColor = new Color32(56, 56, 56, 194);
+
     void Awake()
     {
         Instance = this;
-
-
     }
-    private void Start()
-    {
-        AddItem(Resources.Load<Tile>("Prefabs/Tiles/Red Tile"), 2);
-        AddItem(Resources.Load<Tile>("Prefabs/Tiles/Red Tile"), 2);
-        AddItem(Resources.Load<Tile>("Prefabs/Tiles/Red Tile"), 2);
-        AddItem(Resources.Load<Tile>("Prefabs/Tiles/Blue Tile"), 2);
-        AddItem(Resources.Load<Tile>("Prefabs/Tiles/Yellow Tile"), 2);
-    }
+
 
     public void AddItem(Tile tile, int count)
     {
@@ -80,7 +71,7 @@ public class InventoryManager : MonoBehaviour
         {
             // 2. 如果找到了，直减数量
             existingItem.count -= count;
-            if(existingItem.count <= 0)
+            if (existingItem.count <= 0)
             {
                 itemList.Remove(existingItem);
             }
@@ -95,22 +86,26 @@ public class InventoryManager : MonoBehaviour
         UpdateBackpackUI();
     }
 
-
     public void UpdateBackpackUI()
     {
         var count = 0;
         for (int i = 0; i < 12; i++)
         {
             UIManager.Instance._backPackUIList[i].image.color = slotColor;
-            UIManager.Instance._backPackUIList[i].GetComponentInChildren<TextMeshProUGUI>().text = 0.ToString();
+            UIManager.Instance._backPackUIList[i].GetComponentInChildren<TextMeshProUGUI>().text =
+                0.ToString();
         }
 
         foreach (var item in itemList)
         {
-            UIManager.Instance._backPackUIList[count].image.color = itemList[count].tilePrefab.GetComponent<Tile>()._color;
-            UIManager.Instance._backPackUIList[count].GetComponentInChildren<TextMeshProUGUI>().text = itemList[count].count.ToString();
+            UIManager.Instance._backPackUIList[count].image.color = itemList[count]
+                .tilePrefab.GetComponent<Tile>()
+                ._color;
+            UIManager
+                .Instance._backPackUIList[count]
+                .GetComponentInChildren<TextMeshProUGUI>()
+                .text = itemList[count].count.ToString();
             count += 1;
         }
-
     }
 }

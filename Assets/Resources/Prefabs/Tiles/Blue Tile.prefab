@@ -51,6 +51,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 845554542023221948, guid: bea78e260585585419a4a30aec659f61, type: 3}
+      propertyPath: m_Color.b
+      value: 0.9764706
+      objectReference: {fileID: 0}
+    - target: {fileID: 845554542023221948, guid: bea78e260585585419a4a30aec659f61, type: 3}
+      propertyPath: m_Color.g
+      value: 0.8627451
+      objectReference: {fileID: 0}
+    - target: {fileID: 845554542023221948, guid: bea78e260585585419a4a30aec659f61, type: 3}
+      propertyPath: m_Color.r
+      value: 0.07058824
+      objectReference: {fileID: 0}
     - target: {fileID: 4173422818425878524, guid: bea78e260585585419a4a30aec659f61, type: 3}
       propertyPath: m_Name
       value: Blue Tile
@@ -188,6 +200,7 @@ MonoBehaviour:
   _color: {r: 0.07191872, g: 0.8617275, b: 0.97735846, a: 1}
   _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
   _coordinate: {x: 0, y: 0, z: 0}
+  _spriteRenderer: {fileID: 0}
   _tileType: 0
   _material: {fileID: 0}
   _energyConsume: 0

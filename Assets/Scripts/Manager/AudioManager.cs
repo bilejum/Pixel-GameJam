@@ -1,6 +1,6 @@
-﻿using UnityEngine;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
@@ -49,7 +49,6 @@ public class AudioManager : MonoBehaviour
     {
         Sound s = musicSounds[index];
 
-
         musicSource.pitch = s.pitch;
         musicSource.volume = s.volume;
         musicSource.clip = s.clip;
@@ -65,10 +64,13 @@ public class AudioManager : MonoBehaviour
         //s.pitch = randomPitch;
         sfxSource.pitch = randomPitch;
 
+        sfxSource.volume = s.volume;
 
-        sfxSource.volume =s.volume;
-
-        if (s == null) { Debug.LogWarning("SFX Not Found: " + name); return; }
+        if (s == null)
+        {
+            Debug.LogWarning("SFX Not Found: " + name);
+            return;
+        }
 
         // 使用 PlayOneShot 可以让多个音效重叠播放（比如连射子弹）
         sfxSource.PlayOneShot(s.clip);
@@ -76,7 +78,8 @@ public class AudioManager : MonoBehaviour
 
     public void ShuffleMusic()
     {
-        if (musicSounds == null || musicSounds.Count <= 1) return;
+        if (musicSounds == null || musicSounds.Count <= 1)
+            return;
 
         // 从列表最后一个元素向前遍历
         for (int i = musicSounds.Count - 1; i > 0; i--)

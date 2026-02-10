@@ -7,9 +7,6 @@ using UnityEngine.Rendering;
 using UnityEngine.UI;
 using VInspector.Libs;
 
-
-
-
 public class UIManager : MonoBehaviour
 {
     //设置UIManager单例
@@ -20,34 +17,44 @@ public class UIManager : MonoBehaviour
     public RectTransform _buildingUI;
 
     //建造菜单缩进大小
-    [SerializeField] private float _buildingUIZoomInAmont = 6;
-    [SerializeField] private float _buildingUIZoomOutAmont = 40;
+    [SerializeField]
+    private float _buildingUIZoomInAmont = 6;
+
+    [SerializeField]
+    private float _buildingUIZoomOutAmont = 40;
     private float _lastZoomAmount;
 
     //速度表
-    [SerializeField] private RectTransform _GaugePointer;
-    [SerializeField] private float _smoothSpeed = 5f;      // 平滑速度
+    [SerializeField]
+    private RectTransform _GaugePointer;
+
+    [SerializeField]
+    private float _smoothSpeed = 5f; // 平滑速度
 
     //能量条
-    [SerializeField] private TextMeshProUGUI _energyText;
+    [SerializeField]
+    private TextMeshProUGUI _energyText;
 
     //波次
-    [SerializeField] private TextMeshProUGUI _waveTimeText;
-    [SerializeField] private TextMeshProUGUI _waveIndexText;
+    [SerializeField]
+    private TextMeshProUGUI _waveTimeText;
+
+    [SerializeField]
+    private TextMeshProUGUI _waveIndexText;
 
     public List<Button> _backPackUIList;
-    [SerializeField] private GameObject _backPackUI;
+
+    [SerializeField]
+    private GameObject _backPackUI;
 
     private void Awake()
     {
         Instance = this;
-
     }
 
     private void Start()
     {
         _playerShip = GameManager.Instance._playerShip;
-        
     }
 
     public void SelectedSlot(Button button)
@@ -79,6 +86,7 @@ public class UIManager : MonoBehaviour
             Debug.Log("这个格子超出当前数据范围，确实没东西");
         }
     }
+
     public void DeleteMode()
     {
         if (!_playerShip.deleteMode)
@@ -91,7 +99,6 @@ public class UIManager : MonoBehaviour
         {
             _playerShip.deleteMode = false;
         }
-
     }
 
     public void AdjustGaugePointer(float thrustforce)
@@ -107,7 +114,11 @@ public class UIManager : MonoBehaviour
 
         // 4. 应用平滑过度动画
         // 注意：如果这个方法是在 Update 里调用的，Lerp 会非常平滑
-        _GaugePointer.rotation = Quaternion.Lerp(_GaugePointer.rotation, targetRotation, Time.deltaTime * _smoothSpeed);
+        _GaugePointer.rotation = Quaternion.Lerp(
+            _GaugePointer.rotation,
+            targetRotation,
+            Time.deltaTime * _smoothSpeed
+        );
     }
 
     public void AdjustEnergy(float energy, float maxEnergy)
@@ -136,6 +147,5 @@ public class UIManager : MonoBehaviour
         _waveTimeText.text = time.ToString("F0");
 
         _waveIndexText.text = "Wave" + currentWave.ToString();
-
     }
 }

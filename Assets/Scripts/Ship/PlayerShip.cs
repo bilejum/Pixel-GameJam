@@ -8,11 +8,14 @@ public class PlayerShip : Ship
 
     public Tile _selectedTile;
 
-    private ItemData  _selectedItemData;
+    private ItemData _selectedItemData;
 
     [Header("手感优化")]
-    [SerializeField] private float _linearDrag = 1f;    // 线性阻力（空气阻力感）
-    [SerializeField] private float _angularDrag = 2f;   // 旋转阻力（防止无限自转）
+    [SerializeField]
+    private float _linearDrag = 1f; // 线性阻力（空气阻力感）
+
+    [SerializeField]
+    private float _angularDrag = 2f; // 旋转阻力（防止无限自转）
 
     //控制输入值(0,1)
     private float _thrustInput;
@@ -25,16 +28,13 @@ public class PlayerShip : Ship
 
     private Vector2 directionToMouse;
 
-
-
     //从这开始
     protected override void Awake()
     {
         base.Awake();
-        rb.drag = _linearDrag;          // 设置阻力
-        rb.angularDrag = _angularDrag;  // 设置旋转阻力
+        rb.drag = _linearDrag; // 设置阻力
+        rb.angularDrag = _angularDrag; // 设置旋转阻力
     }
-
 
     private void Start()
     {
@@ -50,7 +50,8 @@ public class PlayerShip : Ship
 
         if (Input.GetMouseButtonDown(0) && GameManager.Instance.State is GameState.Build)
         {
-            if (Utils.IsPointerOverUI()) return;
+            if (Utils.IsPointerOverUI())
+                return;
             _cellPos = _grid.WorldToCell(Utils.GetMouseWorldPos());
             if (!deleteMode)
             {
@@ -108,24 +109,24 @@ public class PlayerShip : Ship
             Debug.Log("SetTile 失败: 传入的 tile prefab 为空！");
             return;
         }
-            Vector3 localPos = _grid.CellToLocal(cellPos);
+        Vector3 localPos = _grid.CellToLocal(cellPos);
 
-            localPos = localPos + new Vector3(1f, 1f, 0);
+        localPos = localPos + new Vector3(1f, 1f, 0);
 
-            Tile newTile = Instantiate<Tile>(tile, transform.GetChild(0));
+        Tile newTile = Instantiate<Tile>(tile, transform.GetChild(0));
 
-            newTile._coordinate = cellPos;
+        newTile._coordinate = cellPos;
 
-            newTile.transform.localPosition = localPos;
+        newTile.transform.localPosition = localPos;
 
-            _tileGrid[cellPos] = newTile;
+        _tileGrid[cellPos] = newTile;
 
-            Vector2Int v2pos = new Vector2Int(0, 0);
+        Vector2Int v2pos = new Vector2Int(0, 0);
 
-            v2pos = (Vector2Int)cellPos;
+        v2pos = (Vector2Int)cellPos;
 
         InventoryManager.Instance.DeleteItem(_selectedTile, 1);
-            //Utils.CreateworldText(newTile.transform, v2pos.ToString(), Vector3.zero, 20, Color.black, TextAnchor.MiddleCenter, TextAlignment.Center, sortingOrder: 2);
+        //Utils.CreateworldText(newTile.transform, v2pos.ToString(), Vector3.zero, 20, Color.black, TextAnchor.MiddleCenter, TextAlignment.Center, sortingOrder: 2);
     }
 
     public void DeleteTile(Vector3Int cellPos)
@@ -140,11 +141,9 @@ public class PlayerShip : Ship
 
     private bool CanSetTile(Vector3Int cellPos)
     {
-
         //Debug.Log(_selectedItemData.count);
         if (_selectedItemData.count <= 0)
         {
-
             return false;
         }
 
@@ -152,13 +151,11 @@ public class PlayerShip : Ship
         // 如果是2D正交（上下左右），可改为 new Vector3Int(0, 1, 0)、(0, -1, 0)、(1, 0, 0)、(-1, 0, 0)
         Vector3Int[] directions = new Vector3Int[]
         {
-        Vector3Int.up,  // 前（y+1）
-        Vector3Int.down,     // 后（y-1）
-        Vector3Int.right,    // 右（x+1）
-        Vector3Int.left,      // 左（x-1）
+            Vector3Int.up, // 前（y+1）
+            Vector3Int.down, // 后（y-1）
+            Vector3Int.right, // 右（x+1）
+            Vector3Int.left, // 左（x-1）
         };
-
-
 
         // 2. 遍历所有方向，检查相邻单元格是否存在于网格中
         foreach (var dir in directions)
@@ -215,6 +212,4 @@ public class PlayerShip : Ship
             rb.angularVelocity *= 0.8f;
         }
     }
-
-
 }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &3668122089439338259
+--- !u!1001 &7533645949872763710
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -51,51 +51,52 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 845554542023221948, guid: bea78e260585585419a4a30aec659f61, type: 3}
-      propertyPath: m_Color.b
-      value: 0.09019608
-      objectReference: {fileID: 0}
-    - target: {fileID: 845554542023221948, guid: bea78e260585585419a4a30aec659f61, type: 3}
-      propertyPath: m_Color.g
-      value: 0.44705883
-      objectReference: {fileID: 0}
-    - target: {fileID: 845554542023221948, guid: bea78e260585585419a4a30aec659f61, type: 3}
-      propertyPath: m_Color.r
-      value: 0.9254902
-      objectReference: {fileID: 0}
     - target: {fileID: 4173422818425878524, guid: bea78e260585585419a4a30aec659f61, type: 3}
       propertyPath: m_Name
-      value: Orange Tile
+      value: LootTile
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4173422818425878524, guid: bea78e260585585419a4a30aec659f61, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6708706850868096537, guid: bea78e260585585419a4a30aec659f61, type: 3}
+      propertyPath: m_Size.x
+      value: 3.9413471
+      objectReference: {fileID: 0}
+    - target: {fileID: 6708706850868096537, guid: bea78e260585585419a4a30aec659f61, type: 3}
+      propertyPath: m_Size.y
+      value: 3.9371119
+      objectReference: {fileID: 0}
+    - target: {fileID: 6708706850868096537, guid: bea78e260585585419a4a30aec659f61, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.015316725
+      objectReference: {fileID: 0}
+    - target: {fileID: 6708706850868096537, guid: bea78e260585585419a4a30aec659f61, type: 3}
+      propertyPath: m_Offset.y
+      value: 0.009539604
+      objectReference: {fileID: 0}
+    - target: {fileID: 6708706850868096537, guid: bea78e260585585419a4a30aec659f61, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 296139534238942047, guid: bea78e260585585419a4a30aec659f61, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: bea78e260585585419a4a30aec659f61, type: 3}
---- !u!1 &796345941341972719 stripped
+--- !u!1 &5865405125286249666 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4173422818425878524, guid: bea78e260585585419a4a30aec659f61, type: 3}
-  m_PrefabInstance: {fileID: 3668122089439338259}
+  m_PrefabInstance: {fileID: 7533645949872763710}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &7276937898216640200
+--- !u!114 &4934797671668513787
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 796345941341972719}
+  m_GameObject: {fileID: 5865405125286249666}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0de42fa041281849ac810a45ce2fbfb, type: 3}
+  m_Script: {fileID: 11500000, guid: 3376c68cca5b24245b180526cbfc2f29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 100
-  _maxHealth: 100
-  _healthRecoveyRate: 0.1
-  _color: {r: 0.92549026, g: 0.44705886, b: 0.09019608, a: 1}
-  _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
-  _coordinate: {x: 0, y: 0, z: 0}
-  _spriteRenderer: {fileID: 0}
-  _tileType: 0
-  _material: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  _energyConsume: 10
-  _bullet: {fileID: 8440934337991791292, guid: a59b5b33b448adb45873c44d15b63185, type: 3}
-  _weaponShootCD: 2
-  _recoilForce: 20
+  tilePrefab: {fileID: 0}

@@ -25,7 +25,6 @@ public abstract class Tile : MonoBehaviour
 
     protected Ship _ship;
 
-    public SpriteRenderer _spriteRenderer;
 
     [SerializeField] public TileType _tileType;
 
@@ -78,13 +77,11 @@ public abstract class Tile : MonoBehaviour
     protected virtual void Awake()
     {
         _ship = transform.parent.parent.GetComponent<Ship>();
-        _spriteRenderer = GetComponent<SpriteRenderer>();
         _tileEffect = GetComponent<TileEffect>();
 
         //_material = Resources.Load<Material>("Shaders/Shader Graphs_DissolveShader");
         //_spriteRenderer.material = _material;
 
-        _spriteRenderer.color = _color;
     }
 
     protected virtual void Update()

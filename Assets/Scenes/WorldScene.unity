@@ -1753,7 +1753,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a42a7dbe44673bc40abf2a85186a1d13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemList: []
+  itemList:
+  - tilePrefab: {fileID: -2784357674937424464, guid: 437a1c47aa83e274d826e3e9ac5f4511, type: 3}
+    count: 3
+  - tilePrefab: {fileID: 5939482147851961875, guid: df230e8e9a57d2f4fb694496825076ce, type: 3}
+    count: 2
+  - tilePrefab: {fileID: 3330162047188022247, guid: cd24c52b002b4254789b78d94a2f0ff3, type: 3}
+    count: 1
   space: 12
 --- !u!224 &886689445 stripped
 RectTransform:
@@ -3016,6 +3022,10 @@ PrefabInstance:
       value: PlayerShip
       objectReference: {fileID: 0}
     - target: {fileID: 5012341161162957207, guid: a3a90c406bc3f8642b95acba3432740c, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5012341161162957207, guid: a3a90c406bc3f8642b95acba3432740c, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -3609,7 +3619,7 @@ MonoBehaviour:
   m_Follow: {fileID: 0}
   m_Lens:
     FieldOfView: 103
-    OrthographicSize: 6.000057
+    OrthographicSize: 99.99976
     NearClipPlane: 0.3
     FarClipPlane: 1000
     Dutch: 0
@@ -4197,7 +4207,7 @@ MonoBehaviour:
   _enemyPrefab: {fileID: 0}
   _spawnEnemyFlag: 1
   _waveDataSOList: []
-  _waveDataSOPath: ScriptableObjects
+  _waveDataSOPath: ScriptableObjects/Waves
   _currentWave: {fileID: 0}
   _currentWaveIndex: 0
   _spawnInterval: 0.5
@@ -4876,7 +4886,7 @@ Camera:
   far clip plane: 1000
   field of view: 103
   orthographic: 1
-  orthographic size: 6.000057
+  orthographic size: 99.99976
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
@@ -4923,7 +4933,7 @@ MonoBehaviour:
   m_ShowCameraFrustum: 1
   m_IgnoreTimeScale: 1
   m_WorldUpOverride: {fileID: 0}
-  m_UpdateMethod: 1
+  m_UpdateMethod: 2
   m_BlendUpdateMethod: 1
   m_DefaultBlend:
     m_Style: 1
