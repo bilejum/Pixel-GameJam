@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
     {
         Instance = this;
         State = GameState.Game;
-        _playerShip = FindObjectOfType<PlayerShip>();
     }
     private void Update()
     {

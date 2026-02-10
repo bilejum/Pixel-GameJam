@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public static class Utils
 {
@@ -46,5 +47,21 @@ public static class Utils
         return directionToMouse;
     }
 
+    public static bool IsPointerOverUI()
+    {
+        // 1. 检查当前是否有UI被射线命中
+        if (EventSystem.current == null) return false;
+
+        // 2. 创建指针事件数据，检测当前鼠标位置的UI
+        PointerEventData eventData = new PointerEventData(EventSystem.current);
+        eventData.position = Input.mousePosition;
+
+        // 3. 检测命中的UI对象
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        // 4. 有命中结果则说明点击在UI上
+        return results.Count > 0;
+    }
 
 }

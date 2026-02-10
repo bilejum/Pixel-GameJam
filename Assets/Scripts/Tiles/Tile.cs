@@ -17,7 +17,7 @@ public abstract class Tile : MonoBehaviour
     [SerializeField] protected float _healthRecoveyRate =0.1f; //这是百分比
 
     [Header("杂项")]
-    [SerializeField] protected Color _color;
+    [SerializeField] public Color _color;
 
     [SerializeField] protected GameObject _destroyEffectPrefab;
 
@@ -25,7 +25,7 @@ public abstract class Tile : MonoBehaviour
 
     protected Ship _ship;
 
-    protected SpriteRenderer _spriteRenderer;
+    public SpriteRenderer _spriteRenderer;
 
     [SerializeField] public TileType _tileType;
 

@@ -29,10 +29,8 @@ public class AudioManager : MonoBehaviour
             Destroy(gameObject);
         }
 
-
         ShuffleMusic();
     }
-
 
     private void Update()
     {

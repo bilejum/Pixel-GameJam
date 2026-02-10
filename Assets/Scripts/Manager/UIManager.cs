@@ -3,6 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.UI;
+using VInspector.Libs;
+
+
 
 
 public class UIManager : MonoBehaviour
@@ -30,16 +35,48 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _waveTimeText;
     [SerializeField] private TextMeshProUGUI _waveIndexText;
 
+    public List<Button> _backPackUIList;
+    [SerializeField] private GameObject _backPackUI;
+
     private void Awake()
     {
         Instance = this;
+
     }
 
     private void Start()
     {
-        if (GameManager.Instance != null)
+        _playerShip = GameManager.Instance._playerShip;
+        
+    }
+
+    public void SelectedSlot(Button button)
+    {
+        // 获取当前点击的格子索引
+        int index = _backPackUIList.IndexOf(button);
+
+        // 1. 安全检查：索引是否在有效范围内
+        // 如果 items 列表只有 3 个元素，你点第 4 个格子（index 3）就会报越界错误
+        if (index >= 0 && index < InventoryManager.Instance.itemList.Count)
         {
-            _playerShip = GameManager.Instance._playerShip;
+            var selectedItem = InventoryManager.Instance.itemList[index];
+
+            // 2. 检查该位置的数据对象是否存在
+            if (selectedItem != null && selectedItem.tilePrefab != null)
+            {
+                Debug.Log(selectedItem.tilePrefab);
+                var tileprefab = selectedItem.tilePrefab;
+                // 在这里执行后续逻辑，比如显示物品详情或使用物品
+                _playerShip.SelectedTile(selectedItem);
+            }
+            else
+            {
+                Debug.Log("该格子数据为空");
+            }
+        }
+        else
+        {
+            Debug.Log("这个格子超出当前数据范围，确实没东西");
         }
     }
     public void DeleteMode()
@@ -48,7 +85,7 @@ public class UIManager : MonoBehaviour
         {
             Debug.Log("enter delete");
             _playerShip.deleteMode = true;
-            _playerShip.SelectedTile(null);
+            _playerShip._selectedTile = null;
         }
         else
         {
@@ -73,22 +110,9 @@ public class UIManager : MonoBehaviour
         _GaugePointer.rotation = Quaternion.Lerp(_GaugePointer.rotation, targetRotation, Time.deltaTime * _smoothSpeed);
     }
 
-    public void AdjustEnergy(float energy,float maxEnergy)
+    public void AdjustEnergy(float energy, float maxEnergy)
     {
         _energyText.text = $"{energy}/{maxEnergy}";
-    }
-
-    public void SwitchColor(string tileColor)
-    {
-        if (tileColor == null) return;
-        if (_playerShip == null) return;
-
-        string LoadPath = $"Prefabs/Tiles/{tileColor} Tile";
-
-        Tile tilePrefab = Resources.Load<Tile>(LoadPath);
-
-        //将获取的TilePrefab传给playerShip
-        _playerShip.SelectedTile(tilePrefab);
     }
 
     public void SwitchBuildingUI(bool buildingUIFlag)
@@ -107,7 +131,7 @@ public class UIManager : MonoBehaviour
         }
     }
 
-    public void UpdateWaveText(float time,int currentWave)
+    public void UpdateWaveText(float time, int currentWave)
     {
         _waveTimeText.text = time.ToString("F0");
 

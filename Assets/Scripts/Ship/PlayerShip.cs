@@ -6,7 +6,9 @@ public class PlayerShip : Ship
 {
     private Vector3Int _cellPos;
 
-    [SerializeField] private Tile _selectedTile;
+    public Tile _selectedTile;
+
+    private ItemData  _selectedItemData;
 
     [Header("手感优化")]
     [SerializeField] private float _linearDrag = 1f;    // 线性阻力（空气阻力感）
@@ -33,10 +35,7 @@ public class PlayerShip : Ship
         rb.angularDrag = _angularDrag;  // 设置旋转阻力
     }
 
-    public void SelectedTile(Tile tile)
-    {
-        _selectedTile = tile;
-    }
+
     private void Start()
     {
         InitShip();
@@ -51,6 +50,7 @@ public class PlayerShip : Ship
 
         if (Input.GetMouseButtonDown(0) && GameManager.Instance.State is GameState.Build)
         {
+            if (Utils.IsPointerOverUI()) return;
             _cellPos = _grid.WorldToCell(Utils.GetMouseWorldPos());
             if (!deleteMode)
             {
@@ -65,7 +65,7 @@ public class PlayerShip : Ship
             }
         }
 
-        if(Input.GetMouseButton(0) && GameManager.Instance.State is GameState.Game)
+        if (Input.GetMouseButton(0) && GameManager.Instance.State is GameState.Game)
         {
             HandleAttack(directionToMouse);
         }
@@ -74,7 +74,7 @@ public class PlayerShip : Ship
         UIManager.Instance.AdjustGaugePointer(_thrustForce * _thrustInput);
 
         //修改能量条
-        UIManager.Instance.AdjustEnergy(_energy,_maxEnergy);
+        UIManager.Instance.AdjustEnergy(_energy, _maxEnergy);
 
         directionToMouse = Utils.GetDirectionToMouse(transform);
     }
@@ -95,25 +95,37 @@ public class PlayerShip : Ship
         SetTile(Vector3Int.zero, whiteTile);
     }
 
+    public void SelectedTile(ItemData itemData)
+    {
+        _selectedTile = itemData.tilePrefab;
+        _selectedItemData = itemData;
+    }
+
     public void SetTile(Vector3Int cellPos, Tile tile)
     {
-        Vector3 localPos = _grid.CellToLocal(cellPos);
+        if (tile == null)
+        {
+            Debug.Log("SetTile 失败: 传入的 tile prefab 为空！");
+            return;
+        }
+            Vector3 localPos = _grid.CellToLocal(cellPos);
 
-        localPos = localPos + new Vector3(1f, 1f, 0);
+            localPos = localPos + new Vector3(1f, 1f, 0);
 
-        Tile newTile = Instantiate<Tile>(tile, transform.GetChild(0));
+            Tile newTile = Instantiate<Tile>(tile, transform.GetChild(0));
 
-        newTile._coordinate = cellPos;
+            newTile._coordinate = cellPos;
 
-        newTile.transform.localPosition = localPos;
+            newTile.transform.localPosition = localPos;
 
-        _tileGrid[cellPos] = newTile;
+            _tileGrid[cellPos] = newTile;
 
-        Vector2Int v2pos = new Vector2Int(0, 0);
+            Vector2Int v2pos = new Vector2Int(0, 0);
 
-        v2pos = (Vector2Int)cellPos;
+            v2pos = (Vector2Int)cellPos;
 
-        //Utils.CreateworldText(newTile.transform, v2pos.ToString(), Vector3.zero, 20, Color.black, TextAnchor.MiddleCenter, TextAlignment.Center, sortingOrder: 2);
+        InventoryManager.Instance.DeleteItem(_selectedTile, 1);
+            //Utils.CreateworldText(newTile.transform, v2pos.ToString(), Vector3.zero, 20, Color.black, TextAnchor.MiddleCenter, TextAlignment.Center, sortingOrder: 2);
     }
 
     public void DeleteTile(Vector3Int cellPos)
@@ -128,6 +140,14 @@ public class PlayerShip : Ship
 
     private bool CanSetTile(Vector3Int cellPos)
     {
+
+        //Debug.Log(_selectedItemData.count);
+        if (_selectedItemData.count <= 0)
+        {
+
+            return false;
+        }
+
         // 1. 定义四个方向的偏移量（根据你的网格坐标系调整，这里是顶视角3D/2D通用：前后左右）
         // 如果是2D正交（上下左右），可改为 new Vector3Int(0, 1, 0)、(0, -1, 0)、(1, 0, 0)、(-1, 0, 0)
         Vector3Int[] directions = new Vector3Int[]
@@ -137,6 +157,8 @@ public class PlayerShip : Ship
         Vector3Int.right,    // 右（x+1）
         Vector3Int.left,      // 左（x-1）
         };
+
+
 
         // 2. 遍历所有方向，检查相邻单元格是否存在于网格中
         foreach (var dir in directions)
@@ -149,6 +171,7 @@ public class PlayerShip : Ship
                 return true;
             }
         }
+
         // 3. 所有方向都没有方块，返回false
         return false;
     }
