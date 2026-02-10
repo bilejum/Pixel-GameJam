@@ -12,6 +12,8 @@ public class LootTile : MonoBehaviour
         // 使用 NameToLayer 是正确的
         if (!isBeingCollected && collision.transform.root.gameObject.layer == LayerMask.NameToLayer("Player"))
         {
+            // 真正到达位置后，加入背包并销毁自己
+            InventoryManager.Instance.AddItem(tilePrefab, 1);
             // 开启吸取协程，传入玩家的 Transform
             StartCoroutine(CollectRoutine(collision.transform.root));
         }
@@ -40,9 +42,6 @@ public class LootTile : MonoBehaviour
 
             yield return null; // 等待下一帧
         }
-
-        // 真正到达位置后，加入背包并销毁自己
-        InventoryManager.Instance.AddItem(tilePrefab, 1);
         Destroy(gameObject);
     }
 

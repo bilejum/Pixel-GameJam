@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f777baecb05c7214f9eac4c8cf0feddf, type: 3}
+  m_Name: BaseEnemyLootTable 1
+  m_EditorClassIdentifier: 
+  lootItems:
+  - itemPrefab: {fileID: 5939482147851961875, guid: df230e8e9a57d2f4fb694496825076ce, type: 3}
+    dropWeight: 10
+  - itemPrefab: {fileID: 3330162047188022247, guid: cd24c52b002b4254789b78d94a2f0ff3, type: 3}
+    dropWeight: 10
+  - itemPrefab: {fileID: -2784357674937424464, guid: 437a1c47aa83e274d826e3e9ac5f4511, type: 3}
+    dropWeight: 10

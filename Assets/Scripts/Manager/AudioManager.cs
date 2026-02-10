@@ -72,9 +72,13 @@ public class AudioManager : MonoBehaviour
             return;
         }
 
-        // 使用 PlayOneShot 可以让多个音效重叠播放（比如连射子弹）
-        sfxSource.PlayOneShot(s.clip);
+        // 如果当前正在播，新音效音量就打 7 折，防止叠加过载
+        float finalVolume = sfxSource.isPlaying ? s.volume * 0.9f : s.volume;
+        sfxSource.PlayOneShot(s.clip, finalVolume);
+
     }
+
+
 
     public void ShuffleMusic()
     {

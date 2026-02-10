@@ -31,6 +31,9 @@ public class EnemyManager : MonoBehaviour
 
     private float _timer;
 
+    public List<LootTile> lootList = new List<LootTile>();
+
+    public bool startSpawnEnemyFlag;
     private void Awake()
     {
         if (Instance == null)
@@ -54,8 +57,6 @@ public class EnemyManager : MonoBehaviour
         }
 
         _currentWave = _waveDataSOList[_currentWaveIndex];
-
-        StartWave();
     }
 
     private void Update()
@@ -63,9 +64,9 @@ public class EnemyManager : MonoBehaviour
         _timer += Time.deltaTime;
         if (_timer >= _currentWave.time)
         {
-            //ClearEnemies();
+            StartClearEnemies();
             _currentWaveIndex += 1;
-            _currentWaveIndex = _currentWaveIndex % _waveDataSOList.Count + 1;
+            //_currentWaveIndex = _currentWaveIndex % _waveDataSOList.Count + 1;
 
             _currentWave = _waveDataSOList[_currentWaveIndex];
             StartWave();
@@ -74,7 +75,7 @@ public class EnemyManager : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.C))
         {
-            ClearEnemies();
+            StartClearEnemies();
         }
 
         UIManager.Instance.UpdateWaveText(_currentWave.time - _timer, _currentWave.waveIndex);
@@ -113,47 +114,53 @@ public class EnemyManager : MonoBehaviour
         if (prefab == null)
             return;
 
-        float x = position.x + Random.Range(10, 20);
-        float y = position.y + Random.Range(10, 20);
+        float x = position.x + Random.Range(10, 50);
+        float y = position.y + Random.Range(10, 50);
 
         // 实例化敌人
         Ship newEnemy = Instantiate(prefab, new Vector2(x, y), Quaternion.identity);
         _enemiesList.Add((BaseEnemy)newEnemy);
     }
 
-    public void ClearEnemies()
+    public void StartClearEnemies()
     {
-        // 从 count - 1 开始倒序循环
-        for (int i = _enemiesList.Count - 1; i >= 0; i--)
+        foreach (var lootItem in lootList)
         {
-            BaseEnemy enemy = _enemiesList[i];
-            if (enemy != null)
-            {
-                var enemyShip = enemy.transform.GetChild(0);
-                var enemyShipIndex = enemy.transform.childCount;
-                for (int j = 0; j < enemyShipIndex; j++)
-                {
-                    enemyShip.GetChild(j).GetComponent<Tile>().Health = 0;
-                }
-            }
+            lootList.Remove(lootItem);
+            Destroy(lootItem.gameObject);
         }
-        // 循环结束后清空列表
-        _enemiesList.Clear();
+        // 开启协程，不要直接在普通函数里写循环
+        StartCoroutine(ClearEnemiesRoutine());
     }
 
-    //public void ClearEnemies()
-    //{
-    //    foreach (var enemy in _enemiesList)
-    //    {
-    //        var enemyShip = enemy.transform.GetChild(0);
-    //        var enemyShipIndex = enemy.transform.childCount;
-    //        for (int i = 0; i < enemyShipIndex; i++)
-    //        {
-    //            enemyShip.GetChild(i).GetComponent<Tile>().Health = 0;
-    //        }
-    //    }
-    //}
+    private IEnumerator ClearEnemiesRoutine()
+    {
+        while (_enemiesList.Count > 0)
+        {
+            // 始终取当前列表的最后一个元素（最安全，不会越界）
+            int lastIndex = _enemiesList.Count - 1;
+            BaseEnemy enemy = _enemiesList[lastIndex];
 
+            if (enemy != null)
+            {
+                // ... 处理逻辑 ...
+                if (enemy.transform.childCount > 0)
+                {
+                    Transform enemyShip = enemy.transform.GetChild(0);
+                    for (int j = 0; j < enemyShip.childCount; j++)
+                    {
+                        Tile t = enemyShip.GetChild(j).GetComponent<Tile>();
+                        if (t != null) t.Health = 0;
+                    }
+                }
+            }
+
+            // 处理完一个就删一个，这样即便外部也删，也不会影响这里的逻辑
+            _enemiesList.RemoveAt(lastIndex);
+
+            yield return new WaitForSeconds(0.2f);
+        }
+    }
     public void DisAbleEnemies()
     {
         foreach (var enemy in _enemiesList)

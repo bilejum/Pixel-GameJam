@@ -20,6 +20,8 @@ public class BaseEnemy : BaseAIShip
             _enemyManager._enemiesList.Add(this);
             _target = _enemyManager._target;
         }
+
+        _lootTile = Resources.Load<LootTile>("Prefabs/Tiles/LootTile");
     }
 
     private void OnDestroy()
@@ -34,6 +36,7 @@ public class BaseEnemy : BaseAIShip
                 var newLootTile = Instantiate(_lootTile, transform.position, Quaternion.identity);
                 newLootTile.tilePrefab = itemToDrop;
                 newLootTile.GetComponent<SpriteRenderer>().color = itemToDrop._color;
+                _enemyManager.lootList.Add(newLootTile);
             }
         }
     }

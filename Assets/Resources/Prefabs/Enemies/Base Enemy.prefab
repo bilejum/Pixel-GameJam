@@ -379,8 +379,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _thrustForce: 0
   _turnTorque: 0
-  _strafeForce: 40
-  _dashForce: 50
+  _strafeForce: 0
+  _dashForce: 0
   _energy: 0
   _maxEnergy: 0
   _noncombatCD: 10

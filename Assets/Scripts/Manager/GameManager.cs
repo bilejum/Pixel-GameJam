@@ -38,6 +38,8 @@ public class GameManager : MonoBehaviour
             Cursor.lockState = CursorLockMode.None;
         }
 
+       _playerShip = FindAnyObjectByType<PlayerShip>();
+
     }
     private void Update()
     {

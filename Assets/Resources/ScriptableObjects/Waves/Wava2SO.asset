@@ -14,10 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waveIndex: 2
   enemyGroups:
-  - enemyPrefab: {fileID: 5522469249313511846, guid: 8dac67f600057054bb2bfd8c0f7bf4c2, type: 3}
+  - enemyPrefab: {fileID: 7931711711096947623, guid: 04adae09842079f4aa82746b333d4d53, type: 3}
     count: 4
     spawnPosition: {x: 100, y: -100}
-  - enemyPrefab: {fileID: 5522469249313511846, guid: 8dac67f600057054bb2bfd8c0f7bf4c2, type: 3}
+  - enemyPrefab: {fileID: 868629761168951056, guid: 3104478f9133c0044afb1ee736d22c79, type: 3}
     count: 4
     spawnPosition: {x: 100, y: -100}
   time: 30

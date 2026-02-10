@@ -107,10 +107,10 @@ public class PlayerShip : Ship
         }
 
         //修改速度表
-        UIManager.Instance.AdjustGaugePointer(_thrustForce * _thrustInput);
+        //UIManager.Instance.AdjustGaugePointer(_thrustForce * _thrustInput);
 
-        //修改能量条
-        UIManager.Instance.AdjustEnergy(_energy, _maxEnergy);
+        ////修改能量条
+        //UIManager.Instance.AdjustEnergy(_energy, _maxEnergy);
 
         directionToMouse = Utils.GetDirectionToMouse(transform);
     }

@@ -23,8 +23,7 @@ public class BaseAIShip : Ship
     [Header("AI设置")]
     [SerializeField] protected float _attackRange = 70f; // 进入此范围开始射击
     [SerializeField] protected float _stopRange = 30f;   // 距离太近则停止推进
-    [SerializeField] protected float _fireRate = 1f;
-    [SerializeField] protected float _spreadAngle = 2f;
+    [SerializeField] protected float _spreadAngle = 10f;
 
     protected Vector2 directionToTarget;
 
@@ -32,7 +31,7 @@ public class BaseAIShip : Ship
 
     [Header("避让设置")]
     [SerializeField] protected float _avoidanceRadius = 15f; // 检测队友的范围
-    [SerializeField] protected float _avoidanceForce = 10f;  // 避让推力的强度
+    [SerializeField] protected float _avoidanceForce = 200f;  // 避让推力的强度
     private Collider2D[] _neighborResults = new Collider2D[5]; // 缓存数组，减少GC
 
 
