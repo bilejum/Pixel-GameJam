@@ -9,8 +9,14 @@ public class WhiteTile : Tile
         base.Awake();
     }
 
-    private void OnDestroy()
+    protected override void OnTileDeath()
     {
-        _ship.CoreDestory();
+        if (_ship != null)
+        {
+            // 这里会正确触发 PlayerShip 或 EnemyShip 的重写方法
+            _ship.CoreDestory();
+        }
+        // 注意：不要在这里 Destroy(gameObject)，
+        // 因为 Ship.CoreDestory 会把整个父物体删掉
     }
 }

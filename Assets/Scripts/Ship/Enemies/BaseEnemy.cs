@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using VInspector;
@@ -6,6 +7,9 @@ using VInspector;
 
 public class BaseEnemy : BaseAIShip
 {
+
+    public static Action OnEnemyKilled;
+
     private EnemyManager _enemyManager;
 
     [SerializeField]private LootTile _lootTile;
@@ -39,6 +43,8 @@ public class BaseEnemy : BaseAIShip
                 _enemyManager.lootList.Add(newLootTile);
             }
         }
+
+        OnEnemyKilled?.Invoke();
     }
 
 }

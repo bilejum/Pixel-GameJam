@@ -18,4 +18,4 @@ MonoBehaviour:
   - itemPrefab: {fileID: 3330162047188022247, guid: cd24c52b002b4254789b78d94a2f0ff3, type: 3}
     dropWeight: 10
   - itemPrefab: {fileID: -2784357674937424464, guid: 437a1c47aa83e274d826e3e9ac5f4511, type: 3}
-    dropWeight: 50
+    dropWeight: 20

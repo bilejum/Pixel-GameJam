@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Cinemachine;
+using System;
 using UnityEngine;
 
 //这个Type指的是方块的功能类别，譬如能否攻击
@@ -33,6 +34,8 @@ public abstract class Tile : MonoBehaviour
 
     protected TileEffect _tileEffect;
 
+    private CinemachineImpulseSource _impulseSource;
+
     [Header("开火设置")]
     [SerializeField] protected float _energyConsume;
     public float Health
@@ -46,6 +49,12 @@ public abstract class Tile : MonoBehaviour
             if (value < _health)
             {
                 _ship.SetShipState = ShipState.Fight;
+            }
+
+            if (_ship is PlayerShip && _impulseSource != null)
+            {
+                // 产生震动：可以根据伤害大小调整震动强度
+                _impulseSource.GenerateImpulse();
             }
 
             _health = value;
@@ -67,7 +76,7 @@ public abstract class Tile : MonoBehaviour
                     var colorOvertime = newDestroyEffect.GetComponent<ParticleSystem>().colorOverLifetime;
                     colorOvertime.color = _color;
 
-                    Destroy(gameObject);
+                    OnTileDeath();
                 }
 
             }
@@ -82,6 +91,7 @@ public abstract class Tile : MonoBehaviour
         //_material = Resources.Load<Material>("Shaders/Shader Graphs_DissolveShader");
         //_spriteRenderer.material = _material;
 
+        _impulseSource = GetComponentInParent<CinemachineImpulseSource>();
     }
 
     protected virtual void Update()
@@ -91,5 +101,11 @@ public abstract class Tile : MonoBehaviour
         {
             Health += _maxHealth * _healthRecoveyRate * Time.deltaTime;
         }
+    }
+
+    protected virtual void OnTileDeath()
+    {
+        // 普通方块直接死
+        Destroy(gameObject);
     }
 }

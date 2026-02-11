@@ -2,9 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
+using VInspector;
 using VInspector.Libs;
 
 public class UIManager : MonoBehaviour
@@ -47,11 +49,31 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject _backPackUI;
 
-    [SerializeField] private GameObject _crosshair;
+    [SerializeField]
+    private GameObject _crosshair;
+
+    [Foldout("黑屏")]
+    [SerializeField]
+    public CanvasGroup blackScreenGroup;
+    public float fadeDuration = 1.5f; // 变黑持续时间
+
+    public CanvasGroup loseScreen;
+
+    public TextMeshProUGUI scoreText;
+
+    private void OnEnable()
+    {
+        // 订阅分数改变信号
+        GameManager.OnScoreChanged += UpdateScoreUI;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.OnScoreChanged -= UpdateScoreUI;
+    }
 
     private void Awake()
     {
-
         if (Instance == null)
         {
             Instance = this;
@@ -65,6 +87,12 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         _playerShip = GameManager.Instance._playerShip;
+
+        // 场景加载后，如果黑屏是满的，就慢慢消失
+        if (blackScreenGroup.alpha > 0)
+        {
+            StartCoroutine(FadeFromBlackRoutine());
+        }
     }
 
     public void SelectedSlot(Button button)
@@ -158,4 +186,63 @@ public class UIManager : MonoBehaviour
 
         _waveIndexText.text = "Wave" + currentWave.ToString();
     }
+
+    public void StartFadeToBlack()
+    {
+        StartCoroutine(FadeRoutine(0, 1));
+    }
+
+    private IEnumerator FadeRoutine(float startAlpha, float endAlpha)
+    {
+        float elapsed = 0;
+        blackScreenGroup.blocksRaycasts = true;
+        float startMusicVol = AudioManager.Instance.musicSource.volume;
+
+        // 初始状态确保 LoseScreen 是透明的
+        loseScreen.alpha = 0;
+        loseScreen.blocksRaycasts = false;
+        loseScreen.blocksRaycasts = true; // 变黑完成后，允许点击失败面板上的按钮
+
+        while (elapsed < fadeDuration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            float progress = Mathf.Clamp01(elapsed / fadeDuration);
+
+            // 1. 背景变黑：从 0 到 1
+            blackScreenGroup.alpha = Mathf.Lerp(startAlpha, endAlpha, progress);
+
+            // 2. 失败文字浮现：同样从 0 到 1 (注意这里不再用 1 - ...)
+            loseScreen.alpha = progress;
+
+            // 3. 音量淡出
+            AudioManager.Instance.musicSource.volume = Mathf.Lerp(startMusicVol, 0f, progress);
+            AudioManager.Instance.sfxSource.volume = Mathf.Lerp(1f, 0f, progress);
+
+            yield return null;
+        }
+
+        blackScreenGroup.alpha = endAlpha;
+        loseScreen.alpha = 1; // 最终完全显示
+    }
+
+    private IEnumerator FadeFromBlackRoutine()
+    {
+        float elapsed = 0;
+        while (elapsed < 1f)
+        {
+            elapsed += Time.deltaTime;
+            blackScreenGroup.alpha = 1 - (elapsed / 1f);
+            yield return null;
+        }
+        blackScreenGroup.alpha = 0;
+        blackScreenGroup.blocksRaycasts = false;
+    }
+
+    private void UpdateScoreUI(int newScore)
+    {
+        // 更新 UI 文本显示
+        scoreText.text = "SCORE: " + newScore.ToString();
+    }
+
+
 }

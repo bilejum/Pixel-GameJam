@@ -14,6 +14,8 @@ public class LootTile : MonoBehaviour
         {
             // 真正到达位置后，加入背包并销毁自己
             InventoryManager.Instance.AddItem(tilePrefab, 1);
+
+            AudioManager.Instance.PlaySFX("Get");
             // 开启吸取协程，传入玩家的 Transform
             StartCoroutine(CollectRoutine(collision.transform.root));
         }
@@ -26,7 +28,7 @@ public class LootTile : MonoBehaviour
         float acceleration = 1.5f; // 加速度，让过程有“吸进去”的感觉
 
         // 当物体距离玩家大于一个很小的值时，持续飞向玩家
-        while (Vector3.Distance(transform.position, playerTransform.position) > 0.2f)
+        while (Vector3.Distance(transform.position, playerTransform.position) > 0.2f) 
         {
             // 每一帧都重新计算朝向玩家的方向
             Vector3 direction = (playerTransform.position - transform.position).normalized;
@@ -41,6 +43,8 @@ public class LootTile : MonoBehaviour
             transform.localScale = Vector3.Lerp(transform.localScale, Vector3.zero, Time.deltaTime * 5f);
 
             yield return null; // 等待下一帧
+
+
         }
         Destroy(gameObject);
     }

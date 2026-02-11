@@ -1,10 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using Cinemachine;
+using System;
+using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerShip : Ship
 {
+    //玩家死亡信号
+    public static Action OnPlayerDeath;
+
+
     private Vector3Int _cellPos;
 
     public Tile _selectedTile;
@@ -153,7 +159,7 @@ public class PlayerShip : Ship
         _ghostTile.transform.localPosition = lerp;
 
         if (_selectedItemData == null) return;
-        if(_selectedItemData.count <= 0)
+        if (_selectedItemData.count <= 0)
         {
             _ghostTile.SetActive(false);
         }
@@ -314,5 +320,18 @@ public class PlayerShip : Ship
         rb.AddRelativeForce(dashDir * _dashForce, ForceMode2D.Impulse);
 
         _dashTimer = _dashCooldown;
+        AudioManager.Instance.PlaySFX("Dash");
+    }
+
+    public override void CoreDestory()
+    {
+        Debug.Log("PlayerDeath");
+        base.CoreDestory();
+    }
+
+    private void OnDestroy()
+    {
+
+        OnPlayerDeath?.Invoke();
     }
 }

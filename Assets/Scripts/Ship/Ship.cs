@@ -30,6 +30,8 @@ public abstract class Ship : MonoBehaviour
     public float _energy = 0f;
     public float _maxEnergy = 0f;
 
+    public bool _coreHasDestory = false;
+
     //对外暴露的加速度和扭矩力变量
     public float ThrustForce
     {
@@ -147,9 +149,10 @@ public abstract class Ship : MonoBehaviour
         _tileGrid.Remove(cellPos);
     }
 
-    public void CoreDestory()
+    public virtual void CoreDestory()
     {
         AudioManager.Instance.PlaySFX("Kill");
+        _coreHasDestory = true;
         Destroy(this.gameObject);
     }
 
