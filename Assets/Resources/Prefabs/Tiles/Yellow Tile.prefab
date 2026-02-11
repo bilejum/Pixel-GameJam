@@ -92,10 +92,10 @@ MonoBehaviour:
   _color: {r: 0.96470594, g: 0.7686275, b: 0.050980397, a: 1}
   _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
   _coordinate: {x: 0, y: 0, z: 0}
-  _spriteRenderer: {fileID: 0}
   _tileType: 2
   _material: {fileID: 0}
   _energyConsume: 0
+  Info: "\u589E\u52A0\u80FD\u91CF\u4E0A\u9650\uFF0C\u5E76\u4E14\u6301\u7EED\u6062\u590D\u80FD\u91CF"
   _chargeCD: 0.1
   _chargeAmount: 1
   _maxCharge: 10

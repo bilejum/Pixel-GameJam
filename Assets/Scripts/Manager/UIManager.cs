@@ -66,6 +66,11 @@ public class UIManager : MonoBehaviour
     private float _targetFillAmount; // 记录目标比例
     public float lerpSpeed = 5f;    // 平滑速度
 
+    //左侧栏目
+    public GameObject _Info;
+    public GameObject Infotext;
+
+
     private void OnEnable()
     {
         // 订阅分数改变信号
@@ -92,6 +97,19 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         _playerShip = GameManager.Instance._playerShip;
+
+
+        // --- 必须加上这一段，否则触发器没有索引，或者根本没激活 ---
+        for (int i = 0; i < _backPackUIList.Count; i++)
+        {
+            // 尝试获取或添加触发器组件
+            var trigger = _backPackUIList[i].gameObject.GetComponent<SlotTooltipTrigger>();
+            if (trigger == null)
+            {
+                trigger = _backPackUIList[i].gameObject.AddComponent<SlotTooltipTrigger>();
+            }
+            trigger.Setup(i); // 核心：告诉脚本它是第几个格子
+        }
 
         // 场景加载后，如果黑屏是满的，就慢慢消失
         if (blackScreenGroup.alpha > 0)
@@ -261,5 +279,71 @@ public class UIManager : MonoBehaviour
     public void AdjustEnergy(float energy, float maxEnergy)
     {
         _energyText.text = $"{energy}/{maxEnergy}";
+    }
+
+    // 在 UIManager 类中添加
+
+    public void ShowTooltip(int index)
+    {
+        // 1. 范围检查
+        if (index >= 0 && index < InventoryManager.Instance.itemList.Count)
+        {
+            var item = InventoryManager.Instance.itemList[index];
+
+            // 2. 确保 item 和 tilePrefab 都不为空
+            if (item != null && item.tilePrefab != null)
+            {
+                // 3. 从 Prefab 上获取 Tile 组件（因为 Tile 是抽象类，GetComponent 依然有效）
+                Tile tileScript = item.tilePrefab.GetComponent<Tile>();
+
+                if (tileScript != null)
+                {
+                    _Info.SetActive(true);
+
+                    // 4. 获取 TextMeshProUGUI 组件并赋值
+                    var textComponent = Infotext.GetComponent<TextMeshProUGUI>();
+                    if (textComponent != null)
+                    {
+                        // 这里直接读取你在 Tile 类里定义的 Info 变量
+                        textComponent.transform.parent.gameObject.SetActive(true);
+                        textComponent.text = tileScript.Info;
+                    }
+                }
+            }
+        }
+    }
+
+    public void HideTooltip()
+    {
+        _Info.SetActive(false);
+    }
+
+    // UIManager.cs 内部
+
+    public void ToggleDeleteMode()
+    {
+        if (_playerShip == null) return;
+
+        // 1. 切换删除模式状态
+        _playerShip.deleteMode = !_playerShip.deleteMode;
+
+        // 2. 逻辑处理：如果进入了删除模式，通常要清除当前选中的方块（不显示 ghostTile）
+        if (_playerShip.deleteMode)
+        {
+            Debug.Log("进入删除模式");
+            _playerShip._selectedTile = null;
+
+            // 隐藏 GhostTile（你可以直接在 UIManager 调用或在 PlayerShip 里处理）
+            if (_playerShip._ghostTile != null)
+                _playerShip._ghostTile.SetActive(false);
+
+            // 视觉反馈：改变鼠标图标或按钮颜色（可选）
+            // buttonImage.color = Color.red; 
+        }
+        else
+        {
+            Debug.Log("退出删除模式");
+            // buttonImage.color = Color.white;
+        }
     }
 }

@@ -173,6 +173,8 @@ public abstract class Ship : MonoBehaviour
     public void ConsumeEnergy(float amount)
     {
         _energy -= amount;
+        // 第一个参数是待处理值，第二个是最小值，第三个是最大值
+        _energy = Mathf.Clamp(_energy, 0f, _maxEnergy);
     }
 
 }

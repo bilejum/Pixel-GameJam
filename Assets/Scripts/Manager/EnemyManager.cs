@@ -279,43 +279,67 @@ public class EnemyManager : MonoBehaviour
     }
 
     // 安全清敌流程（原子操作，防止并发冲突）
+    // 串行击杀流程：逐个触发敌人的死亡逻辑
     public IEnumerator SafeClearEnemies()
     {
-        if (_isClearingEnemies)
-        {
-            Debug.LogWarning("清敌流程已在进行中");
-            yield break;
-        }
+        if (_isClearingEnemies) yield break;
         _isClearingEnemies = true;
-        Debug.Log("启动安全清敌流程");
 
-        // 1. 清理掉落物（深拷贝避免遍历修改）
+        Debug.Log("启动逐个击杀流程");
+
+        // 1. 清理掉落物（这个通常还是直接销毁比较好，或者你可以收回它们）
         ClearLoots();
 
-        // 2. 清理敌人（逐帧销毁，避免性能峰值）
-        int initialCount = _enemiesList.Count;
-        int clearedCount = 0;
+        // 2. 逐个击杀敌人
+        // 制作快照防止遍历时列表发生变化（因为死亡回调会尝试从 _enemiesList 移除自己）
+        List<BaseEnemy> enemiesToKill = new List<BaseEnemy>(_enemiesList);
 
-        // 制作敌人列表快照（防止遍历中修改）
-        List<BaseEnemy> enemiesToClear = new List<BaseEnemy>(_enemiesList);
-
-        foreach (var enemy in enemiesToClear)
+        foreach (var enemy in enemiesToKill)
         {
             if (enemy != null)
             {
-                // 强制销毁敌人（包含子物体）
-                Destroy(enemy.gameObject);
-                clearedCount++;
+                // 找到敌人的核心或所有部件并将其生命值设为 0
+                // 这样会触发你 Tile 类里的 Health set 逻辑，产生爆炸和特效
+                KillEnemyProperly(enemy);
+
+                // 击杀间隔：你可以调小这个值（如 0.05f）让爆炸连成一片，
+                // 或者调大（如 0.2f）让爆炸有节奏感
+                yield return new WaitForSeconds(0.15f);
             }
-            yield return new WaitForSeconds(0.1f); // 控制销毁速度
         }
 
-        // 3. 强制清空列表（防止残留引用）
-        _enemiesList.Clear();
-        Debug.Log($"清敌完成: 共{initialCount}个，成功销毁{clearedCount}个");
+        // 3. 等待最后一批敌人彻底消失（可选）
+        float checkTimer = 0;
+        while (_enemiesList.Count > 0 && checkTimer < 2.0f)
+        {
+            checkTimer += Time.deltaTime;
+            yield return null;
+        }
 
-        // 4. 重置清敌状态
+        _enemiesList.Clear();
         _isClearingEnemies = false;
+        Debug.Log("所有敌人已通过死亡流程清理完毕");
+    }
+
+    private void KillEnemyProperly(BaseEnemy enemy)
+    {
+        // 逻辑：遍历敌人身上所有的 Tile，并把血量设为 0
+        // 这里参考你最初代码中对 child 的处理
+        if (enemy.transform.childCount > 0)
+        {
+            // 假设敌人的结构是：EnemyPrefab -> ShipRoot -> Tiles...
+            // 或者直接在 enemy 身上找组件
+            Tile[] tiles = enemy.GetComponentsInChildren<Tile>();
+            foreach (var t in tiles)
+            {
+                if (t != null) t.Health = 0; // 触发 Tile 的死亡效果
+            }
+        }
+        else
+        {
+            // 如果没有 Tile 组件，就直接销毁
+            Destroy(enemy.gameObject);
+        }
     }
 
     // 强制清敌（调试用，立即执行）

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lootItems:
   - itemPrefab: {fileID: 5939482147851961875, guid: df230e8e9a57d2f4fb694496825076ce, type: 3}
-    dropWeight: 0
+    dropWeight: 10
   - itemPrefab: {fileID: 3330162047188022247, guid: cd24c52b002b4254789b78d94a2f0ff3, type: 3}
     dropWeight: 0
-  - itemPrefab: {fileID: 7276937898216640200, guid: 84fb1c8fc7583ae4dbe2b4c1eac2ce20, type: 3}
-    dropWeight: 20
+  - itemPrefab: {fileID: 3330162047188022247, guid: cd24c52b002b4254789b78d94a2f0ff3, type: 3}
+    dropWeight: 10

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1001 &9045944727597722727
+--- !u!1001 &6200671889195433906
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -53,158 +53,52 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 845554542023221948, guid: bea78e260585585419a4a30aec659f61, type: 3}
       propertyPath: m_Color.b
-      value: 0.9764706
+      value: 0.7171244
       objectReference: {fileID: 0}
     - target: {fileID: 845554542023221948, guid: bea78e260585585419a4a30aec659f61, type: 3}
       propertyPath: m_Color.g
-      value: 0.8627451
+      value: 0.04304019
       objectReference: {fileID: 0}
     - target: {fileID: 845554542023221948, guid: bea78e260585585419a4a30aec659f61, type: 3}
       propertyPath: m_Color.r
-      value: 0.07058824
+      value: 0.735849
       objectReference: {fileID: 0}
     - target: {fileID: 4173422818425878524, guid: bea78e260585585419a4a30aec659f61, type: 3}
       propertyPath: m_Name
-      value: Blue Tile
+      value: Purple Tile
+      objectReference: {fileID: 0}
+    - target: {fileID: 6708706850868096537, guid: bea78e260585585419a4a30aec659f61, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bea78e260585585419a4a30aec659f61, type: 3}
---- !u!1 &4927887130447780763 stripped
+--- !u!1 &8063642124353456206 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4173422818425878524, guid: bea78e260585585419a4a30aec659f61, type: 3}
-  m_PrefabInstance: {fileID: 9045944727597722727}
+  m_PrefabInstance: {fileID: 6200671889195433906}
   m_PrefabAsset: {fileID: 0}
---- !u!96 &446284257994435033
-TrailRenderer:
-  serializedVersion: 2
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4927887130447780763}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 0
-  m_LightProbeUsage: 0
-  m_ReflectionProbeUsage: 0
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Time: 0.4
-  m_Parameters:
-    serializedVersion: 3
-    widthMultiplier: 1
-    widthCurve:
-      serializedVersion: 2
-      m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 0.63508797
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0.33333334
-        outWeight: 0.33333334
-      - serializedVersion: 3
-        time: 1
-        value: 0
-        inSlope: 0
-        outSlope: 0
-        tangentMode: 0
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      m_PreInfinity: 2
-      m_PostInfinity: 2
-      m_RotationOrder: 4
-    colorGradient:
-      serializedVersion: 2
-      key0: {r: 1, g: 1, b: 1, a: 1}
-      key1: {r: 1, g: 1, b: 1, a: 0}
-      key2: {r: 0, g: 0, b: 0, a: 0}
-      key3: {r: 0, g: 0, b: 0, a: 0}
-      key4: {r: 0, g: 0, b: 0, a: 0}
-      key5: {r: 0, g: 0, b: 0, a: 0}
-      key6: {r: 0, g: 0, b: 0, a: 0}
-      key7: {r: 0, g: 0, b: 0, a: 0}
-      ctime0: 0
-      ctime1: 65535
-      ctime2: 0
-      ctime3: 0
-      ctime4: 0
-      ctime5: 0
-      ctime6: 0
-      ctime7: 0
-      atime0: 0
-      atime1: 65535
-      atime2: 0
-      atime3: 0
-      atime4: 0
-      atime5: 0
-      atime6: 0
-      atime7: 0
-      m_Mode: 0
-      m_NumColorKeys: 2
-      m_NumAlphaKeys: 2
-    numCornerVertices: 0
-    numCapVertices: 0
-    alignment: 0
-    textureMode: 1
-    shadowBias: 0.5
-    generateLightingData: 0
-  m_MinVertexDistance: 0.1
-  m_Autodestruct: 0
-  m_Emitting: 1
---- !u!114 &-2784357674937424464
+--- !u!114 &511200289983270235
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4927887130447780763}
+  m_GameObject: {fileID: 8063642124353456206}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccf447e894f5c4e41afbe562a2f193a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 28eb27079d6605348a6f7665a0084c2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 100
   _maxHealth: 100
-  _healthRecoveyRate: 10
-  _color: {r: 0.07191872, g: 0.8617275, b: 0.97735846, a: 1}
+  _healthRecoveyRate: 0.1
+  _color: {r: 0.7372549, g: 0.043137256, b: 0.7176471, a: 1}
   _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
   _coordinate: {x: 0, y: 0, z: 0}
   _tileType: 0
   _material: {fileID: 0}
   _energyConsume: 0
-  Info: "\u589E\u52A0\u98DE\u884C\u901F\u5EA6\u548C\u51B2\u523A\u901F\u5EA6"
-  _addThrustForceAmount: 25
-  _addTurnTorqueAmount: 20
-  _addStrafeForceAmount: 20
-  _adddashForceAmount: 20
+  Info: "\u7ECF\u8FC7\u5B83\u7684\u5B50\u5F39\u4F1A\u5206\u88C2\u4E09\u4EFD\uFF0C\u4F46\u662F\u5B50\u5F39\u901F\u5EA6\u4F1A\u964D\u4F4E"
+  _splitAngle: 15
+  _energyCostPerSplit: 4

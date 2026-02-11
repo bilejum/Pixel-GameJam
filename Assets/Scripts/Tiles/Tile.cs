@@ -38,6 +38,14 @@ public abstract class Tile : MonoBehaviour
 
     [Header("开火设置")]
     [SerializeField] protected float _energyConsume;
+
+    // 隐藏在 Inspector 中，因为这是运行时动态赋值的
+    [HideInInspector] public ItemData originItemData;
+
+    // ... 原有变量 ...
+    [HideInInspector] public Tile sourcePrefab; // 记录来源
+
+    public string Info;
     public float Health
     {
         get

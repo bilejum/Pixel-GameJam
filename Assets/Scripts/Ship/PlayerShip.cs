@@ -1,6 +1,6 @@
-﻿using Cinemachine;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Cinemachine;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -9,7 +9,6 @@ public class PlayerShip : Ship
 {
     //玩家死亡信号
     public static Action OnPlayerDeath;
-
 
     private Vector3Int _cellPos;
 
@@ -141,6 +140,10 @@ public class PlayerShip : Ship
 
     public void SelectedTile(ItemData itemData)
     {
+        // --- 新增：选择方块时自动关闭删除模式 ---
+        deleteMode = false;
+        // ------------------------------------
+
         _selectedTile = itemData.tilePrefab;
         _selectedItemData = itemData;
         _ghostTile.SetActive(true);
@@ -149,22 +152,35 @@ public class PlayerShip : Ship
 
     private void MoveGhostTile()
     {
-        if (_ghostTile == null) return;
-        var spriteRender = _ghostTile.GetComponent<SpriteRenderer>();
+        if (_ghostTile == null)
+            return;
 
+        // 逻辑：如果是在删除模式，且格子里有方块，显示红色 Ghost
+        if (deleteMode)
+        {
+            // 检查当前格子里有没有方块
+            bool hasTile = _tileGrid.ContainsKey(_cellPos);
+            _ghostTile.SetActive(hasTile);
+            if (hasTile)
+                _ghostTile.GetComponent<SpriteRenderer>().color = new Color(1, 0, 0, 0.5f); // 半透明红
+        }
+        else if (_selectedItemData != null && _selectedItemData.count > 0)
+        {
+            _ghostTile.SetActive(true);
+            _ghostTile.GetComponent<SpriteRenderer>().color = _selectedTile._color;
+        }
+        else
+        {
+            _ghostTile.SetActive(false);
+        }
+
+        // 原有的平滑移动逻辑...
         var lerp = Vector3.Lerp(
             _ghostTile.transform.localPosition,
             _grid.CellToLocal(_cellPos),
             Time.unscaledDeltaTime * 20
         );
         _ghostTile.transform.localPosition = lerp;
-
-        if (_selectedItemData == null) return;
-        if (_selectedItemData.count <= 0)
-        {
-            _ghostTile.SetActive(false);
-        }
-
     }
 
     public void SetTile(Vector3Int cellPos, Tile tile)
@@ -180,8 +196,9 @@ public class PlayerShip : Ship
 
         Tile newTile = Instantiate<Tile>(tile, transform.GetChild(0));
 
+        newTile.sourcePrefab = tile;
+        newTile.originItemData = _selectedItemData; // 备份
         newTile._coordinate = cellPos;
-
         newTile.transform.localPosition = localPos;
 
         _tileGrid[cellPos] = newTile;
@@ -198,12 +215,32 @@ public class PlayerShip : Ship
     {
         if (_tileGrid.ContainsKey(cellPos))
         {
-            Debug.Log("找到方块，执行摧毁");
-            Destroy(_tileGrid[cellPos].gameObject);
+            Tile targetTile = _tileGrid[cellPos];
+
+            if (targetTile._tileType == TileType.Core)
+            {
+                AudioManager.Instance.PlaySFX("Error");
+                return;
+            }
+
+            // --- 调试代码 ---
+            if (targetTile.sourcePrefab != null)
+            {
+                Debug.Log($"成功找到来源 Prefab: {targetTile.sourcePrefab.name}，正在回收...");
+                InventoryManager.Instance.AddItem(targetTile.sourcePrefab, 1);
+            }
+            else
+            {
+                // 如果走到了这里，说明 SetTile 的时候赋值失败了
+                Debug.LogError($"{targetTile.name} 身上没有 sourcePrefab 引用！回收失败。");
+            }
+            // ----------------
+
+            Destroy(targetTile.gameObject);
             _tileGrid.Remove(cellPos);
+            AudioManager.Instance.PlaySFX("Correct");
         }
     }
-
     private bool CanSetTile(Vector3Int cellPos)
     {
         //Debug.Log(_selectedItemData.count);
@@ -332,7 +369,6 @@ public class PlayerShip : Ship
 
     private void OnDestroy()
     {
-
         OnPlayerDeath?.Invoke();
     }
 }

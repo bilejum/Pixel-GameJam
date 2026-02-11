@@ -26,4 +26,4 @@ MonoBehaviour:
   - enemyPrefab: {fileID: 7931711711096947623, guid: 04adae09842079f4aa82746b333d4d53, type: 3}
     count: 4
     spawnPosition: {x: 100, y: -100}
-  time: 0
+  time: 30
