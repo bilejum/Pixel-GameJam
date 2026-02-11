@@ -158,4 +158,9 @@ public class BaseAIShip : Ship
         return avoidanceVector;
     }
 
+    public void SetTarget(Ship target)
+    {
+        _target = target;
+    }
+
 }

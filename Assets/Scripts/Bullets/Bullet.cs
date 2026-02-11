@@ -32,19 +32,26 @@ public class Bullet : MonoBehaviour
     // 碰撞检测逻辑可以在这里扩展
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
+        // 1. 基础安全检查
         if (collision == null || _shooter == null) return;
+
+        // 2. 检查碰撞体是否带有 LootTile 组件，如果有，直接无视
+        if (collision.GetComponent<LootTile>() != null) return;
+
+        // 3. 原有的逻辑
+        Transform shooterRoot = _shooter.transform;
+        Transform targetRoot = collision.transform.root;
+
+        if (targetRoot != shooterRoot)
         {
-
-            Transform shooterRoot = _shooter.transform;
-            Transform targetRoot = collision.transform.root; // 直接找最上级父物体，更安全
-            if (targetRoot != shooterRoot)
+            // 伤害逻辑...
+            var hitTile = collision.GetComponent<Tile>();
+            if (hitTile != null)
             {
-                var hitTile = collision.GetComponent<Tile>();
-                if (hitTile != null) hitTile.Health -= damage;
-
+                hitTile.Health -= damage;
+                // 只有打到 Tile 时子弹才消失
                 if (hitEffectPrefab != null)
                 {
-                    // 在子弹当前的位置，以默认旋转角度生成特效
                     Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
                 }
                 Destroy(gameObject);

@@ -10,6 +10,8 @@ public class BaseEnemy : BaseAIShip
 
     public static Action OnEnemyKilled;
 
+    public System.Action OnEnemyDestroyed;
+
     private EnemyManager _enemyManager;
 
     [SerializeField]private LootTile _lootTile;
@@ -45,6 +47,7 @@ public class BaseEnemy : BaseAIShip
         }
 
         OnEnemyKilled?.Invoke();
+        OnEnemyDestroyed?.Invoke();
     }
 
 }
