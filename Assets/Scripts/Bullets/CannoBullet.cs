@@ -15,6 +15,7 @@ public class CannoBullet : Bullet
     {
         // 1. 安全检查：确保 collision 和 shooter 存在
         if (collision == null || _shooter == null) return;
+        if (collision.GetComponent<LootTile>() != null) return;
 
         // 2. 优化判断：避免使用 parent.parent，建议给发射者和敌人设置不同的 Layer 或 Tag
         // 这里暂时保留你的逻辑但加上空值保护

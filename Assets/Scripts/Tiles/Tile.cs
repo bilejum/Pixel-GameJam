@@ -49,13 +49,15 @@ public abstract class Tile : MonoBehaviour
             if (value < _health)
             {
                 _ship.SetShipState = ShipState.Fight;
+
+                if (_ship is PlayerShip && _impulseSource != null)
+                {
+                    // 产生震动：可以根据伤害大小调整震动强度
+                    _impulseSource.GenerateImpulse();
+                }
             }
 
-            if (_ship is PlayerShip && _impulseSource != null)
-            {
-                // 产生震动：可以根据伤害大小调整震动强度
-                _impulseSource.GenerateImpulse();
-            }
+
 
             _health = value;
 

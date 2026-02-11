@@ -279,7 +279,7 @@ public class EnemyManager : MonoBehaviour
     }
 
     // 安全清敌流程（原子操作，防止并发冲突）
-    private IEnumerator SafeClearEnemies()
+    public IEnumerator SafeClearEnemies()
     {
         if (_isClearingEnemies)
         {

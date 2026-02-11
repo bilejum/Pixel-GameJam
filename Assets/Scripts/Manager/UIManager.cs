@@ -61,6 +61,11 @@ public class UIManager : MonoBehaviour
 
     public TextMeshProUGUI scoreText;
 
+    public Slider _energyBar;
+
+    private float _targetFillAmount; // 记录目标比例
+    public float lerpSpeed = 5f;    // 平滑速度
+
     private void OnEnable()
     {
         // 订阅分数改变信号
@@ -159,11 +164,6 @@ public class UIManager : MonoBehaviour
         );
     }
 
-    public void AdjustEnergy(float energy, float maxEnergy)
-    {
-        _energyText.text = $"{energy}/{maxEnergy}";
-    }
-
     public void SwitchBuildingUI(bool buildingUIFlag)
     {
         if (buildingUIFlag)
@@ -230,7 +230,7 @@ public class UIManager : MonoBehaviour
         float elapsed = 0;
         while (elapsed < 1f)
         {
-            elapsed += Time.deltaTime;
+            elapsed += Time.unscaledDeltaTime;
             blackScreenGroup.alpha = 1 - (elapsed / 1f);
             yield return null;
         }
@@ -244,5 +244,22 @@ public class UIManager : MonoBehaviour
         scoreText.text = "SCORE: " + newScore.ToString();
     }
 
+    public void UpdateEnergy(float energyValue, float maxEnergy)
+    {
+        // 1. 安全计算目标比例
+        if (maxEnergy > 0)
+        {
+            _targetFillAmount = energyValue / maxEnergy;
+        }
+        else
+        {
+            _targetFillAmount = 0f;
+        }
+        _energyBar.value = Mathf.Lerp(_energyBar.value, _targetFillAmount, Time.unscaledDeltaTime * lerpSpeed);
+    }
 
+    public void AdjustEnergy(float energy, float maxEnergy)
+    {
+        _energyText.text = $"{energy}/{maxEnergy}";
+    }
 }

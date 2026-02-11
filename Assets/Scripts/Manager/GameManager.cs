@@ -129,7 +129,7 @@ public class GameManager : MonoBehaviour
         UIManager.Instance.StartFadeToBlack();
 
         //4.清理残留（比如你之前的敌人清理逻辑）
-        EnemyManager.Instance.StartClearEnemies();
+        EnemyManager.Instance.SafeClearEnemies();
     }
 
     public void RestartGame()
