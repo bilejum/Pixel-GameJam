@@ -10,11 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bc7d9973325060e42836d4e913af39e9, type: 3}
-  m_Name: Wava1SO
+  m_Name: Wave4SO
   m_EditorClassIdentifier: 
-  waveIndex: 1
+  waveIndex: 4
   enemyGroups:
+  - enemyPrefab: {fileID: 6465669059545527592, guid: 7c2719f1624613048aef968236b62702, type: 3}
+    count: 2
+    spawnPosition: {x: -100, y: 100}
+  - enemyPrefab: {fileID: 868629761168951056, guid: 3104478f9133c0044afb1ee736d22c79, type: 3}
+    count: 2
+    spawnPosition: {x: -100, y: -100}
   - enemyPrefab: {fileID: 5522469249313511846, guid: 8dac67f600057054bb2bfd8c0f7bf4c2, type: 3}
-    count: 1
+    count: 8
     spawnPosition: {x: 100, y: 100}
-  time: 15
+  time: 30

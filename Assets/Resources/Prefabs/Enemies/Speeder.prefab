@@ -795,16 +795,16 @@ MonoBehaviour:
   _dashForce: 0
   _energy: 0
   _maxEnergy: 0
+  _coreHasDestory: 0
   _noncombatCD: 10
   _currentState: 0
   _fraction: 0
   _attackRange: 50
   _stopRange: 30
-  _fireRate: 1
   _spreadAngle: 5
   _canAction: 1
   _avoidanceRadius: 15
-  _avoidanceForce: 200
+  _avoidanceForce: 300
   _lootTile: {fileID: 0}
   lootTable: {fileID: 11400000, guid: 93cccb4ad77b7584eb0a91a887533eff, type: 2}
 --- !u!1 &4037530979318872325

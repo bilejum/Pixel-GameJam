@@ -32,7 +32,7 @@ public class BaseAIShip : Ship
     [Header("避让设置")]
     [SerializeField] protected float _avoidanceRadius = 15f; // 检测队友的范围
     [SerializeField] protected float _avoidanceForce = 200f;  // 避让推力的强度
-    private Collider2D[] _neighborResults = new Collider2D[5]; // 缓存数组，减少GC
+    private Collider2D[] _neighborResults = new Collider2D[10]; // 缓存数组，减少GC
 
 
     private Vector2 avoidance;
