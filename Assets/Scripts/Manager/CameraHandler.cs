@@ -117,4 +117,17 @@ public class CameraHandler : MonoBehaviour
                 .SmartUpdate;
         }
     }
+
+    // 在 CameraHandler.cs 中添加或修改以下内容
+
+    // 1. 增加一个属性或方法供 DOTween 调用
+    public void SetOrthographicSize(float size)
+    {
+        orthographicSize = size;
+        // 关键：同步 target，否则 Update 里的 Lerp 会瞬间把值改回原来的地方
+        targetOrthographicSize = size;
+
+        // 立即应用到相机，防止一帧的延迟
+        cinemachineVirtualCamera.m_Lens.OrthographicSize = size;
+    }
 }

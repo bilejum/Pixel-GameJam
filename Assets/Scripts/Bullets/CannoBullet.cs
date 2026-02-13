@@ -1,54 +1,75 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CannoBullet : Bullet
 {
-    private bool hasExploded = false; // 防止重复爆炸
+    private bool hasExploded = false;
 
     [Header("范围伤害设置")]
-    [SerializeField] private float explosionRadius = 10f; // 爆炸范围半径
-    [SerializeField] private bool isDamageAttenuation = true; // 是否开启伤害衰减
-
+    [SerializeField] private float explosionRadius = 10f;
+    [SerializeField] private bool isDamageAttenuation = true;
 
     protected override void OnTriggerEnter2D(Collider2D collision)
     {
-        // 1. 安全检查：确保 collision 和 shooter 存在
-        if (collision == null || _shooter == null) return;
+        // 1. 基础检查
+        if (collision == null || _shooter == null || hasExploded) return;
+
+        // 2. 过滤掉落物和子弹（防止子弹互相撞炸）
         if (collision.GetComponent<LootTile>() != null) return;
+        if (collision.GetComponent<Bullet>() != null) return;
 
-        // 2. 优化判断：避免使用 parent.parent，建议给发射者和敌人设置不同的 Layer 或 Tag
-        // 这里暂时保留你的逻辑但加上空值保护
         Transform shooterRoot = _shooter.transform;
-        Transform targetRoot = collision.transform.root; // 直接找最上级父物体，更安全
+        Transform targetRoot = collision.transform.root;
 
-        if (targetRoot != shooterRoot)
+        // 3. 碰到自己人：直接穿透，不触发爆炸
+        if (targetRoot == shooterRoot)
         {
-            // 开启范围检测
-            Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
+            // 如果需要紫色方块分裂逻辑，可以在这里调用
+            return;
+        }
 
-            foreach (var hitCollider in hitColliders)
+        // 4. 碰到非友军物体：立即执行爆炸并销毁
+        ExecuteExplosion();
+        Destroy(gameObject);
+    }
+
+    private void ExecuteExplosion()
+    {
+        if (hasExploded) return;
+        hasExploded = true;
+
+        // 范围检测伤害
+        Collider2D[] hitColliders = Physics2D.OverlapCircleAll(transform.position, explosionRadius);
+        foreach (var hitCollider in hitColliders)
+        {
+            // 爆炸也不会伤到自己人
+            if (_shooter != null && hitCollider.transform.root == _shooter.transform) continue;
+
+            var hitTile = hitCollider.GetComponent<Tile>();
+            if (hitTile != null)
             {
-                // 过滤掉发射者
-                if (hitCollider.transform.root == shooterRoot) continue;
-
-                // 获取组件时增加空值检查
-                var hitTile = hitCollider.GetComponent<Tile>();
-                if (hitTile != null)
+                float finalDamage = damage;
+                if (isDamageAttenuation)
                 {
-                    hitTile.Health -= damage;
+                    float distance = Vector2.Distance(transform.position, hitCollider.transform.position);
+                    float damagePercent = Mathf.Clamp01(1 - (distance / explosionRadius));
+                    finalDamage *= damagePercent;
                 }
+                hitTile.Health -= finalDamage;
             }
+        }
 
-            // 生成特效并销毁
-            if (hitEffectPrefab != null)
-            {
-                Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
-            }
-
-            // 确保销毁逻辑在最后
-            Destroy(gameObject);
+        if (hitEffectPrefab != null)
+        {
+            Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
         }
     }
 
+    private void OnDestroy()
+    {
+        // 如果是自然死亡（空爆），则触发爆炸
+        if (!hasExploded)
+        {
+            ExecuteExplosion();
+        }
+    }
 }

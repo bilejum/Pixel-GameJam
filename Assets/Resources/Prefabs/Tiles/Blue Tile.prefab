@@ -203,8 +203,12 @@ MonoBehaviour:
   _tileType: 0
   _material: {fileID: 0}
   _energyConsume: 0
+  originItemData:
+    tilePrefab: {fileID: 0}
+    count: 0
+  sourcePrefab: {fileID: 0}
   Info: "\u589E\u52A0\u98DE\u884C\u901F\u5EA6\u548C\u51B2\u523A\u901F\u5EA6"
-  _addThrustForceAmount: 25
+  _addThrustForceAmount: 20
   _addTurnTorqueAmount: 20
   _addStrafeForceAmount: 20
   _adddashForceAmount: 20

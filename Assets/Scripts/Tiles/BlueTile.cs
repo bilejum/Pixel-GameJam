@@ -13,7 +13,7 @@ public class BlueTile : Tile
     protected override void Awake()
     {
         //增加扭矩力和速度
-        _tileType = TileType.Other;
+        _tileType = TileType.Blue;
         base.Awake();
 
         _ship.ThrustForce += _addThrustForceAmount;

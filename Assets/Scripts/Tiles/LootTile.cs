@@ -23,13 +23,16 @@ public class LootTile : MonoBehaviour
 
     private IEnumerator CollectRoutine(Transform playerTransform)
     {
+        if (playerTransform == null) yield return null;
         isBeingCollected = true;
         float speed = 2f; // 初始速度
         float acceleration = 1.5f; // 加速度，让过程有“吸进去”的感觉
+         
 
         // 当物体距离玩家大于一个很小的值时，持续飞向玩家
         while (Vector3.Distance(transform.position, playerTransform.position) > 0.2f) 
         {
+            
             // 每一帧都重新计算朝向玩家的方向
             Vector3 direction = (playerTransform.position - transform.position).normalized;
 

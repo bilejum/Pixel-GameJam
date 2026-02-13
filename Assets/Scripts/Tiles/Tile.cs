@@ -7,7 +7,8 @@ public enum TileType
 {
     Attack,
     Core,
-    Other
+    Blue,
+    Other,
 }
 
 public abstract class Tile : MonoBehaviour
@@ -118,4 +119,5 @@ public abstract class Tile : MonoBehaviour
         // 普通方块直接死
         Destroy(gameObject);
     }
+
 }

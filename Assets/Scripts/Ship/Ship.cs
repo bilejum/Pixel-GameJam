@@ -32,6 +32,7 @@ public abstract class Ship : MonoBehaviour
 
     public bool _coreHasDestory = false;
 
+
     //对外暴露的加速度和扭矩力变量
     public float ThrustForce
     {
@@ -176,6 +177,8 @@ public abstract class Ship : MonoBehaviour
         // 第一个参数是待处理值，第二个是最小值，第三个是最大值
         _energy = Mathf.Clamp(_energy, 0f, _maxEnergy);
     }
+
+
 
 }
 

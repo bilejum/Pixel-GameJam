@@ -152,8 +152,8 @@ public class PlayerShip : Ship
 
     private void MoveGhostTile()
     {
-        if (_ghostTile == null)
-            return;
+        if (_ghostTile == null) return;
+
 
         // 逻辑：如果是在删除模式，且格子里有方块，显示红色 Ghost
         if (deleteMode)
@@ -167,7 +167,14 @@ public class PlayerShip : Ship
         else if (_selectedItemData != null && _selectedItemData.count > 0)
         {
             _ghostTile.SetActive(true);
-            _ghostTile.GetComponent<SpriteRenderer>().color = _selectedTile._color;
+            if (_selectedTile == null)
+            {
+                _ghostTile.SetActive(false);
+            }
+            else
+            {
+                _ghostTile.GetComponent<SpriteRenderer>().color = _selectedTile._color;
+            }
         }
         else
         {
@@ -370,5 +377,31 @@ public class PlayerShip : Ship
     private void OnDestroy()
     {
         OnPlayerDeath?.Invoke();
+    }
+
+    // --- 在 PlayerShip 类中添加 ---
+
+    // 统计特定类型的方块数量
+    public int GetTileCountByType(TileType type)
+    {
+        int count = 0;
+        foreach (var tile in _tileGrid.Values)
+        {
+            if (tile != null && tile._tileType == type) count++;
+        }
+        return count;
+    }
+
+    // 检查是否拥有推进力（蓝色方块通常对应 Thruster 类型）
+    public bool CanMoveWithThrust()
+    {
+        // 假设你的蓝色方块在 TileType 中定义为 Thruster
+        return GetTileCountByType(TileType.Blue) > 0;
+    }
+
+    // 检查是否拥有武器（红色方块通常对应 Weapon 类型）
+    public bool HasWeapon()
+    {
+        return GetTileCountByType(TileType.Attack) > 0;
     }
 }

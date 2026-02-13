@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using VInspector;
 
 
 public class BaseEnemy : BaseAIShip
@@ -16,7 +15,8 @@ public class BaseEnemy : BaseAIShip
 
     [SerializeField]private LootTile _lootTile;
 
-    [Foldout("Loot")]
+    public bool systemKill = false;
+
     public LootTableSO lootTable; // 在 Inspector 中拖入创建好的配置文件
     protected override void Start()
     {
@@ -37,7 +37,7 @@ public class BaseEnemy : BaseAIShip
             _enemyManager._enemiesList.Remove(this);
             Tile itemToDrop = lootTable.GetRandomItem();
 
-            if (itemToDrop != null)
+            if (itemToDrop != null && !systemKill)
             {
                 var newLootTile = Instantiate(_lootTile, transform.position, Quaternion.identity);
                 newLootTile.tilePrefab = itemToDrop;

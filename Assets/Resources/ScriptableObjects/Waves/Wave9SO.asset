@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc7d9973325060e42836d4e913af39e9, type: 3}
+  m_Name: Wave9SO
+  m_EditorClassIdentifier: 
+  waveIndex: 9
+  enemyGroups:
+  - enemyPrefab: {fileID: 6465669059545527592, guid: 7c2719f1624613048aef968236b62702, type: 3}
+    count: 8
+    spawnPosition: {x: -100, y: 100}
+  - enemyPrefab: {fileID: 868629761168951056, guid: 3104478f9133c0044afb1ee736d22c79, type: 3}
+    count: 16
+    spawnPosition: {x: -100, y: -100}
+  - enemyPrefab: {fileID: 5522469249313511846, guid: 8dac67f600057054bb2bfd8c0f7bf4c2, type: 3}
+    count: 64
+    spawnPosition: {x: 100, y: 100}
+  - enemyPrefab: {fileID: 7931711711096947623, guid: 04adae09842079f4aa82746b333d4d53, type: 3}
+    count: 8
+    spawnPosition: {x: 100, y: -100}
+  - enemyPrefab: {fileID: 4333873065916195962, guid: 93bbd3d0ff2fc3d498c3ff3e4cf80099, type: 3}
+    count: 8
+    spawnPosition: {x: 100, y: -100}
+  - enemyPrefab: {fileID: 4333873065916195962, guid: 93bbd3d0ff2fc3d498c3ff3e4cf80099, type: 3}
+    count: 8
+    spawnPosition: {x: 0, y: -100}
+  - enemyPrefab: {fileID: 4333873065916195962, guid: 93bbd3d0ff2fc3d498c3ff3e4cf80099, type: 3}
+    count: 8
+    spawnPosition: {x: 100, y: 0}
+  - enemyPrefab: {fileID: 4333873065916195962, guid: 93bbd3d0ff2fc3d498c3ff3e4cf80099, type: 3}
+    count: 8
+    spawnPosition: {x: -100, y: 0}
+  - enemyPrefab: {fileID: 2609868632444189268, guid: a872fec196787bf48ba0059ba229dfbf, type: 3}
+    count: 8
+    spawnPosition: {x: -100, y: 0}
+  time: 60

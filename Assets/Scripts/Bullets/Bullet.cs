@@ -38,31 +38,32 @@ public class Bullet : MonoBehaviour
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision == null || _shooter == null) return;
+
+        // 1. 过滤：如果是掉落物，或者是另一颗子弹，直接无视
         if (collision.GetComponent<LootTile>() != null) return;
+        if (collision.GetComponent<Bullet>() != null) return;
 
         Transform shooterRoot = _shooter.transform;
         Transform targetRoot = collision.transform.root;
 
-        // 情况 A：撞到了敌军（原逻辑）
-        if (targetRoot != shooterRoot)
+        // 情况 A：撞到了友军/自己
+        if (targetRoot == shooterRoot)
         {
-            var hitTile = collision.GetComponent<Tile>();
-            if (hitTile != null)
-            {
-                hitTile.Health -= damage;
-                if (hitEffectPrefab != null) Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
-                Destroy(gameObject);
-            }
-        }
-        // 情况 B：撞到了友军（新增逻辑：分裂检测）
-        else
-        {
-            // 如果撞到的是自己飞船上的 PurpleTile
+            // 如果是紫色方块，触发分裂（这里逻辑可以保留，但不要 Destroy）
             if (collision.TryGetComponent<PurpleTile>(out PurpleTile purple))
             {
-                // 这里什么都不用做，让 PurpleTile 自己的 OnTriggerEnter2D 去处理分裂
-                // 或者为了保险，在这里手动调用：purple.ManualSplit(this);
+                // 分裂逻辑由 PurpleTile 触发，这里子弹继续飞行穿过
             }
+            return; // 关键：碰到自己人直接返回，不销毁，不扣血
+        }
+
+        // 情况 B：撞到了敌军
+        var hitTile = collision.GetComponent<Tile>();
+        if (hitTile != null)
+        {
+            hitTile.Health -= damage;
+            if (hitEffectPrefab != null) Instantiate(hitEffectPrefab, transform.position, Quaternion.identity);
+            Destroy(gameObject);
         }
     }
 }

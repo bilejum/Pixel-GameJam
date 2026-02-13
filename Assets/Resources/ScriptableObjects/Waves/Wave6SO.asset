@@ -21,9 +21,15 @@ MonoBehaviour:
     count: 4
     spawnPosition: {x: -100, y: -100}
   - enemyPrefab: {fileID: 5522469249313511846, guid: 8dac67f600057054bb2bfd8c0f7bf4c2, type: 3}
-    count: 16
+    count: 32
     spawnPosition: {x: 100, y: 100}
   - enemyPrefab: {fileID: 7931711711096947623, guid: 04adae09842079f4aa82746b333d4d53, type: 3}
     count: 4
     spawnPosition: {x: 100, y: -100}
+  - enemyPrefab: {fileID: 2609868632444189268, guid: a872fec196787bf48ba0059ba229dfbf, type: 3}
+    count: 2
+    spawnPosition: {x: 0, y: 200}
+  - enemyPrefab: {fileID: 2609868632444189268, guid: a872fec196787bf48ba0059ba229dfbf, type: 3}
+    count: 2
+    spawnPosition: {x: -200, y: 0}
   time: 30

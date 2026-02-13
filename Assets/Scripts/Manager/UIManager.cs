@@ -6,8 +6,6 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UI;
-using VInspector;
-using VInspector.Libs;
 
 public class UIManager : MonoBehaviour
 {
@@ -52,7 +50,6 @@ public class UIManager : MonoBehaviour
     [SerializeField]
     private GameObject _crosshair;
 
-    [Foldout("黑屏")]
     [SerializeField]
     public CanvasGroup blackScreenGroup;
     public float fadeDuration = 1.5f; // 变黑持续时间
@@ -64,12 +61,19 @@ public class UIManager : MonoBehaviour
     public Slider _energyBar;
 
     private float _targetFillAmount; // 记录目标比例
-    public float lerpSpeed = 5f;    // 平滑速度
+    public float lerpSpeed = 5f; // 平滑速度
 
     //左侧栏目
     public GameObject _Info;
     public GameObject Infotext;
 
+    [Header("动画设置")]
+    [SerializeField]
+    private float _fadeDuration = 0.5f; // 过渡时间
+
+    public RectTransform notification;
+    public RectTransform notificationText;
+    
 
     private void OnEnable()
     {
@@ -97,7 +101,6 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         _playerShip = GameManager.Instance._playerShip;
-
 
         // --- 必须加上这一段，否则触发器没有索引，或者根本没激活 ---
         for (int i = 0; i < _backPackUIList.Count; i++)
@@ -273,7 +276,11 @@ public class UIManager : MonoBehaviour
         {
             _targetFillAmount = 0f;
         }
-        _energyBar.value = Mathf.Lerp(_energyBar.value, _targetFillAmount, Time.unscaledDeltaTime * lerpSpeed);
+        _energyBar.value = Mathf.Lerp(
+            _energyBar.value,
+            _targetFillAmount,
+            Time.unscaledDeltaTime * lerpSpeed
+        );
     }
 
     public void AdjustEnergy(float energy, float maxEnergy)
@@ -322,7 +329,8 @@ public class UIManager : MonoBehaviour
 
     public void ToggleDeleteMode()
     {
-        if (_playerShip == null) return;
+        if (_playerShip == null)
+            return;
 
         // 1. 切换删除模式状态
         _playerShip.deleteMode = !_playerShip.deleteMode;
@@ -338,7 +346,7 @@ public class UIManager : MonoBehaviour
                 _playerShip._ghostTile.SetActive(false);
 
             // 视觉反馈：改变鼠标图标或按钮颜色（可选）
-            // buttonImage.color = Color.red; 
+            // buttonImage.color = Color.red;
         }
         else
         {

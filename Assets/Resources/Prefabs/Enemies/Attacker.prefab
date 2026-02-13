@@ -256,6 +256,11 @@ MonoBehaviour:
   _tileType: 2
   _material: {fileID: 0}
   _energyConsume: 0
+  originItemData:
+    tilePrefab: {fileID: 0}
+    count: 0
+  sourcePrefab: {fileID: 0}
+  Info: 
   _addThrustForceAmount: 25
   _addTurnTorqueAmount: 20
   _addStrafeForceAmount: 20
@@ -398,15 +403,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 318fdf3d24a803d49b349811adb84885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _health: 50
-  _maxHealth: 50
-  _healthRecoveyRate: 20
+  _health: 25
+  _maxHealth: 25
+  _healthRecoveyRate: 10
   _color: {r: 1, g: 1, b: 1, a: 1}
   _destroyEffectPrefab: {fileID: 215738699193553746, guid: 6152df0ecdb81b142a3c2d9b5c4dabbd, type: 3}
   _coordinate: {x: 0, y: 0, z: 0}
   _tileType: 1
   _material: {fileID: 0}
   _energyConsume: 0
+  originItemData:
+    tilePrefab: {fileID: 0}
+    count: 0
+  sourcePrefab: {fileID: 0}
+  Info: 
 --- !u!1 &877015688166755567
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,6 +661,11 @@ MonoBehaviour:
   _tileType: 0
   _material: {fileID: 0}
   _energyConsume: 5
+  originItemData:
+    tilePrefab: {fileID: 0}
+    count: 0
+  sourcePrefab: {fileID: 0}
+  Info: 
   _bullet: {fileID: 8700920392053616244, guid: 21e63eae24e72394482228b691bb55f8, type: 3}
   _weaponShootCD: 0.5
   _recoilForce: 5
@@ -801,6 +816,11 @@ MonoBehaviour:
   _tileType: 2
   _material: {fileID: 0}
   _energyConsume: 0
+  originItemData:
+    tilePrefab: {fileID: 0}
+    count: 0
+  sourcePrefab: {fileID: 0}
+  Info: 
   _chargeCD: 0.1
   _chargeAmount: 1
   _maxCharge: 10
@@ -933,6 +953,7 @@ MonoBehaviour:
   _dashForce: 0
   _energy: 0
   _maxEnergy: 0
+  _coreHasDestory: 0
   _noncombatCD: 10
   _currentState: 0
   _fraction: 0
@@ -943,6 +964,7 @@ MonoBehaviour:
   _avoidanceRadius: 15
   _avoidanceForce: 400
   _lootTile: {fileID: 0}
+  systemKill: 0
   lootTable: {fileID: 11400000, guid: 406a7abaef7f3ff4fa60d0d3c2466dfd, type: 2}
 --- !u!1 &1581215126431156081
 GameObject:
@@ -1091,6 +1113,11 @@ MonoBehaviour:
   _tileType: 2
   _material: {fileID: 0}
   _energyConsume: 0
+  originItemData:
+    tilePrefab: {fileID: 0}
+    count: 0
+  sourcePrefab: {fileID: 0}
+  Info: 
   _chargeCD: 0.1
   _chargeAmount: 1
   _maxCharge: 10
@@ -1350,6 +1377,11 @@ MonoBehaviour:
   _tileType: 2
   _material: {fileID: 0}
   _energyConsume: 0
+  originItemData:
+    tilePrefab: {fileID: 0}
+    count: 0
+  sourcePrefab: {fileID: 0}
+  Info: 
   _addThrustForceAmount: 25
   _addTurnTorqueAmount: 20
   _addStrafeForceAmount: 20
@@ -1598,6 +1630,11 @@ MonoBehaviour:
   _tileType: 0
   _material: {fileID: 0}
   _energyConsume: 5
+  originItemData:
+    tilePrefab: {fileID: 0}
+    count: 0
+  sourcePrefab: {fileID: 0}
+  Info: 
   _bullet: {fileID: 8700920392053616244, guid: 21e63eae24e72394482228b691bb55f8, type: 3}
   _weaponShootCD: 0.5
   _recoilForce: 5
@@ -1845,6 +1882,11 @@ MonoBehaviour:
   _tileType: 0
   _material: {fileID: 0}
   _energyConsume: 5
+  originItemData:
+    tilePrefab: {fileID: 0}
+    count: 0
+  sourcePrefab: {fileID: 0}
+  Info: 
   _bullet: {fileID: 8700920392053616244, guid: 21e63eae24e72394482228b691bb55f8, type: 3}
   _weaponShootCD: 0.5
   _recoilForce: 5
@@ -2092,6 +2134,11 @@ MonoBehaviour:
   _tileType: 0
   _material: {fileID: 0}
   _energyConsume: 5
+  originItemData:
+    tilePrefab: {fileID: 0}
+    count: 0
+  sourcePrefab: {fileID: 0}
+  Info: 
   _bullet: {fileID: 8700920392053616244, guid: 21e63eae24e72394482228b691bb55f8, type: 3}
   _weaponShootCD: 0.5
   _recoilForce: 5
@@ -2351,6 +2398,11 @@ MonoBehaviour:
   _tileType: 2
   _material: {fileID: 0}
   _energyConsume: 0
+  originItemData:
+    tilePrefab: {fileID: 0}
+    count: 0
+  sourcePrefab: {fileID: 0}
+  Info: 
   _addThrustForceAmount: 25
   _addTurnTorqueAmount: 20
   _addStrafeForceAmount: 20
@@ -2611,6 +2663,11 @@ MonoBehaviour:
   _tileType: 2
   _material: {fileID: 0}
   _energyConsume: 0
+  originItemData:
+    tilePrefab: {fileID: 0}
+    count: 0
+  sourcePrefab: {fileID: 0}
+  Info: 
   _addThrustForceAmount: 25
   _addTurnTorqueAmount: 20
   _addStrafeForceAmount: 20
@@ -2762,6 +2819,11 @@ MonoBehaviour:
   _tileType: 2
   _material: {fileID: 0}
   _energyConsume: 0
+  originItemData:
+    tilePrefab: {fileID: 0}
+    count: 0
+  sourcePrefab: {fileID: 0}
+  Info: 
   _chargeCD: 0.1
   _chargeAmount: 1
   _maxCharge: 10

@@ -32,6 +32,9 @@ public class EnemyManager : MonoBehaviour
     private Coroutine _clearEnemiesCoroutine; // 新增清敌协程引用
     private Coroutine _endWaveCoroutine; // 新增波次结束协程引用
 
+    [Header("教程控制")]
+    [SerializeField] private bool _isLockedByTutorial = true; // 默认锁定
+
     private void Awake()
     {
         // 单例模式强化（防止重复初始化）
@@ -63,10 +66,15 @@ public class EnemyManager : MonoBehaviour
 
     private void Start()
     {
-        // 延迟启动第一波（避免Awake阶段依赖项未就绪）
-        if (_currentWave != null)
+        // 删掉原有的 DelayedStartFirstWave 调用，改为由 TutorialManager 控制
+        // 如果不是第一次进入游戏（没有教程），则直接启动
+        if (PlayerPrefs.GetInt("FirstTimeLogin", 1) == 0)
         {
-            StartCoroutine(DelayedStartFirstWave(1f));
+            _isLockedByTutorial = false;
+            if (_currentWave != null)
+            {
+                StartCoroutine(DelayedStartFirstWave(1f));
+            }
         }
     }
 
@@ -178,19 +186,15 @@ public class EnemyManager : MonoBehaviour
     [ContextMenu("开始当前波次")]
     public void StartWave()
     {
-        if (_currentWave == null)
+        if (_isLockedByTutorial)
         {
-            Debug.LogWarning("无有效波次数据，无法启动");
+            Debug.Log("EnemyManager 尚在锁定中，等待教程完成...");
             return;
         }
 
-        // 终止已有生成协程（避免重叠）
-        if (_spawnCoroutine != null)
-        {
-            StopCoroutine(_spawnCoroutine);
-            _spawnCoroutine = null;
-        }
+        if (_currentWave == null) return;
 
+        if (_spawnCoroutine != null) StopCoroutine(_spawnCoroutine);
         _spawnCoroutine = StartCoroutine(SpawnWaveRoutine());
     }
 
@@ -329,6 +333,8 @@ public class EnemyManager : MonoBehaviour
         {
             // 假设敌人的结构是：EnemyPrefab -> ShipRoot -> Tiles...
             // 或者直接在 enemy 身上找组件
+            enemy.systemKill = true;
+
             Tile[] tiles = enemy.GetComponentsInChildren<Tile>();
             foreach (var t in tiles)
             {
@@ -390,7 +396,7 @@ public class EnemyManager : MonoBehaviour
     {
         // 游戏胜利逻辑（示例）
         Debug.Log("=== 所有波次挑战成功！===");
-        // UIManager.Instance.ShowVictoryUI();
+        GameManager.Instance.Victory();
     }
 
     // 状态重置（场景切换或重试时调用）
@@ -424,6 +430,20 @@ public class EnemyManager : MonoBehaviour
         if (Instance == this)
         {
             Instance = null;
+        }
+    }
+
+    // 提供给 TutorialManager 调用的“解锁”方法
+    public void UnlockAndStartFirstWave()
+    {
+        if (!_isLockedByTutorial) return;
+
+        _isLockedByTutorial = false;
+        Debug.Log("教程完成，EnemyManager 已解锁并启动波次！");
+
+        if (_currentWave != null)
+        {
+            StartWave();
         }
     }
 }

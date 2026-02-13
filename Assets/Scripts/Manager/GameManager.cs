@@ -57,15 +57,15 @@ public class GameManager : MonoBehaviour
 
         State = GameState.Game;
 
-        if (State is GameState.Game)
-        {
-            //鼠标锁定在游戏窗口
-            Cursor.lockState = CursorLockMode.Confined;
-        }
-        else
-        {
-            Cursor.lockState = CursorLockMode.None;
-        }
+        //if (State is GameState.Game)
+        //{
+        //    //鼠标锁定在游戏窗口
+        //    Cursor.lockState = CursorLockMode.Confined;
+        //}
+        //else
+        //{
+        //    Cursor.lockState = CursorLockMode.None;
+        //}
 
         _playerShip = FindAnyObjectByType<PlayerShip>();
 
@@ -111,6 +111,28 @@ public class GameManager : MonoBehaviour
 
 
     private void HandlePlayerDeath()
+    {
+        //if (State == GameState.End) return; // 防止重复触发
+
+        Debug.Log("GameManager 收到死亡信号，开始处理结算...");
+
+        State = GameState.End;
+
+        // 1. 锁定玩家操作
+        _playerShip.canMove = false;
+
+        // 2. 停止时间（或者减速）
+        Time.timeScale = 0.5f;
+
+        // 3. 呼叫 UI 管理器执行“变黑”效果
+        // 假设你把上一步写的 FadeToBlack 放在了 UIManager 里
+        UIManager.Instance.StartFadeToBlack();
+
+        //4.清理残留（比如你之前的敌人清理逻辑）
+        EnemyManager.Instance.SafeClearEnemies();
+    }
+
+    public void Victory()
     {
         //if (State == GameState.End) return; // 防止重复触发
 

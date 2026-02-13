@@ -180,7 +180,7 @@ MonoBehaviour:
   _maxEnergy: 0
   _coreHasDestory: 0
   _noncombatCD: 10
-  _selectedTile: {fileID: -2784357674937424464, guid: 437a1c47aa83e274d826e3e9ac5f4511, type: 3}
+  _selectedTile: {fileID: 0}
   _linearDrag: 1
   _angularDrag: 2
   _dashCooldown: 1
